@@ -17,6 +17,7 @@ $(TARGET): $(OBJS)
 	$(LN) $(LO) -o $@ $^ #-lpthread  -lboost_system
 
 obj/%.o: %.cpp
+	mkdir -p obj/src
 	$(CC) $(CO) -c -o $@ $<
 
 clean:
