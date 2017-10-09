@@ -7,7 +7,7 @@ using namespace std;
 
 int main()
 {
-    // run_chapter_1();
-    run_chapter_2();
+    run_chapter_1();
+    // run_chapter_2();
     return 0;
 }

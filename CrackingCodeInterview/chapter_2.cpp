@@ -4,24 +4,36 @@
 
 template<class T>
 class LinkedList {
+
     struct Node {
         Node *next;
+        Node *previous;
         T data;
     };
-
-    Node *root;
+    unsigned size = 0;
+    Node *root = nullptr;
 
 public:
     LinkedList() {
-
     }
 
-    void insert(T data) {
+    bool empty() { return size == 0; }
 
-    }
+    void appendToTail(T data) {
+        Node *end = new Node;
+        end->data = data;
+        Node *n = root;
 
-    void remove(T data) {
+        ++size;
 
+        if (n == nullptr) {
+            root = end;
+            return;
+        }
+
+        while(n->next != nullptr)
+            n = n->next;
+        n->next = end;
     }
 };
 
@@ -58,9 +70,16 @@ public:
 //    }
 //};
 
+#include <list>
+
 void run_chapter_2()
 {
+    std::list<int> lll;
+    lll.push_back(4);
+    std::cout << lll.size();
+
     LinkedList<int> ll;
 
-    ll.insert(5);
+    ll.appendToTail(5);
+    ll.appendToTail(7);
 }
