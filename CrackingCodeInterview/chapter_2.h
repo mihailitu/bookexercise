@@ -17,7 +17,14 @@ class LinkedList {
     Node *root = nullptr;
 
 public:
-    LinkedList() {
+    ~LinkedList() {
+        Node *current = root;
+        while(current != nullptr) {
+            Node *temp = current->next;
+            delete current;
+            --size;
+            current = temp;
+        }
     }
 
     bool empty() { return size == 0; }
