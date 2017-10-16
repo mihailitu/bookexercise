@@ -52,7 +52,7 @@ Output:
 Doubly Linked List
 7<->8<->5<->9<->10
 */
-void leaf_to_linked_list()
+void _1_leaf_to_linked_list()
 {
     Node *root = new Node(1);
     root->left = new Node(2);
