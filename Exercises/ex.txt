@@ -1,7 +1,7 @@
 http://www.geeksforgeeks.org/top-10-algorithms-in-interview-questions/
 
 
-1. Save all leaf nodes of a Binary tree in a Doubly Linked List by using Right node as Next node and Left Node as Previous Node.
+1. (V) Save all leaf nodes of a Binary tree in a Doubly Linked List by using Right node as Next node and Left Node as Previous Node.
 2. Given an array,find the maximum j – i such that arr[j] > arr[i]
 3. Remove Alternate Duplicate characters from a char array you have to do it in Place.Like keeping only the odd occurences of each character.
 4. Example: Input: “you got beautiful eyes”Output: ”you gtbeaiful es”Allowed Time Complexity was O(n) and Space Complexity was O(1)
