@@ -1,9 +1,10 @@
 #include <iostream>
+#include "leaf_to_linked_list.h"
 
 using namespace std;
 
-int main(int argc, char *argv[])
+int main()
 {
-    cout << "Hello World!" << endl;
+    leaf_to_linked_list();
     return 0;
 }
