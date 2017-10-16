@@ -6,7 +6,10 @@ http://www.geeksforgeeks.org/top-10-algorithms-in-interview-questions/
 3. (V) Remove Alternate Duplicate characters from a char array you have to do it in Place.Like keeping only the odd occurences of each character.
         Example: Input: “you got beautiful eyes”Output: ”you gtbeaiful es”
         Allowed Time Complexity was O(n) and Space Complexity was O(1)
-5. In a file there are 1 million words . Find 10 most frequent words in that file.
+4. In a file there are 1 million words . Find 10 most frequent words in that file.
+
+5. Have a list of elements, where an element can be either a char or a another list. eg: [[a, b, c, d], [e], [[f], [g]], [[h], i, [j]]]. Liniarize that list as: [a, b, c, d, e, f, g, h, i, j]
+
 6. Find all nodes at k-distance from a given node in a binary tree
 7. Clone a linked list with next and random pointer
 8. Serialise and Deserialise a linked list with next and random pointer.

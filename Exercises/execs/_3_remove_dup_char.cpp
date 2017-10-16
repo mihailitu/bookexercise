@@ -13,7 +13,7 @@ void _3_remove_dup_char()
 
     std::string ss = "you got beautiful eyes";
     {
-        /* method 1 - O(n2) */
+        /* method 1 - O(n log n) */
         std::vector<char> s(ss.begin(), ss.end());
         auto  c = s.begin();
         while(c != s.end()) {
@@ -51,6 +51,5 @@ void _3_remove_dup_char()
         for(auto i : s)
             std::cout << i;
         std::cout << std::endl;
-
     }
 }
