@@ -2,9 +2,10 @@ http://www.geeksforgeeks.org/top-10-algorithms-in-interview-questions/
 
 
 1. (V) Save all leaf nodes of a Binary tree in a Doubly Linked List by using Right node as Next node and Left Node as Previous Node.
-2. Given an array,find the maximum j – i such that arr[j] > arr[i]
-3. Remove Alternate Duplicate characters from a char array you have to do it in Place.Like keeping only the odd occurences of each character.
-4. Example: Input: “you got beautiful eyes”Output: ”you gtbeaiful es”Allowed Time Complexity was O(n) and Space Complexity was O(1)
+2. (V) Given an array,find the maximum j – i such that arr[j] > arr[i]
+3. (V) Remove Alternate Duplicate characters from a char array you have to do it in Place.Like keeping only the odd occurences of each character.
+        Example: Input: “you got beautiful eyes”Output: ”you gtbeaiful es”
+        Allowed Time Complexity was O(n) and Space Complexity was O(1)
 5. In a file there are 1 million words . Find 10 most frequent words in that file.
 6. Find all nodes at k-distance from a given node in a binary tree
 7. Clone a linked list with next and random pointer
@@ -21,7 +22,7 @@ http://www.geeksforgeeks.org/top-10-algorithms-in-interview-questions/
 18. Given a matrix of characters and a word.
 you have to count the number of occurrences of that word in that matrix. you can move to any of the eight valid directions from current position.
 19. You are given an string as input which represents a path. You have to normalize that path inplace(NO EXTRA SPACE).
-20.         e.g.         input : "\a\b\c\..\..\file.txt"         output: "\a\file.txt"
+         e.g.         input : "\a\b\c\..\..\file.txt"         output: "\a\file.txt"
 21. Least common ancestor of two nodes in a binary tree
 22. Given two sorted arrays (with repetitive elements) find the kth minimum number from both arrays.
 23. Given the root to a binary tree, a value n and k.Find the sum of nodes at distance k from node with value n
@@ -36,7 +37,7 @@ you have to count the number of occurrences of that word in that matrix. you can
 32. Given a directed graph. Construct another graph from given graph such that if path exists from vertices A to vertices B and from B to C, then path from A to C and from C to A also should exists.
 33. Implement hashmap on your own. Write good hashing function for string.
 34. Given an array, arrange the elements such that the number formed by concatenating the elements is highest. 
-E.g.: input = [9, 93, 24, 6], the output should be: [9,93,6,24]. This is because if you concatenate all the numbers, 993624 is the highest number that can be formed.
+        E.g.: input = [9, 93, 24, 6], the output should be: [9,93,6,24]. This is because if you concatenate all the numbers, 993624 is the highest number that can be formed.
 35. Given a string, find the longest substring which is palindrome.
 36. Given that integers are read from a data stream. Find median of elements read so for in efficient way. For simplicity assume there are no duplicates.
 37. Write an efficient program for printing k largest elements in an array. Elements in array can be in any order.
@@ -54,19 +55,19 @@ E.g.: input = [9, 93, 24, 6], the output should be: [9,93,6,24]. This is because
 49. Given a maze, a start point and end point find the shortest path to reach the end point from the starting point.
 50. Given a sentence and a set of characters. Find the minimum window within which the set of characters can be found in the sentence in any order.
 51. You are given a string of 0’s and 1’s you have to find the number of substrings in the string which starts and end with a 1.
-52. eg : input : 0010110010output : 6
+        eg : input : 0010110010output : 6
 53. You are given a mapping like a -> 1, b-> 2… z-> 26. You have to print all possible combinations of a given number using the above information.
-54. eg : input : 121output : aba,la,au
+        eg : input : 121output : aba,la,au
 55. Given a dictionary of 50,000 words. Given a phrase without spaces, add spaces to make it a proper sentence.
-56. e.g:input:  thequickbrownfoxjumpoverlazydog     output: the quick brown fox jump over lazy dog
+        e.g:input:  thequickbrownfoxjumpoverlazydog     output: the quick brown fox jump over lazy dog
 57. Given an unsorted array of n integers which can contain integers from 1 to n. Some elements can be repeated multiple times and some other elements can be absent from the array. Count frequency of all elements that are present and print the missing elements.
-58. Examples:Input: arr[] = {2, 3, 3, 2, 5}Output: Below are frequencies of all elements        1 -> 0        2 -> 2        3 -> 2        4 -> 0        5 -> 1
+        Examples:Input: arr[] = {2, 3, 3, 2, 5}Output: Below are frequencies of all elements        1 -> 0        2 -> 2        3 -> 2        4 -> 0        5 -> 1
 59. Get the next bigger number using the same digits of a number. 
-Eg, For 123456, next number would be 123465
+        Eg, For 123456, next number would be 123465
 60. Given a boolean 2D matrix, find the number of islands. A group of connected 1s forms an island. For example, the below matrix contains 5 islands
-61. Input : mat[][] = {1, 1, 0, 0, 0},                  {0, 1, 0, 0, 1},                  {1, 0, 0, 1, 1},{0, 0, 0, 0, 0},{1, 0, 1, 0, 1} Output : 5
+        Input : mat[][] = {1, 1, 0, 0, 0},                  {0, 1, 0, 0, 1},                  {1, 0, 0, 1, 1},{0, 0, 0, 0, 0},{1, 0, 1, 0, 1} Output : 5
 62. This problem is know as Clock angle problem where we need to find angle between hands of an analog clock at a given time.
-63. Examples:Input:  h = 12:00, m = 30.00 Output: 165 degreeInput:  h = 3.00, m = 30.00Output: 75 degree
+        Examples:Input:  h = 12:00, m = 30.00 Output: 165 degreeInput:  h = 3.00, m = 30.00Output: 75 degree
 
 
 Netflix
