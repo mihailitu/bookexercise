@@ -2,6 +2,8 @@
 #include <iostream>
 #include <list>
 
+namespace problem_1 {
+
 struct Node {
     int data;
     Node *left = nullptr;
@@ -36,6 +38,17 @@ void inorder(Node* node, std::list<Node*> &list)
     inorder(node->right, list);
 }
 
+void clearTree(Node* node)
+{
+    if(node == nullptr)
+        return;
+    clearTree(node->left);
+    clearTree(node->right);
+    delete node;
+}
+
+} // namespace problem_1
+
 /* 1. Save all leaf nodes of a Binary tree in a Doubly Linked List by using Right node as Next node and Left Node as Previous Node.
 
 Let the following be input binary tree
@@ -54,6 +67,8 @@ Doubly Linked List
 */
 void _1_leaf_to_linked_list()
 {
+    using namespace problem_1;
+
     Node *root = new Node(1);
     root->left = new Node(2);
     root->right = new Node(3);
@@ -68,4 +83,6 @@ void _1_leaf_to_linked_list()
     inorder(root, dllist);
     for(auto i : dllist)
         std::cout << i->data << " ";
+
+    clearTree(root);
 }
