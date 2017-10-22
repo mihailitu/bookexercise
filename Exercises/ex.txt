@@ -24,6 +24,7 @@ http://www.geeksforgeeks.org/top-10-algorithms-in-interview-questions/
 you have to count the number of occurrences of that word in that matrix. you can move to any of the eight valid directions from current position.
 19. You are given an string as input which represents a path. You have to normalize that path inplace(NO EXTRA SPACE).
          e.g.         input : "\a\b\c\..\..\file.txt"         output: "\a\file.txt"
+20. Implement binary tree traveral inorder, postorder and preoder iteratively, not recursively.
 21. Least common ancestor of two nodes in a binary tree
 22. Given two sorted arrays (with repetitive elements) find the kth minimum number from both arrays.
 23. Given the root to a binary tree, a value n and k.Find the sum of nodes at distance k from node with value n

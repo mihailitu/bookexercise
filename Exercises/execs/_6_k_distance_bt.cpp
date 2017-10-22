@@ -1,5 +1,8 @@
 #include "_6_k_distance_bt.h"
 #include <list>
+#include <vector>
+#include <iostream>
+#include <stack>
 
 namespace problem_6
 {
@@ -46,8 +49,72 @@ void clearTree(Node* node)
     delete node;
 }
 } // namespace problem_6
-/* Find all nodes at k-distance from a given node in a binary tree */
+
+/* Find all nodes at k-distance from a given node in a binary tree
+ * Eg: Given binay tree:
+ *          20
+ *        /   \
+ *       8     22
+ *     /  \
+ *    4   12
+ *       /  \
+ *      10  14
+ * Input: target = pointer to node with data 8.
+ *        root = pointer to node with data 20.
+ *        k = 2.
+ * Output : 10 14 22
+ *
+ * If target is 14 and k is 3, then output should be "4 20"
+ */
+using namespace problem_6;
+void find_downwards(Node *node, int k, std::vector<Node*> &result)
+{
+    if (node == nullptr)
+        return;
+    if (k == 0) {
+        result.push_back(node);
+        return;
+    }
+
+    find_downwards(node->left, k - 1, result);
+    find_downwards(node->right, k - 1, result);
+}
+
+bool build_parent_list(Node *root, Node *target, std::stack<Node*> &parents)
+{
+    if(root == nullptr) {
+        parents.pop();
+        return false; // last node. Target not found
+    }
+    if(root->data == target->data)
+        return true; // target found. Unwind
+
+    if(build_parent_list(root->left, target, parents)) {
+
+    } else if(build_parent_list(root->right, target, parents)) {
+
+    }
+    return false;
+}
+
 void _6_k_distance_bt()
 {
-    using namespace problem_6;
+    Node *root = new Node(20);
+    root->left = new Node(8);
+    root->right = new Node(22);
+    root->left->left = new Node(4);
+    root->left->right = new Node(12);
+    root->left->right->left = new Node(10);
+    root->left->right->right = new Node(14);
+
+    std::vector<Node*> result;
+    find_downwards(root->left, 2, result);
+
+    std::stack<Node*> parents;
+    build_parent_list(root, root->left, parents);
+
+    for(auto i : result)
+        std::cout << i->data << ' ';
+    std::cout << std::endl;
+    clearTree(root);
 }
