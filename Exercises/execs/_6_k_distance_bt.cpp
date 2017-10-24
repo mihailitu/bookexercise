@@ -80,25 +80,31 @@ void find_downwards(Node *node, int k, std::vector<Node*> &result)
     find_downwards(node->right, k - 1, result);
 }
 
-bool build_parent_list(Node *root, Node *target, std::stack<Node*> &parents)
+bool build_parent_list(Node *root, Node *target, std::stack<std::pair<Node*, bool>> &parents)
 {
     if(root == nullptr) {
-        parents.pop();
-        return false; // last node. Target not found
+        return false; // leaf node. Target not found
     }
     if(root->data == target->data)
         return true; // target found. Unwind
 
-    if(build_parent_list(root->left, target, parents)) {
+    parents.push(std::pair<Node*, bool> (root, true));
+    if(build_parent_list(root->left, target, parents))
+        return true;
 
-    } else if(build_parent_list(root->right, target, parents)) {
-
+    parents.pop();
+    parents.push(std::pair<Node*, bool> (root, false));
+    if(build_parent_list(root->right, target, parents)) {
+        return true;
     }
+
+    parents.pop();
     return false;
 }
 
 void _6_k_distance_bt()
 {
+    int k = 2;
     Node *root = new Node(20);
     root->left = new Node(8);
     root->right = new Node(22);
@@ -107,14 +113,36 @@ void _6_k_distance_bt()
     root->left->right->left = new Node(10);
     root->left->right->right = new Node(14);
 
-    std::vector<Node*> result;
-    find_downwards(root->left, 2, result);
+    Node *target = root->left;
 
-    std::stack<Node*> parents;
-    build_parent_list(root, root->left, parents);
+    std::cout << "Target node: " << target->data << std::endl;
+
+    std::vector<Node*> result;
+    find_downwards(target, k, result);
+
+    std::stack<std::pair<Node*, bool>> parents;
+    build_parent_list(root, target, parents);
+
+    int kk = k - 1;
+    while(!parents.empty()) {
+        std::pair<Node*, bool> top = parents.top();
+        Node *parent = top.first;
+        if(kk == 0) {
+            result.push_back(parent);
+            break;
+        }
+        if(top.second) // left == true, go to the right branch
+            find_downwards(parent->right, kk - 1, result);
+        else
+            find_downwards(parent->left, kk - 1, result);
+        parents.pop();
+        --kk;
+    }
 
     for(auto i : result)
         std::cout << i->data << ' ';
     std::cout << std::endl;
+
+
     clearTree(root);
 }
