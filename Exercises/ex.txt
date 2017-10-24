@@ -8,7 +8,7 @@ http://www.geeksforgeeks.org/top-10-algorithms-in-interview-questions/
         Allowed Time Complexity was O(n) and Space Complexity was O(1)
 4. (V) In a file there are 1 million words . Find 10 most frequent words in that file.
 5. (V) Have a list of elements, where an element can be either a char or a another list. eg: [[a, b, c, d], [e], [[f], [g]], [[h], i, [j]]]. Liniarize that list as: [a, b, c, d, e, f, g, h, i, j]
-6. Find all nodes at k-distance from a given node in a binary tree
+6. (V) Find all nodes at k-distance from a given node in a binary tree
 7. Clone a linked list with next and random pointer
 8. Serialise and Deserialise a linked list with next and random pointer.
 9. Construct a binary tree from given inorder and preorder traversals.
