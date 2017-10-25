@@ -5,6 +5,7 @@
 #include "_4_most_freq_words.h"
 #include "_5_liniarize_list_of_lists.h"
 #include "_6_k_distance_bt.h"
+#include "_7_clone_linked_list_with_random_pointer.h"
 
 using namespace std;
 
@@ -15,6 +16,7 @@ int main()
     // _3_remove_dup_char();
     // _4_most_freq_words();
     // _5_liniarize_list_of_lists();
-    _6_k_distance_bt();
+    // _6_k_distance_bt();
+    _7_clone_linked_list_with_random_pointer();
     return 0;
 }
