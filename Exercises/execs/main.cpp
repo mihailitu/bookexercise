@@ -10,6 +10,7 @@
 #include "_9_binary_tree_from_inorder_and_postorder.h"
 #include "_10_sum_of_childs_tree.h"
 #include "_11_one_mil_linked_list.h"
+#include "_12_reverse_linked_list_by_k.h"
 
 using namespace std;
 #include <limits>
@@ -31,6 +32,7 @@ int main()
 
     // _9_binary_tree_from_inorder_and_postorder();
     // _10_sum_of_childs_tree();
-    _11_one_mil_linked_list();
+    // _11_one_mil_linked_list();
+    _12_reverse_linked_list_by_k();
     return 0;
 }
