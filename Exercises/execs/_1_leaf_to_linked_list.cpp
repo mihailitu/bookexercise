@@ -1,9 +1,9 @@
 #include "_1_leaf_to_linked_list.h"
-#include "ex_util.h"
+#include "binarytree.h"
 #include <iostream>
 #include <list>
 
-using namespace ex_util;
+using namespace binarytree;
 
 bool isLeaf(Node<int>* node) {
     return (node->left == nullptr && node->right == nullptr);

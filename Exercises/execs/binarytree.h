@@ -1,9 +1,9 @@
-#ifndef EX_UTIL_H
-#define EX_UTIL_H
+#ifndef BINARYTREE_H
+#define BINARYTREE_H
 
 #include <iostream>
 
-namespace ex_util {
+namespace binarytree {
 template <typename T>
 struct Node {
     T data;
@@ -13,13 +13,13 @@ struct Node {
 };
 
 template <typename T>
-void inorder(Node<T>* node)
+void inorder(Node<T> *node)
 {
     if(node == nullptr)
         return;
 
     inorder(node->left);
-    std::cout << node->data << std::endl;
+    std::cout << node->data << ' ';
     inorder(node->right);
 }
 
@@ -31,7 +31,7 @@ void postorder(Node<T> *node)
 
     inorder(node->left);
     inorder(node->right);
-    std::cout << node->data << std::endl;
+    std::cout << node->data << ' ';
 }
 
 template <typename T>
@@ -40,13 +40,13 @@ void preorder(Node<T> *node)
     if(node == nullptr)
         return;
 
-    std::cout << node->data << std::endl;
+    std::cout << node->data << ' ';
     inorder(node->left);
     inorder(node->right);
 }
 
 template <typename T>
-void clearTree(Node<T>* node)
+void clearTree(Node<T> *node)
 {
     if(node == nullptr)
         return;
@@ -55,6 +55,6 @@ void clearTree(Node<T>* node)
     delete node;
 }
 
-} // namespace EX_UTIL_H
+} // namespace binarytree
 
-#endif // EX_UTILITY_H
+#endif // BINARYTREE_H
