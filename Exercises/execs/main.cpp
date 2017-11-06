@@ -6,6 +6,8 @@
 #include "_5_liniarize_list_of_lists.h"
 #include "_6_k_distance_bt.h"
 #include "_7_clone_linked_list_with_random_pointer.h"
+#include "_8_serialize_and_deserialize_linked_list_with_random_pointer.h"
+#include "_9_binary_tree_from_inorder_and_postorder.h"
 
 using namespace std;
 
@@ -17,6 +19,13 @@ int main()
     // _4_most_freq_words();
     // _5_liniarize_list_of_lists();
     // _6_k_distance_bt();
-    _7_clone_linked_list_with_random_pointer();
+
+    // TODO
+    //_7_clone_linked_list_with_random_pointer();
+
+    // TODO
+    //_8_serialize_and_deserialize_linked_list_with_random_pointer();
+
+    _9_binary_tree_from_inorder_and_postorder();
     return 0;
 }
