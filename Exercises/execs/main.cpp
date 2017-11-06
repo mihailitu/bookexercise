@@ -8,6 +8,7 @@
 #include "_7_clone_linked_list_with_random_pointer.h"
 #include "_8_serialize_and_deserialize_linked_list_with_random_pointer.h"
 #include "_9_binary_tree_from_inorder_and_postorder.h"
+#include "_10_sum_of_childs_tree.h"
 
 using namespace std;
 
@@ -26,6 +27,7 @@ int main()
     // TODO
     //_8_serialize_and_deserialize_linked_list_with_random_pointer();
 
-    _9_binary_tree_from_inorder_and_postorder();
+    // _9_binary_tree_from_inorder_and_postorder();
+    _10_sum_of_childs_tree();
     return 0;
 }
