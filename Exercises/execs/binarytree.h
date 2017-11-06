@@ -46,6 +46,11 @@ void preorder(Node<T> *node)
 }
 
 template <typename T>
+bool isLeaf(Node<T>* node) {
+    return (node->left == nullptr && node->right == nullptr);
+}
+
+template <typename T>
 void clearTree(Node<T> *node)
 {
     if(node == nullptr)

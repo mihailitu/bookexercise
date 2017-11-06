@@ -5,10 +5,6 @@
 
 using namespace binarytree;
 
-bool isLeaf(Node<int>* node) {
-    return (node->left == nullptr && node->right == nullptr);
-}
-
 template <typename T>
 void inorder(Node<T>* node, std::list<Node<T>*> &list)
 {
