@@ -15,7 +15,7 @@ http://www.geeksforgeeks.org/top-10-algorithms-in-interview-questions/
 
 9. (V) Construct a binary tree from given inorder and preorder traversals.
 10. (V - review) Return a tree such that each internal node stores sum of all its child nodes. Each leaf node stores zero.
-11. How will you implement linked list with 1 million nodes? How will you access 999999 th node? Give some optimal design strategy and implementation.
+11. (V) How will you implement linked list with 1 million nodes? How will you access 999999 th node? Give some optimal design strategy and implementation.
 12. Reversal of Linked List in groups of K.
 13. Given a positive integer N, count all possible distinct binary strings of length N such that there are no consecutive 1’s.
 14. Check whether given binary tree is balanced or not. Definition was no two leaves should have height difference of greater than one.
@@ -60,6 +60,7 @@ you have to count the number of occurrences of that word in that matrix. you can
 50. Given a sentence and a set of characters. Find the minimum window within which the set of characters can be found in the sentence in any order.
 51. You are given a string of 0’s and 1’s you have to find the number of substrings in the string which starts and end with a 1.
         eg : input : 0010110010output : 6
+52. write a program to find 100 largest numbers out of an array of 1 billion numbers. (You can keep a priority queue of the 100 biggest numbers, iterate through the billion numbers, whenever you encounter a number greater than the smallest number in the queue (the head of the queue), remove the head of the queue and add the new number to the queue.)
 53. You are given a mapping like a -> 1, b-> 2… z-> 26. You have to print all possible combinations of a given number using the above information.
         eg : input : 121output : aba,la,au
 55. Given a dictionary of 50,000 words. Given a phrase without spaces, add spaces to make it a proper sentence.
