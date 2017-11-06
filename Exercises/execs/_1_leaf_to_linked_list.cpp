@@ -1,54 +1,27 @@
 #include "_1_leaf_to_linked_list.h"
+#include "ex_util.h"
 #include <iostream>
 #include <list>
 
-namespace problem_1 {
+using namespace ex_util;
 
-struct Node {
-    int data;
-    Node *left = nullptr;
-    Node *right = nullptr;
-    Node(int d) : data(d) {}
-};
-
-Node* insert(Node *current, int data)
-{
-    if (current == nullptr)
-        current = new Node(data);
-    else
-        if (data < current->data)
-            current->left = insert(current->left, data);
-    else
-            current->right = insert(current->right, data);
-    return current;
-}
-
-bool isLeaf(Node* node) {
+bool isLeaf(Node<int>* node) {
     return (node->left == nullptr && node->right == nullptr);
 }
 
-void inorder(Node* node, std::list<Node*> &list)
+template <typename T>
+void inorder(Node<T>* node, std::list<Node<T>*> &list)
 {
     if(node == nullptr)
         return;
-    if(isLeaf(node))
+
+    if (isLeaf(node))
         list.push_back(node);
+
     inorder(node->left, list);
     // std::cout << node->data << std::endl;
     inorder(node->right, list);
 }
-
-void clearTree(Node* node)
-{
-    if(node == nullptr)
-        return;
-    clearTree(node->left);
-    clearTree(node->right);
-    delete node;
-}
-
-} // namespace problem_1
-
 /* 1. Save all leaf nodes of a Binary tree in a Doubly Linked List by using Right node as Next node and Left Node as Previous Node.
 
 Let the following be input binary tree
@@ -67,19 +40,18 @@ Doubly Linked List
 */
 void _1_leaf_to_linked_list()
 {
-    using namespace problem_1;
 
-    Node *root = new Node(1);
-    root->left = new Node(2);
-    root->right = new Node(3);
-    root->left->left = new Node(4);
-    root->left->right = new Node(5);
-    root->right->right = new Node(6);
-    root->left->left->left = new Node(7);
-    root->left->left->right = new Node(8);
-    root->right->right->left = new Node(9);
-    root->right->right->right = new Node(10);
-    std::list<Node*> dllist;
+    Node<int> *root = new Node<int>(1);
+    root->left = new Node<int>(2);
+    root->right = new Node<int>(3);
+    root->left->left = new Node<int>(4);
+    root->left->right = new Node<int>(5);
+    root->right->right = new Node<int>(6);
+    root->left->left->left = new Node<int>(7);
+    root->left->left->right = new Node<int>(8);
+    root->right->right->left = new Node<int>(9);
+    root->right->right->right = new Node<int>(10);
+    std::list<Node<int>*> dllist;
     inorder(root, dllist);
     for(auto i : dllist)
         std::cout << i->data << " ";
