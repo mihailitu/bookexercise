@@ -14,7 +14,7 @@ http://www.geeksforgeeks.org/top-10-algorithms-in-interview-questions/
 8. (TO DO) Serialise and Deserialise a linked list with next and random pointer.
 
 9. (V) Construct a binary tree from given inorder and preorder traversals.
-10. Return a tree such that each internal node stores sum of all its child nodes. Each leaf node stores zero.
+10. (V - review) Return a tree such that each internal node stores sum of all its child nodes. Each leaf node stores zero.
 11. How will you implement linked list with 1 million nodes? How will you access 999999 th node? Give some optimal design strategy and implementation.
 12. Reversal of Linked List in groups of K.
 13. Given a positive integer N, count all possible distinct binary strings of length N such that there are no consecutive 1’s.
