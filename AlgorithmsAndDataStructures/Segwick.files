@@ -1,3 +1,7 @@
+expressions.cpp
+expressions.h
+unionfind.cpp
+unionfind.h
 include/binarysearch.h
 src/binarysearch.cpp
 include/bag.h
@@ -11,3 +15,8 @@ include/mybag.h
 include/myqueue.h
 src/mystack.cpp
 include/mystack.h
+include/unionfind.h
+src/unionfind.cpp
+
+src/expressions.cpp
+include/expressions.h
