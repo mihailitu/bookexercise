@@ -63,8 +63,13 @@ you have to count the number of occurrences of that word in that matrix. you can
 52. write a program to find 100 largest numbers out of an array of 1 billion numbers. (You can keep a priority queue of the 100 biggest numbers, iterate through the billion numbers, whenever you encounter a number greater than the smallest number in the queue (the head of the queue), remove the head of the queue and add the new number to the queue.)
 53. You are given a mapping like a -> 1, b-> 2… z-> 26. You have to print all possible combinations of a given number using the above information.
         eg : input : 121output : aba,la,au
+
+54. Josephus problem: People are standing in a circle waiting to be executed. Counting begins at a specified point in the circle and proceeds around the circle in a specified direction. After a specified number of people are skipped, the next person is executed. The procedure is repeated with the remaining people, starting with the next person, going in the same direction and skipping the same number of people, until only one person remains, and is freed.
+The problem — given the number of people, starting point, direction, and number to be skipped — is to choose the position in the initial circle to avoid execution.
+
 55. Given a dictionary of 50,000 words. Given a phrase without spaces, add spaces to make it a proper sentence.
         e.g:input:  thequickbrownfoxjumpoverlazydog     output: the quick brown fox jump over lazy dog
+
 57. Given an unsorted array of n integers which can contain integers from 1 to n. Some elements can be repeated multiple times and some other elements can be absent from the array. Count frequency of all elements that are present and print the missing elements.
         Examples:Input: arr[] = {2, 3, 3, 2, 5}Output: Below are frequencies of all elements        1 -> 0        2 -> 2        3 -> 2        4 -> 0        5 -> 1
 59. Get the next bigger number using the same digits of a number. 

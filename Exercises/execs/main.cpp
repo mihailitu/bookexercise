@@ -12,6 +12,8 @@
 #include "_11_one_mil_linked_list.h"
 #include "_12_reverse_linked_list_by_k.h"
 
+#include "_54_josephus_problem.h"
+
 using namespace std;
 #include <limits>
 
@@ -33,6 +35,7 @@ int main()
     // _9_binary_tree_from_inorder_and_postorder();
     // _10_sum_of_childs_tree();
     // _11_one_mil_linked_list();
-    _12_reverse_linked_list_by_k();
+    // _12_reverse_linked_list_by_k();
+    _54_josephus_problem();
     return 0;
 }
