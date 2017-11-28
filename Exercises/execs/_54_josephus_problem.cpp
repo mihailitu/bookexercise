@@ -19,7 +19,7 @@
 void _54_josephus_problem()
 {
     int N = 7;
-    int K = 2;
+    int K = 3;
 
     std::list<int> josephus_list;
     for(int i = 0; i < N; ++i)
@@ -36,7 +36,7 @@ void _54_josephus_problem()
             elim = 1;
         } else {
             ++elim;
-            current = std::next(current);
+            ++current;// = std::next(current);
         }
     }
     std::cout << std::endl;

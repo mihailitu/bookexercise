@@ -1,5 +1,5 @@
 CC := g++
-CO := -c -ggdb -std=c++1z -O0 -W -Wall -Wextra -pedantic -Wno-unknown-pragmas -fPIC -fno-strict-aliasing -Iinclude/
+CO := -c -ggdb -std=c++1z -W -Wall -Wextra -pedantic -Wno-unknown-pragmas -fPIC -fno-strict-aliasing -Iinclude/
 
 LN := g++
 LO =

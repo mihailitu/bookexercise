@@ -4,6 +4,7 @@
 #include "mystack.h"
 #include "expressions.h"
 #include "linkedlist.h"
+#include "ringbuffer.h"
 
 void testExpressionParser()
 {
@@ -25,6 +26,6 @@ void testLinkedListIterator()
 
 int main()
 {
-    testLinkedListIterator();
+    testRingBuffer();
     return 0;
 }
