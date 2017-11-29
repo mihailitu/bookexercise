@@ -5,10 +5,25 @@
 
 void testRingBuffer()
 {
-    ringbuffer rb(10);
-    for(unsigned i = 0; i < 10; ++i)
-        rb.enqueue(i);
+    const int rbSz = 6;
+    ringbuffer rb(rbSz);
+
+    rb.enqueue(14);
+    rb.enqueue(22);
+    rb.enqueue(13);
+    rb.enqueue(-6);
+
     rb.printBuffer();
+
+    std::cout << "Deq: " << rb.dequeue() <<  ' ' << rb.dequeue() << std::endl;
+
+    rb.enqueue(9);
+    rb.enqueue(20);
+    rb.enqueue(5);
+
+    rb.printBuffer();
+
+    rb.enqueue(20);
 }
 
 ringbuffer::ringbuffer(int sz) : size(sz)
@@ -21,41 +36,57 @@ ringbuffer::ringbuffer(int sz) : size(sz)
 
 bool ringbuffer::enqueue(int val)
 {
-    if(full)
+    if (full) {
+        std::cout << "full" << '\n';
         return false;
+    }
 
-    if(endPointer + 1 == startPointer) {
+    if ((startPointer == 0 && endPointer == size - 1) ||
+            (endPointer == startPointer - 1 )) {
+        std::cout << "full" << '\n';
         full = true;
         return false;
-    }
-
+    } else
+        if (startPointer == -1) {
+            startPointer = endPointer = 0;
+            data[endPointer] = val;
+        } else
+            if (endPointer == size - 1 && startPointer != 0) {
+                endPointer = 0;
+                data[endPointer] = val;
+            } else {
+                ++endPointer;
+                data[endPointer] = val;
+            }
     empty = false;
-
-    data[endPointer] = val;
-    ++endPointer;
-
-    if(endPointer == size) {// round robin
-        endPointer = 0;
-    }
-
     return true;
 }
 
 int ringbuffer::dequeue()
 {
+    full = false;
+
     if (empty) {
+        std::cout << "Empty" << '\n';
         return std::numeric_limits<int>::max();
     }
 
-    if(startPointer + 1 == endPointer) {
+    if (startPointer == -1) {
+        std::cout << "Empty" << '\n';
         empty = true;
+        return std::numeric_limits<int>::max();
     }
 
     int ret = data[startPointer];
-    ++startPointer;
 
-    if(startPointer == size - 1)
-        startPointer = 0;
+    if(startPointer == endPointer) {
+        startPointer = endPointer = -1;
+        empty = true;
+    } else
+        if (startPointer == size -1)
+            startPointer = 0;
+    else
+            ++startPointer;
 
     return ret;
 }
@@ -67,11 +98,15 @@ void ringbuffer::printBuffer()
         return;
     }
 
-    unsigned i = startPointer;
+    int i = startPointer;
     while(i != endPointer) {
-        std::cout << i << ' ';
+        std::cout << data[i] << ' ';
         ++i;
         if(i == size)
             i = 0;
     }
+
+    std::cout << data[endPointer] << ' ';
+
+    std::cout << std::endl;
 }

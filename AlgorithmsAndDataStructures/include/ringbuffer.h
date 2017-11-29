@@ -16,9 +16,9 @@
 class ringbuffer
 {
     std::vector<int> data;
-    unsigned startPointer = 0;
-    unsigned endPointer = 0;
-    unsigned size = 0;
+    int startPointer = -1;
+    int endPointer = -1;
+    int size = 0;
 
     bool empty = true;
     bool full = false;
