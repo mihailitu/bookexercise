@@ -1,5 +1,5 @@
-include/_54_josephus_problem.cpp
-include/_54_josephus_problem.h
+src/movetofront.cpp
+include/movetofront.h
 src/ringbuffer.cpp
 include/ringbuffer.h
 src/linkedlist.cpp
