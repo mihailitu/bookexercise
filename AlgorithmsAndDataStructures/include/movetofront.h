@@ -1,11 +1,8 @@
 #ifndef MOVETOFRONT_H
 #define MOVETOFRONT_H
 
+#include <list>
 
-class movetofront
-{
-public:
-    movetofront();
-};
+void testMoveToFront();
 
 #endif // MOVETOFRONT_H

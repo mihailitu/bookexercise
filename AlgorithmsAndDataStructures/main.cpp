@@ -5,6 +5,7 @@
 #include "expressions.h"
 #include "linkedlist.h"
 #include "ringbuffer.h"
+#include "movetofront.h"
 
 void testExpressionParser()
 {
@@ -26,6 +27,6 @@ void testLinkedListIterator()
 
 int main()
 {
-    testRingBuffer();
+    testMoveToFront();
     return 0;
 }
