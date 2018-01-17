@@ -1,3 +1,7 @@
+src/selectionsort.cpp
+include/selectionsort.h
+src/insertionsort.cpp
+include/insertionsort.h
 src/movetofront.cpp
 include/movetofront.h
 src/ringbuffer.cpp

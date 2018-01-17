@@ -6,6 +6,8 @@
 #include "linkedlist.h"
 #include "ringbuffer.h"
 #include "movetofront.h"
+#include "insertionsort.h"
+#include "selectionsort.h"
 
 void testExpressionParser()
 {
@@ -27,6 +29,11 @@ void testLinkedListIterator()
 
 int main()
 {
-    testMoveToFront();
+    std::vector<int> a = {7, 5, 10, 2, 4, 6, 1, 3};
+    selectionSort(a);
+
+    for(auto i : a)
+        std::cout << i << ' ';
+    std::cout << std::endl;
     return 0;
 }
