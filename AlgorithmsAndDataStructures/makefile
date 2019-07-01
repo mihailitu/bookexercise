@@ -6,7 +6,7 @@ CO := -c -ggdb -std=c++17 -W -Wall -Wextra -pedantic -Wno-unknown-pragmas -fPIC 
 LN := g++
 LO =
 
-SRCS := $(wildcard src/*.cpp)
+SRCS := $(wildcard *.cpp src/*.cpp)
 OBJS := $(patsubst %.cpp, obj/%.o, $(SRCS))
 
 TARGET := segwick
