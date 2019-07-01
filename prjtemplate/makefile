@@ -9,7 +9,7 @@ LO =
 SRCS := $(wildcard src/*.cpp)
 OBJS := $(patsubst %.cpp, obj/%.o, $(SRCS))
 
-TARGET := segwick
+TARGET := prjtemplate
 
 first: all
 
