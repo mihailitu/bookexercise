@@ -80,6 +80,8 @@ int str_solution(string &s) {
                 word.clear();
             }
         } else if (c == '.' || c == '!' || c == '?') {
+            if (word.length() > 0)
+                sentence.push_back(word);
             text.push_back(sentence);
             word.clear();
             sentence.clear();
