@@ -1,0 +1,4 @@
+#ifndef FUNDAMENTALS_H
+#define FUNDAMENTALS_H
+
+#endif // FUNDAMENTALS_H

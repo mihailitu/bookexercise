@@ -1,5 +1,5 @@
 CC := g++
-CO := -c -ggdb -std=c++17 -W -Wall -Wextra -pedantic -Wno-unknown-pragmas -fPIC -fno-strict-aliasing -Iinclude/
+CO := -c -ggdb -std=c++17 -W -Wall -Wextra -pedantic -Wno-unknown-pragmas -fPIC -fno-strict-aliasing -Iinclude/ -I../
 #release
 #CO := -c -std=c++17 -o3 -W -Wall -Wextra -pedantic -Wno-unknown-pragmas -fPIC -fno-strict-aliasing -Iinclude/
 
@@ -16,7 +16,7 @@ first: all
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(LN) $(LO) -o $@ $^ #-lpthread  -lboost_system
+	$(LN) $(LO) -o $@ $^ -L ../gtest -lgtest -lpthread
 
 obj/%.o: %.cpp
 	mkdir -p obj/src
