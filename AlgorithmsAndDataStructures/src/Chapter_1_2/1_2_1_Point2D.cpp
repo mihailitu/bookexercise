@@ -1,4 +1,5 @@
-#include "fundamentals.h"
+// #include "fundamentals.h"
+#include "gtest.h"
 
 #include <random>
 /**
@@ -37,19 +38,14 @@ double calcDistance(const Point2D &p1, const Point2D &p2)
 // compare x coordinate for sorting
 bool compareX(const Point2D &p, const Point2D &q) {
     return p.x < q.x;
-};
+}
 
 // compare y coordinate for sorting
 bool compareY(const Point2D &p, const Point2D &q) {
     return p.y < q.y;
-};
-
-std::pair<int, int> _1_2_1_Point_2D_divide_and_conquer(const std::vector<Point2D> &points) {
-
-    return {};
 }
 
-// Complexity: O(n (log n)^2)
+// Complexity: O(n^2)
 std::pair<int, int> _1_2_1_Point_2D(const std::vector<Point2D> &points)
 {
     if (points.size() <= 1) { // we need at least two points
@@ -81,6 +77,36 @@ std::pair<int, int> _1_2_1_Point_2D(const std::vector<Point2D> &points)
             closestP1Index, closestP2Index);
     return {closestP1Index, closestP2Index};
 }
+
+/* A utility function to find the distance beween the closest points of strip of given size.
+ * All points in strip[] are sorted according to y coordinate.
+ * They all have an upper bound on minimum distance as d.
+ * Note that this method seems to be a O(n^2) method, but it's a O(n)
+ * method as the inner loop runs at most 6 times
+ */
+double stripClosest(std::vector<Point2D> strip, double d)
+{
+    double min = d;
+    std::sort(strip.begin(), strip.end(), compareY);
+
+    // Pick all points one by one and try the next points till the difference
+    // between y coordinates is smaller than d.
+    // This is a proven fact that this loop runs at most 6 times
+    for (unsigned i = 0; i < strip.size(); ++i)
+         for (unsigned j = i+1; j < strip.size() && (strip[j].y - strip[i].y) < min; ++j)
+             if (calcDistance(strip[i],strip[j]) < min)
+                 min = calcDistance(strip[i], strip[j]);
+
+     return min;
+}
+
+// O(n log(n)):
+// https://www.geeksforgeeks.org/closest-pair-of-points-using-divide-and-conquer-algorithm/
+std::pair<int, int> _1_2_1_Point_2D_divide_and_conquer(const std::vector<Point2D> &points) {
+
+    return {};
+}
+
 
 TEST(Fundamentals, _1_2_1_Point2D){
 
