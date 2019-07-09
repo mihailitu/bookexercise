@@ -107,7 +107,6 @@ std::pair<int, int> _1_2_1_Point_2D_divide_and_conquer(const std::vector<Point2D
     return {};
 }
 
-
 TEST(Fundamentals, _1_2_1_Point2D){
 
     std::vector<Point2D> points = {
