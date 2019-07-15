@@ -38,9 +38,6 @@ bool _1_2_6_CircularStr1(const std::string &s1, const std::string &s2)
     if(s1.length() != s2.length())
         return false;
 
-//    if(s1.compare(s2) == 0)
-//        return true;
-
     auto slen = s1.length();
 
     for(unsigned i = 0; i < slen; ++i) {
