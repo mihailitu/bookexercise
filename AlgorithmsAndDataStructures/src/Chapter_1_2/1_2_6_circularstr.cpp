@@ -57,20 +57,31 @@ bool _1_2_6_CircularStr1(const std::string &s1, const std::string &s2)
     return false;
 }
 
+bool _1_2_6_CircularStr2(const std::string &s1, const std::string &s2)
+{
+    if(s1.length() != s2.length())
+        return false;
+
+    std::string temp = s1  + s2;
+
+    return temp.find(s2) != std::string::npos;
+}
+
 TEST(Fundamentals, _1_2_6_CircularStr1)
 {
     ASSERT_TRUE(_1_2_6_CircularStr("abcde", "deabc"));
-    ASSERT_TRUE(_1_2_6_CircularStr("ACTGACG", "TGACGAC"));
-    ASSERT_TRUE(!_1_2_6_CircularStr("CTGACG", "TGACGAC"));
-
     ASSERT_TRUE(_1_2_6_CircularStr1("abcde", "deabc"));
+    ASSERT_TRUE(_1_2_6_CircularStr2("abcde", "deabc"));
+
+    ASSERT_TRUE(_1_2_6_CircularStr("ACTGACG", "TGACGAC"));
     ASSERT_TRUE(_1_2_6_CircularStr1("ACTGACG", "TGACGAC"));
-    ASSERT_TRUE(!_1_2_6_CircularStr1("CTGACG", "TGACGAC"));
+    ASSERT_TRUE(_1_2_6_CircularStr2("ACTGACG", "TGACGAC"));
 
     ASSERT_TRUE(_1_2_6_CircularStr("ABCDE", "ABCDE"));
     ASSERT_TRUE(_1_2_6_CircularStr1("ABCDE", "ABCDE"));
-
+    ASSERT_TRUE(_1_2_6_CircularStr2("ABCDE", "ABCDE"));
 
     ASSERT_TRUE(_1_2_6_CircularStr("ABCDE", "BCDEA"));
     ASSERT_TRUE(_1_2_6_CircularStr1("ABCDE", "BCDEA"));
+    ASSERT_TRUE(_1_2_6_CircularStr2("ABCDE", "BCDEA"));
 }
