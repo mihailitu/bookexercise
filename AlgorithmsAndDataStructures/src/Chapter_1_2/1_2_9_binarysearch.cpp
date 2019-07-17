@@ -24,12 +24,13 @@ int _1_2_9_binary_search(int key, const std::vector<int> &arr, unsigned long lo,
 {
     while(lo < hi) {
         unsigned long mid = lo + (hi - lo) / 2;
-        if (key < arr[mid])
+        if(key == arr[mid])
+            return static_cast<int>(mid);
+        if (key < arr[mid]) {
             hi = mid - 1;
-        else if(key > arr[mid])
-                lo = mid + 1;
-        else
-                return static_cast<int>(mid);
+        } else if(key > arr[mid]) {
+            lo = mid + 1;
+        }
     }
     return -1;
 }
@@ -45,7 +46,7 @@ TEST(Fundamentals, _1_2_9_BinarySearch)
         int r = _1_2_9_binary_search(i, v, 0, v.size() - 1);
         int r1 = _1_2_9_recursive_binary_search(i, v, 0, v.size() - 1);
 
-        ASSERT_EQ(r, r1);
+        EXPECT_EQ(r, r1) << " failed for " << i << std::endl;
 
         if(r < 0 || r1 < 0)
             std::cout << i << " not found!" << "\n";
