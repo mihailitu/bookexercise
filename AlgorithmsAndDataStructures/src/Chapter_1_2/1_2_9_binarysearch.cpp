@@ -5,7 +5,7 @@
  * Hint : Create a Counter in main() and pass it as an argument to rank().
  */
 
-int _1_2_9_recursive_binary_search(int key, const std::vector<int> &arr, unsigned long lo, unsigned long hi)
+int _1_2_9_recursive_binary_search(int key, const std::vector<int> &arr, unsigned long lo, unsigned long hi, int &counter)
 {
     if(lo > hi)
         return -1;
@@ -13,17 +13,19 @@ int _1_2_9_recursive_binary_search(int key, const std::vector<int> &arr, unsigne
     unsigned long mid = lo + (hi - lo)/2;
 
     if(key < arr[mid])
-        return _1_2_9_recursive_binary_search(key, arr, lo, mid - 1);
+        return _1_2_9_recursive_binary_search(key, arr, lo, mid - 1, ++counter);
     else
         if(key >arr[mid])
-            return _1_2_9_recursive_binary_search(key, arr, mid + 1, hi);
+            return _1_2_9_recursive_binary_search(key, arr, mid + 1, hi, ++counter);
+    ++counter;
     return static_cast<int>(mid);
 }
 
-int _1_2_9_binary_search(int key, const std::vector<int> &arr, unsigned long lo, unsigned long hi)
+int _1_2_9_binary_search(int key, const std::vector<int> &arr, unsigned long lo, unsigned long hi, int &counter)
 {
-    while(lo < hi) {
+    while(lo <= hi) {
         unsigned long mid = lo + (hi - lo) / 2;
+        ++counter;
         if(key == arr[mid])
             return static_cast<int>(mid);
         if (key < arr[mid]) {
@@ -43,8 +45,10 @@ TEST(Fundamentals, _1_2_9_BinarySearch)
     std::vector<int> keys = {23, 50, 10, 99, 18, 23, 98, 84, 11, 10, 48, 77, 13, 54, 98, 77, 77, 68};
 
     for(auto i : keys) {
-        int r = _1_2_9_binary_search(i, v, 0, v.size() - 1);
-        int r1 = _1_2_9_recursive_binary_search(i, v, 0, v.size() - 1);
+        int counter = 0;
+        int r = _1_2_9_binary_search(i, v, 0, v.size() - 1, counter);
+        counter = 0;
+        int r1 = _1_2_9_recursive_binary_search(i, v, 0, v.size() - 1, counter);
 
         EXPECT_EQ(r, r1) << " failed for " << i << std::endl;
 
