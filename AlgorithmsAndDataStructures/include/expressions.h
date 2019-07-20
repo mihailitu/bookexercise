@@ -5,6 +5,9 @@
 #include <stack>
 
 template<class T>
+T fromStr(const std::string &op);
+
+template<class T>
 T eval(const std::string &expr)
 {
     std::istringstream iss(expr);
@@ -35,12 +38,18 @@ T eval(const std::string &expr)
             else if (op == "%") v = prevVal % v;
             vals.push(v);
         } else {
-            vals.push(std::stoi(w));
+            vals.push(fromStr<T>(w));
         }
     }
 
     return vals.top();
 
+}
+
+template<>
+int fromStr<int>(const std::string &op)
+{
+    return std::stoi(op);
 }
 
 #endif // EXPRESSIONS_H
