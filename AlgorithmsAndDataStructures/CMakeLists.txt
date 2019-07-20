@@ -8,6 +8,7 @@ link_directories(${PROJECT_NAME} ../ ../gtest/ ../gtest/internal ../gtest/intern
 
 aux_source_directory(src SRC_LIST)
 aux_source_directory(src/Chapter_1_2 SRC_LIST)
+aux_source_directory(src/Chapter_1_3 SRC_LIST)
 
 #FILE(GLOB_RECURSE INC_ALL "../gtest/*.h")
 
