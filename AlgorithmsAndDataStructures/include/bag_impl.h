@@ -1,6 +1,8 @@
 #ifndef BAG_IMPL_H
 #define BAG_IMPL_H
 
+#include <iterator>
+
 template<class T>
 struct baglist
 {
@@ -13,6 +15,20 @@ struct baglist
  * bag class, using a linked list
  */
 template<class T> class bag {
+    class bag_iterator {
+    public:
+        typedef std::forward_iterator_tag iterator_category;
+        typedef bag value_type;
+        typedef std::size_t difference_type;
+        typedef bag* pointer;
+        typedef bag& reference;
+
+        bag_iterator() {}
+        bag_iterator begin() {
+            return bag_iterator();
+        }
+    };
+
 public:
     bag();
     ~bag();
