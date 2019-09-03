@@ -4,10 +4,10 @@
 #include <iterator>
 
 template<class T>
-struct baglist
+struct bag_elem
 {
-    baglist *next = nullptr;
-    baglist *previous = nullptr;
+    bag_elem *next = nullptr;
+    bag_elem *previous = nullptr;
     T item;
 };
 
@@ -16,17 +16,15 @@ struct baglist
  */
 template<class T> class bag {
     class bag_iterator {
+
     public:
-        typedef std::forward_iterator_tag iterator_category;
-        typedef bag value_type;
-        typedef std::size_t difference_type;
-        typedef bag* pointer;
-        typedef bag& reference;
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = T;
+        using difference_type = T;
+        using pointer = T*;
+        using reference = T&;
 
         bag_iterator() {}
-        bag_iterator begin() {
-            return bag_iterator();
-        }
     };
 
 public:
@@ -38,10 +36,14 @@ public:
     bool isEmpty();
     unsigned size();
 
+    bag_iterator begin() {
+        return it;
+    }
 private:
+    bag_iterator it;
     unsigned count;
-    baglist<T> *root;
-    baglist<T> *tail;
+    bag_elem<T> *root;
+    bag_elem<T> *tail;
 };
 
 template<class T>
@@ -64,11 +66,11 @@ template<class T>
 void bag<T>::add(T item)
 {
     if(root == nullptr) {
-        root = new baglist<T>;
+        root = new bag_elem<T>;
         tail = root;
     }
 
-    baglist<T> *elem = new baglist<T>;
+    bag_elem<T> *elem = new bag_elem<T>;
     elem->item = item;
     elem->previous = tail;
     tail->next = elem;
@@ -91,7 +93,7 @@ void bag<T>::remove(T item)
         }
     }
 
-    baglist<T> *current = root->next;
+    bag_elem<T> *current = root->next;
     while(current != tail) {
         if(current->item == item) {
             current->previous->next = current->next;
