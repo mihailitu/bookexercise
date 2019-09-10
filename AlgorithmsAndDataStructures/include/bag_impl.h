@@ -25,6 +25,7 @@ template<class T> class bag {
         using reference = T&;
 
         bag_iterator() {}
+
     };
 
 public:
@@ -37,7 +38,11 @@ public:
     unsigned size();
 
     bag_iterator begin() {
-        return it;
+        return root;
+    }
+
+    bag_iterator end() {
+        return tail + 1;
     }
 private:
     bag_iterator it;
