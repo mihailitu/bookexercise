@@ -48,8 +48,26 @@ Part example of Expected Output for addressed Rover in TXT o/p file:
 Bonus part of Rovers C++ Task
 At-least 4 rovers are on plateau at any time.
 */
+
+#include "rover.h"
+#include <vector>
+#include <string>
+#include <map>
+
+// Assume that the input might have been corrupted in transmission.
+// Check integrity before start moving rovers around
+bool checkInputIntegrity(const std::vector<std::string> &/*input*/)
+{
+    return true;
+}
+
 int main()
 {
-    cout << "Hello World!" << endl;
+    // if (!checkInputIntegrity({}))
+        //return -1;
+
+    // holds the position of each rover (the initial or the final position)
+    // so, for each step, we can check for collisions
+    std::map<int, std::vector<cell>> positions;
     return 0;
 }
