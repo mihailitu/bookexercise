@@ -23,11 +23,11 @@ Input:
 The first line of input is the upper-right coordinates of the plateau, the lower-left
 coordinates are assumed to be 0,0.
 The rest of the input is information pertaining to the rovers that have been deployed. Each
-rover has two lines of input. The first line gives the rover&#39;s position, and the second line is a
+rover has two lines of input. The first line gives the rover's position, and the second line is a
 series of instructions telling the rover how to explore the plateau.
 The position is made up of two integers and a letter separated by spaces, corresponding to
-the x and y co-ordinates and the rover&#39;s orientation.
-Each rover will be finished sequentially, which means that the second rover won&#39;t start to
+the x and y co-ordinates and the rover's orientation.
+Each rover will be finished sequentially, which means that the second rover won't start to
 move until the first one has finished moving.
 
 Output:
@@ -95,11 +95,11 @@ bool readPlateauSize(const std::string &data, int &mapW, int &mapH)
     if (mapW < 0 || mapH < 0)
         return false;
 
-    // plateau size of 0 (zero) may be valid: a rover may just look around without moving
+    // plateau size of (0, 0) can be valid: one rover may just look around without moving
     return true;
 }
 
-bool readRoversInitialPosition(const std::string &data, int &x, int &y, Compass &heading, int mapW, int mapH, const std::map<int, MarsCell> &others)
+bool readRoversInitialPosition(int roverId, const std::string &data, int &x, int &y, Compass &heading, int mapW, int mapH, const std::map<int, RoverPosition> &others)
 {
     std::stringstream parser(data);
     if (!parser)
@@ -139,7 +139,7 @@ bool readRoversInitialPosition(const std::string &data, int &x, int &y, Compass 
         return false;
     }
 
-    return isValidLocation(x, y, mapW, mapH, others);
+    return isValidLocation(roverId, x, y, mapW, mapH, others);
 }
 
 bool checkMovementDataIntegrity(const std::string &data)
@@ -149,16 +149,7 @@ bool checkMovementDataIntegrity(const std::string &data)
             return false;
     return true;
 }
-/*
-5 5
-1 2 N
-LMLMLMLMM
-3 3 E
-MMRMMRMRRM
 
-
-LRM
-*/
 int main(int argc, char *argv[])
 {
 //    if (argc != 2) {
@@ -184,35 +175,59 @@ int main(int argc, char *argv[])
 
     // holds the position of each rover (the initial or the final position)
     // so, for each step, we can check for collisions
-    std::map<int, MarsCell> positions;
+    std::map<int, RoverPosition> positions;
 
-    // rovers list
+    // rovers list, as constructed from input file
     std::vector<Rover> rovers;
 
     // Start building the rovers. Each rover has two lines of data
     int roverID = 0;
     for(unsigned i = 1; i < inputData.size(); i += 2) {
+        if (i + 1 >= inputData.size()) {// the file is incomplete
+            std::cerr << "Malformed data for rover " << roverID << "! We won't use it!" << '\n';
+            break;
+        }
+
         int posX, posY;
         Compass heading;
-        if (!readRoversInitialPosition(inputData[i], posX, posY, heading, mapW, mapH, positions)) {
-            std::cerr << "Malformed data for rover " << i - 1 << "! We won't use it!" << '\n';
+        if (!readRoversInitialPosition(roverID, inputData[i], posX, posY, heading, mapW, mapH, positions)) {
+            std::cerr << "Malformed data for rover " << roverID << "! We won't use it!" << '\n';
             continue;
         }
 
-        if (!checkMovementDataIntegrity(inputData[i+1])) {
-            std::cerr << "Malformed data for rover " << i - 1 << "! We won't use it!" << '\n';
+        std::string movementData = inputData[i+1];
+
+        if (!checkMovementDataIntegrity(movementData)) {
+            std::cerr << "Malformed data for rover " << roverID << "! We won't use it!" << '\n';
             continue;
         }
-        rovers.push_back(Rover(roverID, heading, posX, posY, inputData[i+1], mapW, mapH));
+        rovers.push_back(Rover(roverID, heading, posX, posY, movementData, mapW, mapH));
         positions[roverID] = {posX, posY, heading};
 
         ++roverID;
     }
 
     for(Rover &r : rovers) {
-        MarsCell final = r.Process(positions); // process rover actions
+        RoverPosition final = r.Process(positions); // process rover actions
         positions[r.GetID()] = final; // update locations that are in use
     }
+
+    for(auto pos : positions) {
+        std::cout << pos.second.x << ' ' << pos.second.y << ' ' << compassToChar(pos.second.heading) << '\n';
+    }
+
+    ofstream out("output.txt");
+    if (!out.is_open()) {
+        std::cerr << "Failed to open output file" << '\n';
+        return -1;
+    }
+
+    for(auto &r : rovers) {
+        RoverPosition pos = r.GetCurrentPosition();
+        out << pos.x << ' ' << pos.y << ' ' << compassToChar(pos.heading) << '\n';
+    }
+
+    out.close();
 
     return 0;
 }

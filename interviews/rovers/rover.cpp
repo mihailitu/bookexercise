@@ -10,7 +10,7 @@ Rover::Rover(int _id, Compass _positioning, int _posX, int _posY, const std::str
 }
 
 
-MarsCell Rover::Process(const std::map<int, MarsCell> &usedLocations)
+RoverPosition Rover::Process(const std::map<int, RoverPosition> &usedLocations)
 {
     for(char c : steps) {
         switch(c) {
@@ -31,11 +31,11 @@ MarsCell Rover::Process(const std::map<int, MarsCell> &usedLocations)
     return currentPosition;
 }
 
-void Rover::move(const std::map<int, MarsCell> &usedLocations)
+void Rover::move(const std::map<int, RoverPosition> &usedLocations)
 {
     int nextX = currentPosition.x;
     int nextY = currentPosition.y;
-    switch (currentPosition.positioning) {
+    switch (currentPosition.heading) {
     case East: {
         nextX += 1;
         break;
@@ -54,7 +54,7 @@ void Rover::move(const std::map<int, MarsCell> &usedLocations)
     }
     }
 
-    if (!isValidLocation(nextX, nextY, mapW, mapH, usedLocations))
+    if (!isValidLocation(id, nextX, nextY, mapW, mapH, usedLocations))
         return;
 
     currentPosition.x = nextX;
@@ -64,18 +64,18 @@ void Rover::move(const std::map<int, MarsCell> &usedLocations)
 // verifies if (newLocX, newLocY) location is valid:
 // - is inside plateau boundaries
 // - no other rover is in that location
-bool isValidLocation(int newLocX, int newLocY, int mapW, int mapH, const std::map<int, MarsCell> &usedLocations)
+bool isValidLocation(int id, int newLocX, int newLocY, int mapW, int mapH, const std::map<int, RoverPosition> &usedLocations)
 {
-    // make sure we are not moving outside designated area
-    if (newLocX < 0 || newLocX >= mapW)
+    // make sure we are not moving outside designated area (mapW and mapH are included in the area)
+    if (newLocX < 0 || newLocX > mapW)
         return false;
 
-    if (newLocY < 0 || newLocY >= mapH)
+    if (newLocY < 0 || newLocY > mapH)
         return false;
 
     // make sure that the next cell is empty. We don't want to crash the rovers
     for(auto &loc : usedLocations)
-        if(loc.second.x == newLocX && loc.second.y == newLocY)
+        if(loc.first != id && loc.second.x == newLocX && loc.second.y == newLocY)
             return false;
 
     return true;
@@ -83,46 +83,66 @@ bool isValidLocation(int newLocX, int newLocY, int mapW, int mapH, const std::ma
 
 void Rover::rotateLeft()
 {
-    switch (currentPosition.positioning) {
+    switch (currentPosition.heading) {
     case East: {
-        currentPosition.positioning = North;
+        currentPosition.heading = North;
         break;
     }
     case South: {
-        currentPosition.positioning = East;
+        currentPosition.heading = East;
         break;
     }
     case West: {
-        currentPosition.positioning = South;
+        currentPosition.heading = South;
         break;
     }
     case North: {
-        currentPosition.positioning = West;
+        currentPosition.heading = West;
         break;
     }
-
     }
 }
 
 void Rover::rotateRight()
 {
-    switch (currentPosition.positioning) {
+    switch (currentPosition.heading) {
     case East: {
-        currentPosition.positioning = South;
+        currentPosition.heading = South;
         break;
     }
     case South: {
-        currentPosition.positioning = West;
+        currentPosition.heading = West;
         break;
     }
     case West: {
-        currentPosition.positioning = North;
+        currentPosition.heading = North;
         break;
     }
     case North: {
-        currentPosition.positioning = East;
+        currentPosition.heading = East;
         break;
     }
+    }
+}
 
+char compassToChar(Compass heading)
+{
+    switch (heading) {
+    case East: {
+        heading = South;
+        return 'S';
+    }
+    case South: {
+        heading = West;
+        return 'W';
+    }
+    case West: {
+        heading = North;
+        return 'N';
+    }
+    case North: {
+        heading = East;
+        return 'E';
+    }
     }
 }
