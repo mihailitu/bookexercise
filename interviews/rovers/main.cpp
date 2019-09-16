@@ -56,110 +56,27 @@ At-least 4 rovers are on plateau at any time.
 #include <fstream>
 #include <sstream>
 
-std::vector<std::string> readInputFile(const std::string &fileName)
-{
-    std::ifstream inputFile(fileName);
+// Read input file and stores each line in a string
+std::vector<std::string> readInputFile(const std::string &fileName);
 
-    if (!inputFile.is_open()) {
-        std::cerr << "Failed to open " << fileName << "\n";
-        return {};
-    }
+// Decodes the size of the grid and verifies integrity
+bool readPlateauSize(const std::string &data, int &mapW, int &mapH);
 
-    std::vector<std::string> inputData;
-    std::string line;
-    // read the file line by line
-    while(std::getline(inputFile, line))
-        inputData.push_back(line);
+// Decodes rover's initial position and verifies integrity
+bool readRoversInitialPosition(int roverId, const std::string &data, int &x, int &y, Compass &heading, int mapW, int mapH, const std::map<int, RoverPosition> &others);
 
-    inputFile.close();
-
-    return inputData;
-}
-
-bool readPlateauSize(const std::string &data, int &mapW, int &mapH)
-{
-    std::stringstream parser(data);
-    if (!parser) {
-        return false;
-    }
-
-    parser >> mapW;
-    if (!parser)
-        return false;
-
-    parser >> mapH;
-    if (!parser)
-        return false;
-
-    // negative numbers are not allowed
-    if (mapW < 0 || mapH < 0)
-        return false;
-
-    // plateau size of (0, 0) can be valid: one rover may just look around without moving
-    return true;
-}
-
-bool readRoversInitialPosition(int roverId, const std::string &data, int &x, int &y, Compass &heading, int mapW, int mapH, const std::map<int, RoverPosition> &others)
-{
-    std::stringstream parser(data);
-    if (!parser)
-        return false;
-
-    parser >> x;
-    if (!parser)
-        return false;
-
-    parser >> y;
-    if (!parser)
-        return false;
-
-    char c;
-    parser >> c;
-    if (!parser)
-        return false;
-
-    switch(c) {
-    case 'E': {
-        heading = East;
-        break;
-    }
-    case 'S': {
-        heading = South;
-        break;
-    }
-    case 'W': {
-        heading = West;
-        break;
-    }
-    case 'N': {
-        heading = North;
-        break;
-    }
-    default:
-        return false;
-    }
-
-    return isValidLocation(roverId, x, y, mapW, mapH, others);
-}
-
-bool checkMovementDataIntegrity(const std::string &data)
-{
-    for(char c : data)
-        if ((c != 'L') && (c != 'R') && c != ('M'))
-            return false;
-    return true;
-}
+// Verifies integrity of rover's commands
+bool checkMovementDataIntegrity(const std::string &data);
 
 int main(int argc, char *argv[])
 {
-//    if (argc != 2) {
-//        std::cerr << "Usage: rover <input>" << '\n';
-//        return -1;
-//    }
+    if (argc != 2) {
+        std::cerr << "Usage: rover <input>" << '\n';
+        return -1;
+    }
 
-//    std::string fileName = argv[1];
+    std::string fileName = argv[1];
 
-    std::string fileName = "input.txt";
     std::vector<std::string> inputData = readInputFile(fileName);
 
     if (inputData.size() < 3) {// we need at least: plateau size, one rover's position and commands
@@ -230,4 +147,98 @@ int main(int argc, char *argv[])
     out.close();
 
     return 0;
+}
+
+std::vector<std::string> readInputFile(const std::string &fileName)
+{
+    std::ifstream inputFile(fileName);
+
+    if (!inputFile.is_open()) {
+        std::cerr << "Failed to open " << fileName << "\n";
+        return {};
+    }
+
+    std::vector<std::string> inputData;
+    std::string line;
+    // read the file line by line
+    while(std::getline(inputFile, line))
+        inputData.push_back(line);
+
+    inputFile.close();
+
+    return inputData;
+}
+
+bool readPlateauSize(const std::string &data, int &mapW, int &mapH)
+{
+    std::stringstream parser(data);
+    if (!parser) {
+        return false;
+    }
+
+    parser >> mapW;
+    if (!parser)
+        return false;
+
+    parser >> mapH;
+    if (!parser)
+        return false;
+
+    // negative numbers are not allowed
+    if (mapW < 0 || mapH < 0)
+        return false;
+
+    // plateau size of (0, 0) can be valid: one rover may just look around without moving
+    return true;
+}
+
+bool readRoversInitialPosition(int roverId, const std::string &data, int &x, int &y, Compass &heading, int mapW, int mapH, const std::map<int, RoverPosition> &others)
+{
+    std::stringstream parser(data);
+    if (!parser)
+        return false;
+
+    parser >> x;
+    if (!parser)
+        return false;
+
+    parser >> y;
+    if (!parser)
+        return false;
+
+    char c;
+    parser >> c;
+    if (!parser)
+        return false;
+
+    switch(c) {
+    case 'E': {
+        heading = Compass::East;
+        break;
+    }
+    case 'S': {
+        heading = Compass::South;
+        break;
+    }
+    case 'W': {
+        heading = Compass::West;
+        break;
+    }
+    case 'N': {
+        heading = Compass::North;
+        break;
+    }
+    default:
+        return false;
+    }
+
+    return isValidLocation(roverId, x, y, mapW, mapH, others);
+}
+
+bool checkMovementDataIntegrity(const std::string &data)
+{
+    for(char c : data)
+        if ((c != 'L') && (c != 'R') && c != ('M'))
+            return false;
+    return true;
 }

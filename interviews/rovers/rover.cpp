@@ -9,7 +9,6 @@ Rover::Rover(int _id, Compass _positioning, int _posX, int _posY, const std::str
     currentPosition = {_posX, _posY, _positioning};
 }
 
-
 RoverPosition Rover::Process(const std::map<int, RoverPosition> &usedLocations)
 {
     for(char c : steps) {
@@ -36,19 +35,19 @@ void Rover::move(const std::map<int, RoverPosition> &usedLocations)
     int nextX = currentPosition.x;
     int nextY = currentPosition.y;
     switch (currentPosition.heading) {
-    case East: {
+    case Compass::East: {
         nextX += 1;
         break;
     }
-    case South: {
+    case Compass::South: {
         nextY -= 1;
         break;
     }
-    case West: {
+    case Compass::West: {
         nextX -= 1;
         break;
     }
-    case North: {
+    case Compass::North: {
         nextY += 1;
         break;
     }
@@ -84,20 +83,20 @@ bool isValidLocation(int id, int newLocX, int newLocY, int mapW, int mapH, const
 void Rover::rotateLeft()
 {
     switch (currentPosition.heading) {
-    case East: {
-        currentPosition.heading = North;
+    case Compass::East: {
+        currentPosition.heading = Compass::North;
         break;
     }
-    case South: {
-        currentPosition.heading = East;
+    case Compass::South: {
+        currentPosition.heading = Compass::East;
         break;
     }
-    case West: {
-        currentPosition.heading = South;
+    case Compass::West: {
+        currentPosition.heading = Compass::South;
         break;
     }
-    case North: {
-        currentPosition.heading = West;
+    case Compass::North: {
+        currentPosition.heading = Compass::West;
         break;
     }
     }
@@ -106,20 +105,20 @@ void Rover::rotateLeft()
 void Rover::rotateRight()
 {
     switch (currentPosition.heading) {
-    case East: {
-        currentPosition.heading = South;
+    case Compass::East: {
+        currentPosition.heading = Compass::South;
         break;
     }
-    case South: {
-        currentPosition.heading = West;
+    case Compass::South: {
+        currentPosition.heading = Compass::West;
         break;
     }
-    case West: {
-        currentPosition.heading = North;
+    case Compass::West: {
+        currentPosition.heading = Compass::North;
         break;
     }
-    case North: {
-        currentPosition.heading = East;
+    case Compass::North: {
+        currentPosition.heading = Compass::East;
         break;
     }
     }
@@ -128,21 +127,18 @@ void Rover::rotateRight()
 char compassToChar(Compass heading)
 {
     switch (heading) {
-    case East: {
-        heading = South;
+    case Compass::East: {
         return 'S';
     }
-    case South: {
-        heading = West;
+    case Compass::South: {
         return 'W';
     }
-    case West: {
-        heading = North;
+    case Compass::West: {
         return 'N';
     }
-    case North: {
-        heading = East;
+    case Compass::North: {
         return 'E';
     }
     }
+    return ' ';
 }

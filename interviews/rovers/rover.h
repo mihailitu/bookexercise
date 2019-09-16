@@ -5,13 +5,14 @@
 #include <vector>
 #include <string>
 
-enum Compass {
+enum class Compass {
     East,
     South,
     West,
     North
 };
 
+// Position of the rover at any given time
 struct RoverPosition {
     int x;
     int y;
@@ -27,6 +28,8 @@ class Rover
     RoverPosition currentPosition;
 public:
     Rover(int _id, Compass _positioning, int _posX, int _posY, const std::string &_steps, int _mapW, int _mapH);
+
+    // Process all command from 'steps'
     RoverPosition Process(const std::map<int, RoverPosition> &usedLocations);
     int GetID() const {
         return id;
@@ -43,6 +46,9 @@ private:
     void move(const std::map<int, RoverPosition> &usedLocations);
 };
 
+// Check if the location given by (newLocX, newLocY) can be used
 bool isValidLocation(int id, int newLocX, int newLocY, int mapW, int mapH, const std::map<int, RoverPosition> &usedLocations);
+
+// Encodes 'heading' into a E, S, W, N character
 char compassToChar(Compass heading);
 #endif // ROVER_H
