@@ -12,7 +12,7 @@ enum Compass {
     North
 };
 
-struct mars_cell {
+struct MarsCell {
     int x;
     int y;
     Compass positioning;
@@ -26,16 +26,21 @@ class Rover
     int posX, posY;
     std::string steps;
     int mapW, mapH;
-    mars_cell currentPosition;
+    MarsCell currentPosition;
 public:
     Rover(int _id, Compass _positioning, int _posX, int _posY, const std::string &_steps, int _mapW, int _mapH);
-    mars_cell process(const std::map<int, mars_cell> &usedLocations);
+    MarsCell Process(const std::map<int, MarsCell> &usedLocations);
+    int GetID() {
+        return id;
+    }
 
 private:
     void rotateLeft();
     void rotateRight();
 
-    void move(const std::map<int, mars_cell> &usedLocations);
+    void move(const std::map<int, MarsCell> &usedLocations);
 };
+
+bool isValidLocation(int newLocX, int newLocY, int mapW, int mapH, const std::map<int, MarsCell> &usedLocations);
 
 #endif // ROVER_H

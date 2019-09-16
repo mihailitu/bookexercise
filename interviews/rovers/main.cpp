@@ -99,7 +99,7 @@ bool readPlateauSize(const std::string &data, int &mapW, int &mapH)
     return true;
 }
 
-bool readRoversInitialPosition(const std::string &data, int &x, int &y, Compass &heading, int mapW, int mapH, const std::map<int, mars_cell> &others)
+bool readRoversInitialPosition(const std::string &data, int &x, int &y, Compass &heading, int mapW, int mapH, const std::map<int, MarsCell> &others)
 {
     std::stringstream parser(data);
     if (!parser)
@@ -116,10 +116,6 @@ bool readRoversInitialPosition(const std::string &data, int &x, int &y, Compass 
     char c;
     parser >> c;
     if (!parser)
-        return false;
-
-    // is data valid?
-    if ((x < 0 || x >= mapW) || (y < 0 || y >= mapH))
         return false;
 
     switch(c) {
@@ -143,14 +139,10 @@ bool readRoversInitialPosition(const std::string &data, int &x, int &y, Compass 
         return false;
     }
 
-    for(auto roverPos : others)
-        if (roverPos.second.x == x && roverPos.second.y == y)
-            return false;
-
-    return true;
+    return isValidLocation(x, y, mapW, mapH, others);
 }
 
-bool checkMovementIntegrity(const std::string &data)
+bool checkMovementDataIntegrity(const std::string &data)
 {
     for(char c : data)
         if ((c != 'L') && (c != 'R') && c != ('M'))
@@ -192,7 +184,7 @@ int main(int argc, char *argv[])
 
     // holds the position of each rover (the initial or the final position)
     // so, for each step, we can check for collisions
-    std::map<int, mars_cell> positions;
+    std::map<int, MarsCell> positions;
 
     // rovers list
     std::vector<Rover> rovers;
@@ -207,7 +199,7 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        if (!checkMovementIntegrity(inputData[i+1])) {
+        if (!checkMovementDataIntegrity(inputData[i+1])) {
             std::cerr << "Malformed data for rover " << i - 1 << "! We won't use it!" << '\n';
             continue;
         }
@@ -217,8 +209,10 @@ int main(int argc, char *argv[])
         ++roverID;
     }
 
-    for(Rover &r : rovers)
-        r.process(positions);
+    for(Rover &r : rovers) {
+        MarsCell final = r.Process(positions); // process rover actions
+        positions[r.GetID()] = final; // update locations that are in use
+    }
 
     return 0;
 }
