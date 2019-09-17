@@ -26,6 +26,8 @@ class Rover
     std::string steps;
     int mapW, mapH;
     RoverPosition currentPosition;
+
+    std::vector<RoverPosition> trail;
 public:
     Rover(int _id, Compass _positioning, int _posX, int _posY, const std::string &_steps, int _mapW, int _mapH);
 
@@ -37,6 +39,10 @@ public:
 
     RoverPosition GetCurrentPosition() const {
         return currentPosition;
+    }
+
+    std::vector<RoverPosition> Trail() const {
+        return trail;
     }
 
 private:

@@ -7,6 +7,7 @@ Rover::Rover(int _id, Compass _positioning, int _posX, int _posY, const std::str
     mapW(_mapW), mapH(_mapH)
 {
     currentPosition = {_posX, _posY, _positioning};
+    trail.push_back(currentPosition);
 }
 
 RoverPosition Rover::Process(const std::map<int, RoverPosition> &usedLocations)
@@ -58,6 +59,8 @@ void Rover::move(const std::map<int, RoverPosition> &usedLocations)
 
     currentPosition.x = nextX;
     currentPosition.y = nextY;
+
+    trail.push_back(currentPosition);
 }
 
 // verifies if (newLocX, newLocY) location is valid:
