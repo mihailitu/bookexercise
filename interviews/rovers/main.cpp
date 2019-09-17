@@ -71,7 +71,7 @@ bool checkMovementDataIntegrity(const std::string &data);
 int main(int argc, char *argv[])
 {
     if (argc != 2) {
-        std::cerr << "Usage: rover <input>" << '\n';
+        std::cerr << "Usage: rovers <input>" << '\n';
         return -1;
     }
 
