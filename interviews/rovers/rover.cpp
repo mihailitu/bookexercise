@@ -2,15 +2,19 @@
 
 #include <iostream>
 
-Rover::Rover(int _id, Compass _positioning, int _posX, int _posY, const std::string &_steps, int _mapW, int _mapH) :
-    id(_id), steps(_steps),
-    mapW(_mapW), mapH(_mapH)
+Rover::Rover(int _id, Compass _positioning, int _posX, int _posY, int _mapW, int _mapH) :
+    id(_id), mapW(_mapW), mapH(_mapH)
 {
     currentPosition = {_posX, _posY, _positioning};
     trail.push_back(currentPosition);
 }
 
-RoverPosition Rover::Process(const std::map<int, RoverPosition> &usedLocations)
+void Rover::UploadCommands(const std::string &_steps)
+{
+    steps += _steps;
+}
+
+RoverPosition Rover::ProcessCommands(const std::map<int, RoverPosition> &usedLocations)
 {
     for(char c : steps) {
         switch(c) {
@@ -28,6 +32,7 @@ RoverPosition Rover::Process(const std::map<int, RoverPosition> &usedLocations)
         }
         }
     }
+    steps = "";
     return currentPosition;
 }
 
@@ -63,26 +68,6 @@ void Rover::move(const std::map<int, RoverPosition> &usedLocations)
     trail.push_back(currentPosition);
 }
 
-// verifies if (newLocX, newLocY) location is valid:
-// - is inside plateau boundaries
-// - no other rover is in that location
-bool isValidLocation(int id, int newLocX, int newLocY, int mapW, int mapH, const std::map<int, RoverPosition> &usedLocations)
-{
-    // make sure we are not moving outside designated area (mapW and mapH are included in the area)
-    if (newLocX < 0 || newLocX > mapW)
-        return false;
-
-    if (newLocY < 0 || newLocY > mapH)
-        return false;
-
-    // make sure that the next cell is empty. We don't want to crash the rovers
-    for(auto &loc : usedLocations)
-        if(loc.first != id && loc.second.x == newLocX && loc.second.y == newLocY)
-            return false;
-
-    return true;
-}
-
 void Rover::rotateLeft()
 {
     switch (currentPosition.heading) {
@@ -103,6 +88,7 @@ void Rover::rotateLeft()
         break;
     }
     }
+    trail.push_back(currentPosition);
 }
 
 void Rover::rotateRight()
@@ -125,6 +111,27 @@ void Rover::rotateRight()
         break;
     }
     }
+    trail.push_back(currentPosition);
+}
+
+// verifies if (newLocX, newLocY) location is valid:
+// - is inside plateau boundaries
+// - no other rover is in that location
+bool isValidLocation(int id, int newLocX, int newLocY, int mapW, int mapH, const std::map<int, RoverPosition> &usedLocations)
+{
+    // make sure we are not moving outside designated area (mapW and mapH are included in the area)
+    if (newLocX < 0 || newLocX > mapW)
+        return false;
+
+    if (newLocY < 0 || newLocY > mapH)
+        return false;
+
+    // make sure that the next cell is empty. We don't want to crash the rovers
+    for(auto &loc : usedLocations)
+        if(loc.first != id && loc.second.x == newLocX && loc.second.y == newLocY)
+            return false;
+
+    return true;
 }
 
 char compassToChar(Compass heading)

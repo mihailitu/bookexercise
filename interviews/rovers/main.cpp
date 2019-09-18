@@ -118,19 +118,18 @@ int main(int argc, char *argv[])
             std::cerr << "Malformed data for rover " << roverID << "! We won't use it!" << '\n';
             continue;
         }
-        rovers.push_back(Rover(roverID, heading, posX, posY, movementData, mapW, mapH));
+        Rover r(roverID, heading, posX, posY, mapW, mapH);
+        r.UploadCommands(movementData);
+
+        rovers.push_back(r);
         positions[roverID] = {posX, posY, heading};
 
         ++roverID;
     }
 
     for(Rover &r : rovers) {
-        RoverPosition final = r.Process(positions); // process rover actions
+        RoverPosition final = r.ProcessCommands(positions); // process rover actions
         positions[r.GetID()] = final; // update locations that are in use
-    }
-
-    for(auto pos : positions) {
-        std::cout << pos.second.x << ' ' << pos.second.y << ' ' << compassToChar(pos.second.heading) << '\n';
     }
 
     ofstream out("output.txt");

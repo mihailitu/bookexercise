@@ -27,12 +27,15 @@ class Rover
     int mapW, mapH;
     RoverPosition currentPosition;
 
+    // Keep a trail of the rover's moves
     std::vector<RoverPosition> trail;
 public:
-    Rover(int _id, Compass _positioning, int _posX, int _posY, const std::string &_steps, int _mapW, int _mapH);
+    Rover(int _id, Compass _positioning, int _posX, int _posY, int _mapW, int _mapH);
+
+    void UploadCommands(const std::string &_steps);
 
     // Process all command from 'steps'
-    RoverPosition Process(const std::map<int, RoverPosition> &usedLocations);
+    RoverPosition ProcessCommands(const std::map<int, RoverPosition> &usedLocations);
     int GetID() const {
         return id;
     }
