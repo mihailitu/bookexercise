@@ -5,3 +5,4 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} -g -W -Wall -Wextra -pedantic
 project(rovers)
 add_executable(${PROJECT_NAME} "main.cpp" "rover.cpp")
 
+add_subdirectory(tests)
