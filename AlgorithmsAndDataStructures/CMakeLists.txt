@@ -10,8 +10,9 @@ link_directories(${PROJECT_NAME} ../ ../gtest/ ../gtest/internal ../gtest/intern
 aux_source_directory(src SRC_LIST)
 aux_source_directory(src/Chapter_1_2 SRC_LIST)
 aux_source_directory(src/Chapter_1_3 SRC_LIST)
+aux_source_directory(src/Chapter_1_5 SRC_LIST)
 
-#FILE(GLOB_RECURSE INC_ALL "../gtest/*.h")
+FILE(GLOB_RECURSE INC_ALL "src/Chapter_1_5/*.h")
 
 add_executable(${PROJECT_NAME} main.cpp ${SRC_LIST} ${INC_ALL})
 
