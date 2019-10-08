@@ -14,22 +14,27 @@ void testUnionFind(const std::string &fName)
     }
     int N;
     testFile >> N;
-    UnionFindQuickFind uf(N);
+    UnionFindQuickUnionWeighted uf(N);
     int p, q;
     while (testFile >> p >> q) {
         if (!uf.connected(p, q)) {
             uf.union_connect(p, q);
-            std::cout << p << " + " << q << "\n";
+            // std::cout << p << " + " << q << "\n";
         }
     }
 }
 
 TEST(Chapter_1_5, UnionFindTiny)
 {
-    testUnionFind("tinyUF.txt");
+    testUnionFind("data/tinyUF.txt");
+}
+
+TEST(Chapter_1_5, UnionFindMedium)
+{
+    testUnionFind("data/mediumUF.txt");
 }
 
 TEST(Chapter_1_5, UnionFindLarge)
 {
-
+    testUnionFind("data/largeUF.txt");
 }

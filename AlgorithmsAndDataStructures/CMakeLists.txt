@@ -14,6 +14,18 @@ aux_source_directory(src/Chapter_1_5 SRC_LIST)
 
 FILE(GLOB_RECURSE INC_ALL "src/Chapter_1_5/*.h")
 
+FILE(DOWNLOAD https://algs4.cs.princeton.edu/15uf/tinyUF.txt
+    ${CMAKE_BINARY_DIR}/data/tinyUF.txt
+    SHOW_PROGRESS)
+
+FILE(DOWNLOAD https://algs4.cs.princeton.edu/15uf/mediumUF.txt
+    ${CMAKE_BINARY_DIR}/data/mediumUF.txt
+    SHOW_PROGRESS)
+
+FILE(DOWNLOAD https://algs4.cs.princeton.edu/15uf/largeUF.txt
+    ${CMAKE_BINARY_DIR}/data/largeUF.txt
+    SHOW_PROGRESS)
+
 add_executable(${PROJECT_NAME} main.cpp ${SRC_LIST} ${INC_ALL})
 
 target_link_libraries(${PROJECT_NAME} -lgtest -lpthread)
