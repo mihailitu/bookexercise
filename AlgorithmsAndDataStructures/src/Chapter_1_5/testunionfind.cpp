@@ -18,7 +18,7 @@ void testUnionFind(const std::string &fName)
     int p, q;
     while (testFile >> p >> q) {
         if (!uf.connected(p, q)) {
-            uf.union_connect(p, q);
+            uf.connect(p, q);
             // std::cout << p << " + " << q << "\n";
         }
     }

@@ -17,7 +17,7 @@ UnionFindQuickFind::UnionFindQuickFind(int N) : UnionFind (N)
         id.push_back(i);
 }
 
-void UnionFindQuickFind::union_connect(int p, int q)
+void UnionFindQuickFind::connect(int p, int q)
 {
     int pid = id[p];
     int qid = id[q];
@@ -45,7 +45,7 @@ int UnionFindQuickUnion::root(int i)
     return i;
 }
 
-void UnionFindQuickUnion::union_connect(int p, int q)
+void UnionFindQuickUnion::connect(int p, int q)
 {
     int i = root(p);
     int j = root(q);
@@ -74,7 +74,7 @@ int UnionFindQuickUnionWeighted::root(int i)
     return i;
 }
 
-void UnionFindQuickUnionWeighted::union_connect(int p, int q)
+void UnionFindQuickUnionWeighted::connect(int p, int q)
 {
     int i = root(p);
     int j = root(q);
