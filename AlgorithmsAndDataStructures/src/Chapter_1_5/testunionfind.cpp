@@ -24,17 +24,17 @@ void testUnionFind(const std::string &fName)
     }
 }
 
-TEST(Chapter_1_5, UnionFindTiny)
+TEST(Chapter_1_5, UnionQuickWeightedFindTiny)
 {
     testUnionFind("data/tinyUF.txt");
 }
 
-TEST(Chapter_1_5, UnionFindMedium)
+TEST(Chapter_1_5, UnionQuickWeightedFindMedium)
 {
     testUnionFind("data/mediumUF.txt");
 }
 
-TEST(Chapter_1_5, UnionFindLarge)
+TEST(Chapter_1_5, UnionQuickWeightedFindLarge)
 {
     testUnionFind("data/largeUF.txt");
 }
