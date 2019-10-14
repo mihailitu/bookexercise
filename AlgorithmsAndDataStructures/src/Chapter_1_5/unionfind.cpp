@@ -1,7 +1,7 @@
 #include "unionfind.h"
 #include "gtest.h"
 
-UnionFind::UnionFind(int N) : N(N)
+UnionFind::UnionFind(int N) : N(N), numberOfComponents(N)
 {
 
 }
@@ -21,10 +21,16 @@ void UnionFindQuickFind::connect(int p, int q)
 {
     int pid = id[p];
     int qid = id[q];
+
+    if(pid == qid)
+        return;
+
     for(unsigned i = 0; i < id.size(); ++i) { // at most 2N + 2 array accesses
         if (id[i] == pid)
             id[i] = qid;
     }
+
+    --numberOfComponents;
 }
 
 bool UnionFindQuickFind::connected(int p, int q)
@@ -49,7 +55,10 @@ void UnionFindQuickUnion::connect(int p, int q)
 {
     int i = root(p);
     int j = root(q);
+    if (i == j)
+        return;
     id[i] = j;
+    --numberOfComponents;
 }
 
 bool UnionFindQuickUnion::connected(int p, int q)
@@ -88,6 +97,7 @@ void UnionFindQuickUnionWeighted::connect(int p, int q)
         id[j] = i;
         sz[i] += sz[j];
     }
+    --numberOfComponents;
 }
 
 bool UnionFindQuickUnionWeighted::connected(int p, int q)

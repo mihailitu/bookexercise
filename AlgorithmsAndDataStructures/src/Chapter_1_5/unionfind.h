@@ -5,12 +5,14 @@
 
 class UnionFind
 {
+protected:
     int N;
+    int numberOfComponents; // number of components
 public:
     UnionFind(int N); // initialize UnionFind data structure with objects N objects (from 0 to N-1)
     virtual void connect(int p, int q) = 0; // add a connection between p and q
     virtual bool connected(int p, int q) = 0; // are p and q in the same component?
-    virtual int count() {return N; }
+    virtual int count() {return numberOfComponents;}
     virtual ~UnionFind();
 };
 
