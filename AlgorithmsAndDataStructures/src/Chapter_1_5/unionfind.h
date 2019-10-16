@@ -16,6 +16,18 @@ public:
     virtual ~UnionFind();
 };
 
+class UnionFindQuickUnionWeighted : public UnionFind
+{
+    std::vector<int> id;
+    std::vector<int> sz;
+
+    int root(int i);
+public:
+    UnionFindQuickUnionWeighted(int N); // initialize UnionFind data structure with objects N objects (from 0 to N-1)
+    void connect(int p, int q); // add a connection between p and q
+    bool connected(int p, int q); // are p and q in the same component?
+};
+
 class UnionFindQuickFind : public UnionFind
 {
     std::vector<int> id;
@@ -32,18 +44,6 @@ class UnionFindQuickUnion : public UnionFind
     int root(int i);
 public:
     UnionFindQuickUnion(int N); // initialize UnionFind data structure with objects N objects (from 0 to N-1)
-    void connect(int p, int q); // add a connection between p and q
-    bool connected(int p, int q); // are p and q in the same component?
-};
-
-class UnionFindQuickUnionWeighted : public UnionFind
-{
-    std::vector<int> id;
-    std::vector<int> sz;
-
-    int root(int i);
-public:
-    UnionFindQuickUnionWeighted(int N); // initialize UnionFind data structure with objects N objects (from 0 to N-1)
     void connect(int p, int q); // add a connection between p and q
     bool connected(int p, int q); // are p and q in the same component?
 };
