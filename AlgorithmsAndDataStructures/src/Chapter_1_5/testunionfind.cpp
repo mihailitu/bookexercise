@@ -15,11 +15,12 @@ void testUnionFind(const std::string &fName)
     int N;
     testFile >> N;
     UnionFindQuickUnionWeighted uf(N);
+    uf.print();
     int p, q;
     while (testFile >> p >> q) {
         if (!uf.connected(p, q)) {
             uf.connect(p, q);
-            // std::cout << p << " + " << q << "\n";
+            uf.print();
         }
     }
 }
@@ -29,12 +30,12 @@ TEST(Chapter_1_5, UnionQuickWeightedFindTiny)
     testUnionFind("data/tinyUF.txt");
 }
 
-TEST(Chapter_1_5, UnionQuickWeightedFindMedium)
-{
-    testUnionFind("data/mediumUF.txt");
-}
+//TEST(Chapter_1_5, UnionQuickWeightedFindMedium)
+//{
+//    testUnionFind("data/mediumUF.txt");
+//}
 
-TEST(Chapter_1_5, UnionQuickWeightedFindLarge)
-{
-    testUnionFind("data/largeUF.txt");
-}
+//TEST(Chapter_1_5, UnionQuickWeightedFindLarge)
+//{
+//    testUnionFind("data/largeUF.txt");
+//}

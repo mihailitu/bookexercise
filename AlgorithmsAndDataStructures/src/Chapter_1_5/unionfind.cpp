@@ -3,7 +3,8 @@
 
 UnionFind::UnionFind(int N) : N(N), numberOfComponents(N)
 {
-
+    for(int i = 0; i < N; ++i) // N array accesses
+        id.push_back(i);
 }
 
 UnionFind::~UnionFind()
@@ -11,10 +12,16 @@ UnionFind::~UnionFind()
 
 }
 
+void UnionFind::print() const
+{
+    for(unsigned i = 0; i < id.size(); ++i)
+        std::cout << id[i] << ' ';
+    std::cout << '\n';
+}
+
 UnionFindQuickUnionWeighted::UnionFindQuickUnionWeighted(int N) : UnionFind (N)
 {
     for(int i = 0; i < N; ++i) { // N array accesses
-        id.push_back(i);
         sz.push_back(1);
     }
 }
@@ -50,11 +57,18 @@ bool UnionFindQuickUnionWeighted::connected(int p, int q)
     return root(p) == root(q);
 }
 
+void UnionFindQuickUnionWeighted::print() const
+{
+    for(unsigned i = 0; i < id.size(); ++i)
+        std::cout << id[i] << ' ';
+    std::cout << '\n';
+    for(unsigned i = 0; i < sz.size(); ++i)
+        std::cout << sz[i] << ' ';
+    std::cout << "\n\n";
+}
 
 UnionFindQuickFind::UnionFindQuickFind(int N) : UnionFind (N)
 {
-    for(int i = 0; i < N; ++i) // N array accesses
-        id.push_back(i);
 }
 
 void UnionFindQuickFind::connect(int p, int q)
@@ -80,8 +94,6 @@ bool UnionFindQuickFind::connected(int p, int q)
 
 UnionFindQuickUnion::UnionFindQuickUnion(int N) : UnionFind (N)
 {
-    for(int i = 0; i < N; ++i) // N array accesses
-        id.push_back(i);
 }
 
 int UnionFindQuickUnion::root(int i)
