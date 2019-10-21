@@ -15,12 +15,12 @@ void testUnionFind(const std::string &fName)
     int N;
     testFile >> N;
     UnionFindQuickUnionWeighted uf(N);
-    uf.print();
+    // uf.print();
     int p, q;
     while (testFile >> p >> q) {
         if (!uf.connected(p, q)) {
             uf.connect(p, q);
-            uf.print();
+            // uf.print();
         }
     }
 }
