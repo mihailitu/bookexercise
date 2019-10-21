@@ -1,7 +1,7 @@
 #include "unionfind.h"
 #include "gtest.h"
 
-UnionFind::UnionFind(int N) : N(N), numberOfComponents(N)
+UnionFind::UnionFind(int N) : N(N), numberOfComponents(N-1)
 {
     for(int i = 0; i < N; ++i) // N array accesses
         id.push_back(i);
