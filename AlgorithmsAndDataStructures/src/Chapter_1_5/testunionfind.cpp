@@ -30,10 +30,10 @@ TEST(Chapter_1_5, UnionQuickWeightedFindTiny)
     testUnionFind("data/tinyUF.txt");
 }
 
-//TEST(Chapter_1_5, UnionQuickWeightedFindMedium)
-//{
-//    testUnionFind("data/mediumUF.txt");
-//}
+TEST(Chapter_1_5, UnionQuickWeightedFindMedium)
+{
+    testUnionFind("data/mediumUF.txt");
+}
 
 //TEST(Chapter_1_5, UnionQuickWeightedFindLarge)
 //{

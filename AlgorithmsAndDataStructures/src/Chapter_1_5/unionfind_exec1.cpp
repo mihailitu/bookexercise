@@ -70,7 +70,7 @@ public:
         std::cout << "\n\n";
     }
 
-    int count() {
+    unsigned count() {
         return components;
     }
 };

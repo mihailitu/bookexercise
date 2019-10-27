@@ -1,5 +1,6 @@
 #include "gtest.h"
 #include "fundamentals.h"
+#include "logger.h"
 
 /* 1.2.2 Write an Interval1D client that takes an int value N as command-line argument,
  * reads N intervals (each defined by a pair of double values) from standard input,
@@ -20,7 +21,8 @@ std::vector<std::vector<unsigned>> _1_2_2_Interval1D(const std::vector<std::pair
 {
     std::cout << "Intervals: ";
     for(unsigned i = 0; i < intervals.size(); ++i) {
-        std::cout << "[" << intervals[i].first << ", " << intervals[i].second << "]";
+        log_info("[%d, %d]", intervals[i].first, intervals[i].second);
+        // std::cout << "[" << intervals[i].first << ", " << intervals[i].second << "]";
         if (i == intervals.size() -1)
             std::cout << "\n";
         else
@@ -35,13 +37,12 @@ std::vector<std::vector<unsigned>> _1_2_2_Interval1D(const std::vector<std::pair
 
     for(unsigned i = 0; i < intersections.size(); ++i)
         if(!intersections[i].empty()) {
-            std::cout << "Interval " << "[" << intervals[i].first << ", " << intervals[i].second << "] intercts with interval(s): ";
+            log_info("Interval [%d, %d] intercts with interval(s):", intervals[i].first, intervals[i].second);
             for(unsigned j = 0; j < intersections[i].size(); ++j)
-                std::cout << "[" << intervals[intersections[i][j]].first << ", " << intervals[intersections[i][j]].second << "] ";
-            std::cout << '\n';
+                log_info("[%d, %d]", intervals[intersections[i][j]].first, intervals[intersections[i][j]].second);
         }
 
-    std::cout << "-------------------\n";
+    log_info("-------------------\n");
     return intersections;
 }
 
