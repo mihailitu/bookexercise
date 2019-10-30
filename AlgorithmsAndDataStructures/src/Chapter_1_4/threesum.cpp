@@ -19,11 +19,11 @@ long long count_brute_force(const std::vector<int> &a)
 
 bool binarySearch(const std::vector<int> &a, int val)
 {
-    unsigned long lo = 0;
-    unsigned long hi = a.size() - 1;
+    long lo = 0;
+    long hi = a.size() - 1;
 
     while(lo <= hi) {
-        unsigned long mid = lo + (hi - lo) / 2;
+        long mid = lo + (hi - lo) / 2;
         if(val < a[mid])
             hi = mid - 1;
         else if (val > a[mid])
@@ -41,8 +41,8 @@ long long count_n_sq_log_n(std::vector<int> a)
     unsigned long N = a.size();
 
     unsigned count = 0;
-    for(unsigned i = 0; i < N - 1; ++i)
-        for(unsigned j = i; j < N; ++j)
+    for(unsigned i = 0; i < N; ++i)
+        for(unsigned j = i + 1; j < N; ++j)
             if (binarySearch(a, -(a[i] + a[j])))
                 ++count;
     return count;
@@ -90,9 +90,9 @@ TEST(Chapter_1_4, ThreeSumNsqLogN)
         "data/2Kints.txt",
         "data/4Kints.txt",
         "data/8Kints.txt",
-        "data/16Kints.txt",
-        "data/32Kints.txt",
-        "data/1Mints.txt"
+//        "data/16Kints.txt",
+//        "data/32Kints.txt",
+//        "data/1Mints.txt"
     };
 
     for(auto f : fileData) {
