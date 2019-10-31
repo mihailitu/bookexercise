@@ -102,3 +102,53 @@ TEST(Chapter_1_4, ThreeSumNsqLogN)
         log_info("%d  elements adds up to zero", count_n_sq_log_n(data));
     }
 }
+
+// Hint: given an integer x and a sorted array a[] of nnn distinct integers, design a linear-time algorithm to determine if there exists two distinct indices i and j such that a[i]+a[j]==x.
+int count_n_sq(std::vector<int> &data)
+{
+    std::sort(data.begin(), data.end());
+    int N = data.size();
+
+    int count = 0;
+    for(int i = 0; i < N -2; ++i) {
+        int j = i + 1;
+        int k = N - 1;
+        while (j < k) {
+            int sum = data[i] + data[j] + data[k];
+            if( 0 == sum ) {
+                // log_info("%d + %d + %d = 0", data[i], data[j], data[k]);
+                ++count;
+                ++j;
+                --k;
+            } else if (sum < 0)
+                ++j;
+            else
+                --k;
+        }
+    }
+    return count;
+}
+
+TEST(Chapter_1_4, ThreeSumNSquare)
+{
+    std::vector<std::string> fileData = {
+        "data/1Kints.txt",
+        "data/2Kints.txt",
+        "data/4Kints.txt",
+        "data/8Kints.txt",
+        "data/16Kints.txt",
+        "data/32Kints.txt",
+//        "data/1Mints.txt"
+    };
+
+//    std::vector<int> data = { -25, -10, -7, 0, -3, 2, 4, 8, 10};
+//    log_info("%d  elements adds up to zero", count_n_sq(data));
+//    return;
+
+    for(auto f : fileData) {
+        log_info("ThreeSumDeLuxe using: %s", f.c_str());
+        std::vector<int> data;
+        readInts(f, data);
+        log_info("%d  elements adds up to zero", count_n_sq(data));
+    }
+}
