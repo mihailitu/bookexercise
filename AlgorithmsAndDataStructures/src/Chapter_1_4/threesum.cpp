@@ -104,12 +104,12 @@ TEST(Chapter_1_4, ThreeSumNsqLogN)
 }
 
 // Hint: given an integer x and a sorted array a[] of nnn distinct integers, design a linear-time algorithm to determine if there exists two distinct indices i and j such that a[i]+a[j]==x.
-int count_n_sq(std::vector<int> &data)
+unsigned long count_n_sq(std::vector<int> &data)
 {
     std::sort(data.begin(), data.end());
     int N = data.size();
 
-    int count = 0;
+    unsigned long count = 0;
     for(int i = 0; i < N -2; ++i) {
         int j = i + 1;
         int k = N - 1;
@@ -138,7 +138,7 @@ TEST(Chapter_1_4, ThreeSumNSquare)
         "data/8Kints.txt",
         "data/16Kints.txt",
         "data/32Kints.txt",
-//        "data/1Mints.txt"
+        "data/1Mints.txt"
     };
 
 //    std::vector<int> data = { -25, -10, -7, 0, -3, 2, 4, 8, 10};
@@ -149,6 +149,6 @@ TEST(Chapter_1_4, ThreeSumNSquare)
         log_info("ThreeSumDeLuxe using: %s", f.c_str());
         std::vector<int> data;
         readInts(f, data);
-        log_info("%d  elements adds up to zero", count_n_sq(data));
+        log_info("%lu  elements adds up to zero", count_n_sq(data));
     }
 }

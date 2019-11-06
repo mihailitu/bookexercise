@@ -4,6 +4,8 @@
 #include <string>
 #include <cstring>
 #include <cstdio>
+#include <chrono>
+#include <ctime>
 
 #pragma GCC system_header
 
@@ -14,11 +16,21 @@
 #define DEBUG_DBG 1
 #define DEBUG_MESSAGE
 
+static std::string current_time() {
+    char timebuffer[100];
+    std::time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    std::time_t t = std::time(nullptr);
+    std::size_t tlen = std::strftime(timebuffer, sizeof(timebuffer), "%F %T", std::localtime(&t));
+    if (tlen == 0)
+        return "";
+    return std::string(timebuffer, tlen);
+}
+
 // with date, time, file:line
 #define log_info(fmt, ...) \
     do { \
             if ( DEBUG_INFO) { \
-                fprintf( stdout, "INFO: %s %s %s:%d: " fmt "\n", __DATE__, __TIME__, __FILENAME__, __LINE__, ##__VA_ARGS__ ); \
+                fprintf( stdout, "INFO: %s %s:%d: " fmt "\n", current_time().c_str(), __FILENAME__, __LINE__, ##__VA_ARGS__ ); \
             } \
        } while(0)
 
@@ -26,14 +38,14 @@
 #define log_error(fmt, ...) \
     do { \
             if ( DEBUG_ERROR) { \
-                fprintf( stderr, "ERROR: %s %s %s:%d: " fmt "\n", __DATE__, __TIME__, __FILENAME__, __LINE__, ##__VA_ARGS__ ); \
+                fprintf( stderr, "ERROR: %s %s:%d: " fmt "\n", current_time().c_str(), __FILENAME__, __LINE__, ##__VA_ARGS__ ); \
             } \
        } while(0)
 
 #define log_warning(fmt, ...) \
     do { \
             if ( DEBUG_WARNING) { \
-                fprintf( stdout, "WARNING: %s %s %s:%d: " fmt "\n", __DATE__, __TIME__, __FILENAME__, __LINE__, ##__VA_ARGS__ ); \
+                fprintf( stdout, "WARNING: %s %s:%d: " fmt "\n", current_time().c_str(), __FILENAME__, __LINE__, ##__VA_ARGS__ ); \
             } \
        } while(0)
 
@@ -41,24 +53,8 @@
 #define log_debug(fmt, ...) \
     do { \
             if ( DEBUG_DBG) { \
-                fprintf( stdout, "INFO: %s %s %s:%d: " fmt "\n", __DATE__, __TIME__, __FILENAME__, __LINE__, ##__VA_ARGS__ ); \
+                fprintf( stdout, "INFO: %s %s:%d: " fmt "\n", current_time().c_str(), __FILENAME__, __LINE__, ##__VA_ARGS__ ); \
             } \
        } while(0)
-
-//#define log_info(fmt, ...) \
-//    do { \
-//            if ( DEBUG_INFO) { \
-//                fprintf( stderr, fmt "\n", ##__VA_ARGS__ ); \
-//            } \
-//       } while(0)
-
-
-class Logger
-{
-    Logger();
-public:
-
-    static void LogMessage( std::string&& message, std::string fName, int line, std::string date, std::string time);
-};
 
 #endif // LOGGER_H
