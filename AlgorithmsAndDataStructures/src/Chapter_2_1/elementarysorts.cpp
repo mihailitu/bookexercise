@@ -86,8 +86,8 @@ TEST(Chapter_2_1, TimedElementarySorts)
     unsigned N = 100'000;
     std::vector<int> arr;
 
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::random_device rd;
+    std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(0, N - 1);
 
     for(unsigned i = 0; i < N; ++i)
