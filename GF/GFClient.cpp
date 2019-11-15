@@ -5,7 +5,7 @@
 #include <fstream>
 
 CGigaFlowClient::CGigaFlowClient(const std::string &gigaFlowAddress, int queueSz):
-    m_zmqContext(), m_zmqSubSocket(m_zmqContext, ZMQ_SUB),
+    m_zmqContext(1), m_zmqSubSocket(m_zmqContext, ZMQ_SUB),
     m_dZMQQueueSz(queueSz)
 {
     m_sGigaFlowAddress = gigaFlowAddress;
@@ -23,6 +23,8 @@ void CGigaFlowClient::StartListener()
     try {
         m_zmqSubSocket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
         m_zmqSubSocket.setsockopt(ZMQ_RCVHWM, &m_dZMQQueueSz, sizeof(m_dZMQQueueSz));
+        int linger = 0; // Proper shutdown ZeroMQ
+        m_zmqSubSocket.setsockopt(ZMQ_LINGER, &linger, sizeof(linger));
         m_zmqSubSocket.connect(m_sGigaFlowAddress);
     } catch(...){
         std::cout << "StartListener error\n";
@@ -49,6 +51,7 @@ void CGigaFlowClient::CloseConnection()
     } catch(...) {
         std::cout << "CloseConnection error\n";
     }
+    m_zmqSubSocket.close();
 }
 
 void CGigaFlowClient::GFDataHandler()
@@ -60,7 +63,7 @@ void CGigaFlowClient::GFDataHandler()
     unsigned long long bytes = 0;
     while(!m_bTerminate) {
         zmq::message_t message;
-        if (!m_zmqSubSocket.recv(&message, ZMQ_DONTWAIT))
+        if (!m_zmqSubSocket.recv(&message))//, ZMQ_DONTWAIT))
             continue;
         std::cout << "receiving... ";
         bytes += message.size();
