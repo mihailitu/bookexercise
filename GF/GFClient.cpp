@@ -1,12 +1,9 @@
 #include "GFClient.h"
-#include "flatbuffers/flatbuffers.h"
-#include "gf_generated.h"
 #include <iostream>
-#include <fstream>
 #include "zmq.h"
 
-CGigaFlowClient::CGigaFlowClient(const std::string &gigaFlowAddress, int queueSz):
-    m_dZMQQueueSz(queueSz)
+CGigaFlowClient::CGigaFlowClient(const std::string &gigaFlowAddress, int queueSz, std::function<void(const GigaFlow::Data::GFRecord *gfr )> messageHandler):
+    m_dZMQQueueSz(queueSz), m_pfnMessageHandler(messageHandler)
 {
     m_sGigaFlowAddress = gigaFlowAddress;
 }
@@ -70,12 +67,17 @@ void CGigaFlowClient::GFDataHandler()
     unsigned messCount = 0;
     unsigned long long bytes = 0;
     zmq_msg_t zmqMessage;
+
     while(!m_bTerminate) {
         zmq_msg_init(&zmqMessage);
         int rc = zmq_recvmsg(m_zmqSubSocket, &zmqMessage, 0);
         if(rc < 0)
             continue;
+        flatbuffers::FlatBufferBuilder fbb;
+        GigaFlow::Data::GFRecordBuilder gfb(fbb);
 
+        if (m_pfnMessageHandler)
+            m_pfnMessageHandler(GigaFlow::Data::GetGFRecord(zmq_msg_data(&zmqMessage)));
         bytes += zmq_msg_size(&zmqMessage);
         ++messCount;
     }
