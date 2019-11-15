@@ -14,5 +14,11 @@ int main()
 
     std::cout << "Ending...";
     gfclient.CloseConnection();
+    std::cout << "Ended...";
+
+    gfclient.StartListener();
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+    gfclient.CloseConnection();
+
     return 0;
 }
