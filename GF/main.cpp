@@ -15,8 +15,9 @@ namespace {
 
 void zmqMessageHandler(const std::string &gfName, const GigaFlow::Data::GFRecord *gfRecord)
 {
-    std::cout << gfName << "\n";
-    // write_gf_record(out, gfRecord);
+    out << gfName << " #: ";
+    write_gf_record(out, gfRecord);
+    std::cout << gfName << " #: ";
     write_gf_record(std::cout, gfRecord);
 }
 
