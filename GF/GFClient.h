@@ -1,5 +1,4 @@
-#include <zmq.hpp>
-#include <zmq.h>
+// #include <zmq.hpp>
 #include <string>
 #include <thread>
 
@@ -7,11 +6,17 @@ class CGigaFlowClient {
     // GigaFlow's IP:PORT
     std::string m_sGigaFlowAddress;
 
+//    // 0MQ Context
+//    zmq::context_t m_zmqContext;
+
+//    // 0MQ Subscribe Socket
+//    zmq::socket_t m_zmqSubSocket;
+
     // 0MQ Context
-    zmq::context_t m_zmqContext;
+    void *m_zmqContext;
 
     // 0MQ Subscribe Socket
-    zmq::socket_t m_zmqSubSocket;
+    void *m_zmqSubSocket;
 
     // GigaFlow client listener
     std::thread m_gfListener;
@@ -25,7 +30,7 @@ public:
     virtual ~CGigaFlowClient();
     CGigaFlowClient(const CGigaFlowClient &) = delete;
     int InitializeSockets();
-    void StartListener();
+    int StartListener();
     void CloseConnection();
     bool Connected() const;
 private:
