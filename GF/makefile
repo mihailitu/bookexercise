@@ -14,11 +14,11 @@ first: all
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-        $(LN) $(LO) -o $@ $^ -lpthread -lzmq
+	$(LN) $(LO) -o $@ $^ -lpthread -lzmq
 
 bin/debug/%.o: %.cpp
-        mkdir -p bin/debug/src
-        $(CC) $(CO) -o $@ $<
+	mkdir -p bin/debug/src
+	$(CC) $(CO) -o $@ $<
 
 clean:
-        rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJS) $(TARGET)
