@@ -18,8 +18,9 @@ CGigaFlowClient::~CGigaFlowClient()
 
 void CGigaFlowClient::StartListener()
 {
-    if (!m_zmqSubSocket.connected())
+    if (m_zmqSubSocket.connected())
         return;
+
     try {
         m_zmqSubSocket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
         m_zmqSubSocket.setsockopt(ZMQ_RCVHWM, &m_dZMQQueueSz, sizeof(m_dZMQQueueSz));
@@ -43,15 +44,20 @@ void CGigaFlowClient::CloseConnection()
 {
     m_bTerminate = true;
 
-    if (m_gfListener.joinable())
-        m_gfListener.join();
+    //    if (m_gfListener.joinable())
+    //        m_gfListener.join();
 
     try {
-        m_zmqSubSocket.disconnect(m_sGigaFlowAddress);
+        // m_zmqSubSocket.disconnect(m_sGigaFlowAddress);
     } catch(...) {
         std::cout << "CloseConnection error\n";
     }
+
     m_zmqSubSocket.close();
+    m_zmqContext.close();
+    if (m_gfListener.joinable())
+        m_gfListener.join();
+
 }
 
 void CGigaFlowClient::GFDataHandler()
@@ -63,8 +69,12 @@ void CGigaFlowClient::GFDataHandler()
     unsigned long long bytes = 0;
     while(!m_bTerminate) {
         zmq::message_t message;
-        if (!m_zmqSubSocket.recv(&message))//, ZMQ_DONTWAIT))
+        try {
+            if (!m_zmqSubSocket.recv(&message))//, ZMQ_DONTWAIT))
+                continue;
+        } catch(...) {
             continue;
+        }
         std::cout << "receiving... ";
         bytes += message.size();
         std::cout << message.size() << '\n';

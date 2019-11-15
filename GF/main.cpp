@@ -17,9 +17,9 @@ int main()
     gfclient.CloseConnection();
     std::cout << "Ended..." << std::endl;
 
-    gfclient.StartListener();
-    std::this_thread::sleep_for(std::chrono::seconds(10));
-    gfclient.CloseConnection();
+    // gfclient.StartListener();
+    // std::this_thread::sleep_for(std::chrono::seconds(10));
+    // gfclient.CloseConnection();
 
     return 0;
 }
