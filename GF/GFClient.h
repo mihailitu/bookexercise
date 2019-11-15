@@ -24,9 +24,10 @@ class CGigaFlowClient {
     // maintains the thread running state
     bool m_bTerminate;
 
-    std::function<void(const GigaFlow::Data::GFRecord *gfr)> m_pfnMessageHandler;
+    std::function<void(const std::string &gfName, const GigaFlow::Data::GFRecord *gfr)> m_pfnMessageHandler;
 public:
-    CGigaFlowClient(const std::string &gigaFlowAddress, int queueSz, std::function<void(const GigaFlow::Data::GFRecord *gfr)> messageHandler);
+    CGigaFlowClient(const std::string &gigaFlowAddress, int queueSz,
+                    std::function<void(const std::string &gfName, const GigaFlow::Data::GFRecord *gfr)> messageHandler);
     virtual ~CGigaFlowClient();
     CGigaFlowClient(const CGigaFlowClient &) = delete;
     int InitializeSockets();

@@ -2,7 +2,8 @@
 #include <iostream>
 #include "zmq.h"
 
-CGigaFlowClient::CGigaFlowClient(const std::string &gigaFlowAddress, int queueSz, std::function<void(const GigaFlow::Data::GFRecord *gfr )> messageHandler):
+CGigaFlowClient::CGigaFlowClient(const std::string &gigaFlowAddress, int queueSz,
+                                 std::function<void(const std::string &gfName, const GigaFlow::Data::GFRecord *gfr )> messageHandler):
     m_dZMQQueueSz(queueSz), m_pfnMessageHandler(messageHandler)
 {
     m_sGigaFlowAddress = gigaFlowAddress;
@@ -77,7 +78,7 @@ void CGigaFlowClient::GFDataHandler()
         GigaFlow::Data::GFRecordBuilder gfb(fbb);
 
         if (m_pfnMessageHandler)
-            m_pfnMessageHandler(GigaFlow::Data::GetGFRecord(zmq_msg_data(&zmqMessage)));
+            m_pfnMessageHandler(m_sGigaFlowAddress, GigaFlow::Data::GetGFRecord(zmq_msg_data(&zmqMessage)));
         bytes += zmq_msg_size(&zmqMessage);
         ++messCount;
     }
