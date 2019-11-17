@@ -27,7 +27,7 @@ void runGFClients()
     int rc = gfclient.StartListener();
     std::cout << "RC " << rc << std::endl;
     // while() {
-    std::this_thread::sleep_for(std::chrono::seconds(10));
+    std::this_thread::sleep_for(std::chrono::seconds(600));
     // }
 
     std::cout << "Ending..." << std::endl;
@@ -50,14 +50,14 @@ int main()
     }
 
     std::thread t1(runGFClients);
-    std::thread t2(runGFClients);
-    std::thread t3(runGFClients);
-    std::thread t4(runGFClients);
+    // std::thread t2(runGFClients);
+    // std::thread t3(runGFClients);
+    // std::thread t4(runGFClients);
     t1.join();
-    t2.join();
-    t3.join();
-    t4.join();
-
+    // t2.join();
+    // t3.join();
+    // t4.join();
+    return 0;
     // CGigaFlowClient gfclient("tcp://localhost:5555", 1000000);
     CGigaFlowClient gfclient("office13.anuview.net", 5555, 1000000, zmqMessageHandler);
     int rc = gfclient.StartListener();
