@@ -6,8 +6,9 @@
 #include <functional>
 
 class CGigaFlowClient {
-    // GigaFlow's IP:PORT
-    std::string m_sGigaFlowAddress;
+    // GigaFlow's tcp://addr:PORT
+    std::string m_sGFAddress;
+    unsigned m_dGFPort;
 
     // 0MQ Context
     void *m_zmqContext;
@@ -26,10 +27,9 @@ class CGigaFlowClient {
 
     std::function<void(const std::string &gfName, const GigaFlow::Data::GFRecord *gfr)> m_pfnMessageHandler;
 public:
-    CGigaFlowClient(const std::string &gigaFlowAddress, int queueSz,
+    CGigaFlowClient(const std::string &gfAddress, unsigned gfPort, int zmqQueueSz,
                     std::function<void(const std::string &gfName, const GigaFlow::Data::GFRecord *gfr)> messageHandler);
     virtual ~CGigaFlowClient();
-    CGigaFlowClient(const CGigaFlowClient &) = delete;
     int InitializeSockets();
     int StartListener();
     void CloseConnection();

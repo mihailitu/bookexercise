@@ -23,11 +23,11 @@ void zmqMessageHandler(const std::string &gfName, const GigaFlow::Data::GFRecord
 
 void runGFClients()
 {
-    CGigaFlowClient gfclient("tcp://office13.anuview.net:5555", 1000000, zmqMessageHandler);
+    CGigaFlowClient gfclient("office13.anuview.net", 5555, 1000000, zmqMessageHandler);
     int rc = gfclient.StartListener();
     std::cout << "RC " << rc << std::endl;
     // while() {
-    std::this_thread::sleep_for(std::chrono::seconds(60));
+    std::this_thread::sleep_for(std::chrono::seconds(10));
     // }
 
     std::cout << "Ending..." << std::endl;
@@ -53,17 +53,17 @@ int main()
     std::thread t2(runGFClients);
     std::thread t3(runGFClients);
     std::thread t4(runGFClients);
-    t4.join();
-    t3.join();
-    t2.join();
     t1.join();
+    t2.join();
+    t3.join();
+    t4.join();
 
     // CGigaFlowClient gfclient("tcp://localhost:5555", 1000000);
-    CGigaFlowClient gfclient("tcp://office13.anuview.net:5555", 1000000, zmqMessageHandler);
+    CGigaFlowClient gfclient("office13.anuview.net", 5555, 1000000, zmqMessageHandler);
     int rc = gfclient.StartListener();
     std::cout << "RC " << rc << std::endl;
     // while() {
-    std::this_thread::sleep_for(std::chrono::seconds(60));
+    std::this_thread::sleep_for(std::chrono::seconds(10));
     // }
 
     std::cout << "Ending..." << std::endl;
