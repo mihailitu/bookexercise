@@ -42,6 +42,7 @@ void runGFClients()
 
 int main()
 {
+    CGigaFlowClient::message_handler pfn = zmqMessageHandler;
     std::string fName = "GFR_" + current_time() + ".txt";
     out.open(fName);
     if(!out.is_open()) {
@@ -59,7 +60,7 @@ int main()
     // t4.join();
     return 0;
     // CGigaFlowClient gfclient("tcp://localhost:5555", 1000000);
-    CGigaFlowClient gfclient("office13.anuview.net", 5555, 1000000, zmqMessageHandler);
+    CGigaFlowClient gfclient("office13.anuview.net", 5555, 1000000, pfn);
     int rc = gfclient.StartListener();
     std::cout << "RC " << rc << std::endl;
     // while() {
