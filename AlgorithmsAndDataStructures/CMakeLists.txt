@@ -5,9 +5,10 @@ project(segwick)
 set(CMAKE_CXX_FLAGS_DEBUG "-std=c++17 ${CMAKE_CXX_FLAGS} -g -W -Wall -Wextra -pedantic -Wno-unknown-pragmas -fPIC -fno-strict-aliasing -I../")
 #set(CMAKE_CXX_FLAGS_RELEASE "-std=c++17 ${CMAKE_CXX_FLAGS} -O3 -W -Wall -Wextra -pedantic -Wno-unknown-pragmas -fPIC -fno-strict-aliasing -I../")
 
-link_directories(${PROJECT_NAME} ../ ../gtest/ ../gtest/internal ../gtest/internal/custom)
+link_directories(${PROJECT_NAME} util/ ../ ../gtest/ ../gtest/internal ../gtest/internal/custom)
 
 aux_source_directory(src SRC_LIST)
+aux_source_directory(src/util SRC_LIST)
 aux_source_directory(src/Chapter_1_2 SRC_LIST)
 aux_source_directory(src/Chapter_1_3 SRC_LIST)
 aux_source_directory(src/Chapter_1_4 SRC_LIST)
