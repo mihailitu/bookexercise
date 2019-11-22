@@ -2,29 +2,13 @@
 #include <iostream>
 #include "zmq.h"
 
-CGigaFlowClient::CGigaFlowClient(const std::string &gfAddress, unsigned gfPort, int zmqQueueSz,
-                                 std::function<void(const std::string &gfName, const GigaFlow::Data::GFRecord *gfr )> messageHandler):
+CGigaFlowClient::CGigaFlowClient(const std::string &gfAddress, unsigned gfPort, int zmqQueueSz, message_handler messageHandler):
     m_sGFAddress(gfAddress),
     m_dGFPort(gfPort),
     m_dZMQQueueSz(zmqQueueSz),
     m_pfnMessageHandler(messageHandler)
 {
 }
-
-//CGigaFlowClient::CGigaFlowClient(CGigaFlowClient &rhs)
-//{
-//    this->m_zmqContext = rhs.m_zmqContext;
-//    rhs.m_zmqContext = nullptr;
-
-//    this->m_zmqSubSocket = rhs.m_zmqSubSocket;
-//    rhs.m_zmqSubSocket = nullptr;
-
-//    this->m_pfnMessageHandler = rhs.m_pfnMessageHandler;
-//    rhs.m_pfnMessageHandler = nullptr;
-
-//    this->m_sGigaFlowAddress = rhs.m_sGigaFlowAddress;
-//    rhs.m_sGigaFlowAddress = "";
-//}
 
 CGigaFlowClient::~CGigaFlowClient()
 {

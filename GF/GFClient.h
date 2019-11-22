@@ -6,6 +6,8 @@
 #include <functional>
 
 class CGigaFlowClient {
+public:
+    using message_handler = std::function<void(const std::string &gfName, const GigaFlow::Data::GFRecord *gfr)>;
     // GigaFlow's tcp://addr:PORT
     std::string m_sGFAddress;
     unsigned m_dGFPort;
@@ -25,10 +27,9 @@ class CGigaFlowClient {
     // maintains the thread running state
     bool m_bTerminate;
 
-    std::function<void(const std::string &gfName, const GigaFlow::Data::GFRecord *gfr)> m_pfnMessageHandler;
+    message_handler m_pfnMessageHandler;
 public:
-    CGigaFlowClient(const std::string &gfAddress, unsigned gfPort, int zmqQueueSz,
-                    std::function<void(const std::string &gfName, const GigaFlow::Data::GFRecord *gfr)> messageHandler);
+    CGigaFlowClient(const std::string &gfAddress, unsigned gfPort, int zmqQueueSz, message_handler messageHandler);
     virtual ~CGigaFlowClient();
     int InitializeSockets();
     int StartListener();

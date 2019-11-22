@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include "logger.h"
+#include "util.h"
 
 long long count_brute_force(const std::vector<int> &a)
 {
@@ -47,21 +48,6 @@ long long count_n_sq_log_n(std::vector<int> a)
                 ++count;
     return count;
 }
-
-void readInts(const std::string &fName, std::vector<int> &elements)
-{
-    std::ifstream testFile(fName);
-    if (!testFile.is_open()) {
-        FAIL() << fName << " not found";
-        return;
-    }
-    int p;
-    while (testFile >> p)
-        elements.push_back(p);
-
-    log_info("Constructed %u elements from %s",  elements.size(), fName.c_str());
-}
-
 
 TEST(Chapter_1_4, ThreeSum)
 {
