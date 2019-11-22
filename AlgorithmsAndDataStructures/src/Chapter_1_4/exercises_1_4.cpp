@@ -5,7 +5,7 @@
 
 *3-SUM in quadratic time.*
 Design an algorithm for the 3-SUM problem that takes time proportional to n^2 in the worst case.
-You may assume that you can sort the nnn integers in time proportional to n^2 or better.
+You may assume that you can sort the n integers in time proportional to n^2 or better.
 
 /Hint:
     given an integer x and a sorted array a[] of n distinct integers, design a linear-time algorithm to determine
@@ -28,6 +28,25 @@ sequence of integers. Write a program that, given a bitonic array of n distinct 
 
 Signing bonus. Do it without finding the maximum integer.
 */
+template<typename T>
+bool isBitonic(const std::vector<T> &a)
+{
+    bool isDecresing = false;
+    unsigned N = a.size();
+    for(unsigned i = 1; i < N; ++i) {
+        if (!isDecresing && (a[i] < a[i-1]))
+                isDecresing = true;
+        else
+            if (isDecresing && (a[i] > a[i-1]))
+                return false;
+    }
+    return true;
+}
+
+void searchInBitonic()
+{
+
+}
 
 /*
 3.Question 3
