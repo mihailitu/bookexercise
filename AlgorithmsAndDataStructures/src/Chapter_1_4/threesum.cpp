@@ -89,7 +89,7 @@ TEST(Chapter_1_4, ThreeSumNsqLogN)
     }
 }
 
-// Hint: given an integer x and a sorted array a[] of nnn distinct integers, design a linear-time algorithm to determine if there exists two distinct indices i and j such that a[i]+a[j]==x.
+// Hint: given an integer x and a sorted array a[] of n distinct integers, design a linear-time algorithm to determine if there exists two distinct indices i and j such that a[i]+a[j]==x.
 unsigned long count_n_sq(std::vector<int> &data)
 {
     std::sort(data.begin(), data.end());
