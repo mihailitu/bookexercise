@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(GF)
+project(gfclient)
 
 set(CMAKE_CXX_FLAGS_DEBUG "-std=c++17 ${CMAKE_CXX_FLAGS} -g -W -Wall -Wextra -pedantic -Wno-unknown-pragmas -fPIC -fno-strict-aliasing -Iinclude/")
 aux_source_directory(. SRC_LIST)

@@ -1,4 +1,4 @@
-#include "GFClient.h"
+#include "GigaFlowClient.h"
 
 #include <fstream>
 #include <iostream>
@@ -12,18 +12,27 @@ namespace {
     std::ofstream out;
 }
 
+static int64_t lastRecord = -1;
+static unsigned long records = 0;
 
-void zmqMessageHandler(const std::string &gfName, const GigaFlow::Data::GFRecord *gfRecord)
+void zmqMessageHandler(COrsAppDataManager *, const std::string &, const GigaFlow::Data::GFRecord *gfRecord)
 {
-    out << gfName << " #: ";
+    if (lastRecord != -1 && (lastRecord + 1 != gfRecord->record_id()))
+            std::cout << "Warn: missing records: " << lastRecord << "->" << gfRecord->record_id() << '\n';
+
+    if ((++records % 1000) == 0) {
+        std::cout << ".";
+        std::cout.flush();
+    }
+
+    lastRecord = gfRecord->record_id();
+    // write_gf_record(std::cout, gfRecord);
     write_gf_record(out, gfRecord);
-    std::cout << gfName << " #: ";
-    write_gf_record(std::cout, gfRecord);
 }
 
 void runGFClients()
 {
-    CGigaFlowClient gfclient("office13.anuview.net", 5555, 1000000, zmqMessageHandler);
+    CGigaFlowClient gfclient("office13.anuview.net", 5555, 1000000, nullptr, zmqMessageHandler);
     int rc = gfclient.StartListener();
     std::cout << "RC " << rc << std::endl;
     // while() {
@@ -40,6 +49,11 @@ void runGFClients()
     gfclient.CloseConnection();
 }
 
+class MessageHandler {
+public:
+
+};
+
 int main()
 {
     CGigaFlowClient::message_handler pfn = zmqMessageHandler;
@@ -50,31 +64,16 @@ int main()
         return -1;
     }
 
-    std::thread t1(runGFClients);
-    // std::thread t2(runGFClients);
-    // std::thread t3(runGFClients);
-    // std::thread t4(runGFClients);
-    t1.join();
-    // t2.join();
-    // t3.join();
-    // t4.join();
-    return 0;
-    // CGigaFlowClient gfclient("tcp://localhost:5555", 1000000);
-    CGigaFlowClient gfclient("office13.anuview.net", 5555, 1000000, pfn);
+    CGigaFlowClient gfclient("localhost"/*"192.168.1.191"*/, 5555, 1000000, nullptr, pfn);
+    // CGigaFlowClient gfclient("office13.anuview.net", 5555, 1000000, nullptr, pfn);
     int rc = gfclient.StartListener();
     std::cout << "RC " << rc << std::endl;
-    // while() {
-    std::this_thread::sleep_for(std::chrono::seconds(10));
-    // }
+
+    std::this_thread::sleep_for(std::chrono::seconds(60));
 
     std::cout << "Ending..." << std::endl;
     gfclient.CloseConnection();
     std::cout << "Ended..." << std::endl;
-
-    rc = gfclient.StartListener();
-    std::cout << "RC " << rc << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(10));
-    gfclient.CloseConnection();
 
     return 0;
 }
