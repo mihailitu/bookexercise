@@ -1,6 +1,7 @@
 #include "GigaFlowClient.h"
 
 #include <iostream>
+#include <vector>
 #include <zmq.h>
 
 
@@ -88,6 +89,39 @@ void CGigaFlowClient::CloseConnection()
     std::cout << "Done!\n";
 }
 
+#include <zlib.h>
+
+//int resultLength = inflater.inflate(uncompressed); //Uncompress message into uncompressed object/array and return length
+//short records = getShort(uncompressed, 0); //Get the flow record count
+//int offset = 2; //move pointer after record count
+//for (int i = 0; i < records; i++) { //iterate over each record
+//    short recordLen = getShort(uncompressed, offset); //Get length of this specific flow record
+//    byte[] t = new byte[recordLen]; //buffer to store contents
+//    System.arraycopy(uncompressed, offset + 2, t, 0, recordLen); //copy correct flow block from uncompressed to t object/array
+//    showRecord(t); //decode flow record
+//    offset = offset + 2 + recordLen; //set offset to next message
+//}
+
+void decompress(const void* const data, unsigned datalen)
+{
+    z_stream zstr;
+    zstr.zalloc = Z_NULL;
+    zstr.zfree = Z_NULL;
+    zstr.opaque = Z_NULL;
+    zstr.avail_in = datalen;
+    zstr.next_in = (Bytef*)data;
+
+    int ret = inflateInit(&zstr);
+    std::vector<char> decompressed;
+    const unsigned chunk_sz = 1024;
+    char outChunck[chunk_sz];
+
+    do {
+
+    } while(true);
+
+}
+
 void CGigaFlowClient::GFDataListener()
 {
     unsigned long records = 0;
@@ -105,6 +139,9 @@ void CGigaFlowClient::GFDataListener()
             std::cout << "recv error" << '\n';
 			continue;
         }
+
+        z_stream zstr;
+
         if ((++records % 1000) == 0) {
             std::cout << ".";
             std::cout.flush();

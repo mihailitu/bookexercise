@@ -1,4 +1,4 @@
-#pragma once
+// #pragma once
 
 #include "gf_generated.h"
 #include "flatbuffers/flatbuffers.h"

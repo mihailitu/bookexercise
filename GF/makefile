@@ -14,7 +14,7 @@ first: all
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(LN) $(LO) -o $@ $^ -lpthread -lzmq
+	$(LN) $(LO) -o $@ $^ -lpthread -lzmq -lz
 
 bin/debug/%.o: %.cpp
 	mkdir -p bin/debug/src

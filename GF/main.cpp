@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <string>
 
 std::string current_time();
 std::vector<uint8_t> get_ip(const flatbuffers::Vector<uint8_t> *ip);

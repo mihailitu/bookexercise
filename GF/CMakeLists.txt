@@ -7,4 +7,4 @@ aux_source_directory(. SRC_LIST)
 FILE(GLOB_RECURSE INC_ALL "include/*.h")
 add_executable(${PROJECT_NAME} main.cpp ${SRC_LIST} ${INC_ALL})
 
-target_link_libraries(${PROJECT_NAME} -lpthread -lzmq)
+target_link_libraries(${PROJECT_NAME} -lpthread -lzmq -lz)
