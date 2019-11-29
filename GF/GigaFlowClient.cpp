@@ -112,14 +112,22 @@ void decompress(const void* const data, unsigned datalen)
     zstr.next_in = (Bytef*)data;
 
     int ret = inflateInit(&zstr);
+    if (!ret)
+        return;
     std::vector<char> decompressed;
     const unsigned chunk_sz = 1024;
-    char outChunck[chunk_sz];
+    unsigned char outChunck[chunk_sz];
 
     do {
+        zstr.avail_out = chunk_sz;
+        zstr.next_out = outChunck;
 
-    } while(true);
-
+        ret = inflate(&zstr, Z_NO_FLUSH);
+        if (!ret)
+            return;
+        // insert out_chunk into decompressed
+    } while(zstr.avail_out == 0);
+    inflateEnd(&zstr);
 }
 
 void CGigaFlowClient::GFDataListener()
@@ -140,7 +148,7 @@ void CGigaFlowClient::GFDataListener()
 			continue;
         }
 
-        z_stream zstr;
+        decompress(zmq_msg_data(&zmqMessage), zmq_msg_size(&zmqMessage));
 
         if ((++records % 1000) == 0) {
             std::cout << ".";
