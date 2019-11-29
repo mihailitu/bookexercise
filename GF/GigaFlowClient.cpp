@@ -102,7 +102,7 @@ bool decompress(void* data, size_t datalen, std::vector<unsigned char> &decompre
     zstr.next_in = static_cast<Bytef*>(data);
 
     int ret = inflateInit(&zstr);
-    if (!ret)
+    if (ret != Z_OK)
         return false;
 
     const unsigned chunk_sz = 1024;
@@ -113,7 +113,7 @@ bool decompress(void* data, size_t datalen, std::vector<unsigned char> &decompre
         zstr.next_out = outChunk;
 
         ret = inflate(&zstr, Z_NO_FLUSH);
-        if (!ret) {
+        if (ret != Z_OK) {
             inflateEnd(&zstr);
             return false;
         }
@@ -159,20 +159,26 @@ void CGigaFlowClient::GFDataListener()
 			continue;
         }
 
+        std::cout << "received " << zmq_msg_size(&zmqMessage) << '\n';
+
         if (!m_pfnMessageHandler)
             continue;
+
+        std::cout << "Decompress..." << std::endl;
 
         std::vector<unsigned char> decompressed;
         if (!decompress(zmq_msg_data(&zmqMessage), zmq_msg_size(&zmqMessage), decompressed))
             continue;
 
         size_t buffLen = decompressed.size();
+        std::cout << "Decompressed sz " << buffLen << std::endl;
 
         if (buffLen < 2) // make sure we have enough bytes
             continue;
 
         unsigned short recNo = readShort(decompressed, 0);
         unsigned short offset = 2; // normally, we will use sizeof(short). But the data comes from a Java program, so harcode it
+        std::cout << "Rec no: " << recNo << std::endl;
         for(unsigned i = 0; i < recNo; ++i) {
             if (buffLen > offset + 2) // the buffer is malformed
                 break;
@@ -187,6 +193,7 @@ void CGigaFlowClient::GFDataListener()
                 m_pfnMessageHandler(m_pOrsDataManager, m_sGFAddress, GigaFlow::Data::GetGFRecord(decompressed.data() + offset));
 
             offset += recLen;
+
             bytes += zmq_msg_size(&zmqMessage);
             ++messCount;
         }
