@@ -91,6 +91,45 @@ void CGigaFlowClient::CloseConnection()
 
 #include <zlib.h>
 
+// decompress data into decompressed vector
+bool decompress(void* data, size_t datalen, std::vector<unsigned char> &decompressed)
+{
+    z_stream zstr;
+    zstr.zalloc = Z_NULL;
+    zstr.zfree = Z_NULL;
+    zstr.opaque = Z_NULL;
+    zstr.avail_in = static_cast<unsigned int>(datalen);
+    zstr.next_in = static_cast<Bytef*>(data);
+
+    int ret = inflateInit(&zstr);
+    if (!ret)
+        return false;
+
+    const unsigned chunk_sz = 1024;
+    unsigned char outChunk[chunk_sz];
+
+    do {
+        zstr.avail_out = chunk_sz;
+        zstr.next_out = outChunk;
+
+        ret = inflate(&zstr, Z_NO_FLUSH);
+        if (!ret) {
+            inflateEnd(&zstr);
+            return false;
+        }
+        decompressed.insert(decompressed.end(), outChunk, outChunk + chunk_sz - zstr.avail_out);
+    } while(zstr.avail_out == 0);
+
+    inflateEnd(&zstr);
+
+    return true;
+}
+
+unsigned short readShort(std::vector<unsigned char> &data, unsigned short offset)
+{
+    return *(reinterpret_cast<unsigned short *>(data.data() + offset));
+}
+
 //int resultLength = inflater.inflate(uncompressed); //Uncompress message into uncompressed object/array and return length
 //short records = getShort(uncompressed, 0); //Get the flow record count
 //int offset = 2; //move pointer after record count
@@ -101,34 +140,6 @@ void CGigaFlowClient::CloseConnection()
 //    showRecord(t); //decode flow record
 //    offset = offset + 2 + recordLen; //set offset to next message
 //}
-
-void decompress(const void* const data, unsigned datalen)
-{
-    z_stream zstr;
-    zstr.zalloc = Z_NULL;
-    zstr.zfree = Z_NULL;
-    zstr.opaque = Z_NULL;
-    zstr.avail_in = datalen;
-    zstr.next_in = (Bytef*)data;
-
-    int ret = inflateInit(&zstr);
-    if (!ret)
-        return;
-    std::vector<char> decompressed;
-    const unsigned chunk_sz = 1024;
-    unsigned char outChunck[chunk_sz];
-
-    do {
-        zstr.avail_out = chunk_sz;
-        zstr.next_out = outChunck;
-
-        ret = inflate(&zstr, Z_NO_FLUSH);
-        if (!ret)
-            return;
-        // insert out_chunk into decompressed
-    } while(zstr.avail_out == 0);
-    inflateEnd(&zstr);
-}
 
 void CGigaFlowClient::GFDataListener()
 {
@@ -148,18 +159,41 @@ void CGigaFlowClient::GFDataListener()
 			continue;
         }
 
-        decompress(zmq_msg_data(&zmqMessage), zmq_msg_size(&zmqMessage));
+        if (!m_pfnMessageHandler)
+            continue;
+
+        std::vector<unsigned char> decompressed;
+        if (!decompress(zmq_msg_data(&zmqMessage), zmq_msg_size(&zmqMessage), decompressed))
+            continue;
+
+        size_t buffLen = decompressed.size();
+
+        if (buffLen < 2) // make sure we have enough bytes
+            continue;
+
+        unsigned short recNo = readShort(decompressed, 0);
+        unsigned short offset = 2; // normally, we will use sizeof(short). But the data comes from a Java program, so harcode it
+        for(unsigned i = 0; i < recNo; ++i) {
+            if (buffLen > offset + 2) // the buffer is malformed
+                break;
+
+            unsigned short recLen = readShort(decompressed, offset);
+            offset += 2;
+
+            if (offset + recLen >= buffLen) // the buffer is malformed
+                continue;
+
+            if (m_pfnMessageHandler)
+                m_pfnMessageHandler(m_pOrsDataManager, m_sGFAddress, GigaFlow::Data::GetGFRecord(decompressed.data() + offset));
+
+            offset += recLen;
+            bytes += zmq_msg_size(&zmqMessage);
+            ++messCount;
+        }
 
         if ((++records % 1000) == 0) {
             std::cout << ".";
             std::cout.flush();
         }
-        flatbuffers::FlatBufferBuilder fbb;
-        GigaFlow::Data::GFRecordBuilder gfb(fbb);
-
-        if (m_pfnMessageHandler)
-            m_pfnMessageHandler(m_pOrsDataManager, m_sGFAddress, GigaFlow::Data::GetGFRecord(zmq_msg_data(&zmqMessage)));
-		bytes += zmq_msg_size(&zmqMessage);
-		++messCount;
 	}
 }
