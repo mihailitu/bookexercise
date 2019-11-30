@@ -142,20 +142,16 @@ void CGigaFlowClient::GFDataListener()
         if (!m_pfnMessageHandler)
             continue;
 
-//        std::cout << "Decompress..." << std::endl;
-        unsigned char * decompressed = static_cast<unsigned char*>(zmq_msg_data(&zmqMessage));
-        size_t buffLen = zmq_msg_size(&zmqMessage);
-//        std::cout << "client received:" << std::endl;
-//        for(unsigned c = 0; c < dataLen; ++c)
-//            std::cout << data[c];
-//        std::cout << "----" << std::endl;
+        std::cout << "Decompress..." << std::endl;
+//        unsigned char * decompressed = static_cast<unsigned char*>(zmq_msg_data(&zmqMessage));
+//        size_t buffLen = zmq_msg_size(&zmqMessage);
 
-//        std::vector<unsigned char> decompressed(data, data + dataLen);//(chunk_sz);
-//        if (!decompress(zmq_msg_data(&zmqMessage), zmq_msg_size(&zmqMessage), decompressed))
-//            continue;
+        std::vector<unsigned char> decompressed;//(data, data + dataLen);//(chunk_sz);
+        if (!decompress(zmq_msg_data(&zmqMessage), zmq_msg_size(&zmqMessage), decompressed))
+            continue;
 
-//        size_t buffLen = decompressed.size();
-//        std::cout << "Decompressed sz " << buffLen << std::endl;
+        size_t buffLen = decompressed.size();
+        std::cout << "Decompressed sz " << buffLen << std::endl;
 
         if (buffLen < 2) // make sure we have enough bytes
             continue;
@@ -173,7 +169,7 @@ void CGigaFlowClient::GFDataListener()
             if (offset + recLen > buffLen) // the buffer is malformed
                 continue;
 
-            const GigaFlow::Data::GFRecord * gfr = GigaFlow::Data::GetGFRecord(decompressed + offset);
+            const GigaFlow::Data::GFRecord * gfr = GigaFlow::Data::GetGFRecord(decompressed.data() + offset);
 
             if (m_pfnMessageHandler)
                 m_pfnMessageHandler(m_pOrsDataManager, m_sGFAddress, gfr);
@@ -182,13 +178,12 @@ void CGigaFlowClient::GFDataListener()
 
 //            bytes += zmq_msg_size(&zmqMessage);
 //            ++messCount;
-            ++records;
+            if ((++records % 1000) == 0) {
+                std::cout << ".";
+                std::cout.flush();
+            }
         }
 
-        if ((++records % 1000) == 0) {
-            std::cout << ".";
-            std::cout.flush();
-        }
 	}
 }
 
@@ -202,8 +197,7 @@ void CGigaFlowClient::GFDataListener()
    is an error reading or writing the files. */
 int inf(FILE *source, FILE *dest)
 {
-    const unsigned chunk_sz = 300 *  // ~300 bytes per flow
-                                    10000; // ~10.000 records per message
+    const unsigned chunk_sz = 16384;
     int ret;
     unsigned have;
     z_stream strm;
@@ -315,7 +309,7 @@ bool decompress(void* data, size_t datalen, std::vector<unsigned char> &decompre
 
         ret = inflate(&zstr, Z_NO_FLUSH);
         if (ret != Z_OK && ret != Z_STREAM_END) {
-             zerr(ret);
+            zerr(ret);
             inflateEnd(&zstr);
             return false;
         }

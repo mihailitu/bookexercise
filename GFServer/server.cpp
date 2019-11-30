@@ -7,9 +7,10 @@
 #include <thread>
 #include <chrono>
 #include "logger.h"
+#include <zlib.h>
 
 flatbuffers::FlatBufferBuilder createRecordBuffer(const GigaFlowRecord &gfrec);
-int def(FILE *source, FILE *dest, int level);
+int def(std::vector<unsigned char> &in, std::vector<unsigned char> &out, int level = 2);
 
 int main () {
     zmq::context_t context = zmq::context_t(1);
@@ -46,7 +47,7 @@ int main () {
 
     std::vector<unsigned char> TenKFlows;
 
-    log_info_l("Start sending data.");
+    log_info("Start sending data.");
     std::cout.flush();
     unsigned i = 0;
     unsigned long bytes = 0;
@@ -54,11 +55,13 @@ int main () {
         TenKFlows.clear();
         unsigned short recNo = static_cast<unsigned short>(records.size());
 
+        log_info("Sending %d records... ", recNo);
+
         TenKFlows.insert(TenKFlows.end(), &recNo, &recNo + 2);
         for (const GigaFlowRecord &gfrec : records) {
             // Show progress for each 1000 records
             if ((++i % 1000) == 0) {
-                log_info_l(".");
+                std::cout << ".";
                 std::cout.flush();
             }
 
@@ -72,74 +75,59 @@ int main () {
             bytes += builder.GetSize();
         }
 
-        zmq::message_t request(TenKFlows.data(), TenKFlows.size());
+        std::vector<unsigned char> compressedData;
+        if (def(TenKFlows, compressedData) != Z_OK)
+            continue;
+
+        log_info("message sz: %lu", compressedData.size());
+
+        zmq::message_t request(compressedData.data(), compressedData.size());
         while(!publishSocket.send(request)) {
             std::cerr << "data " << i << " not sent!!!\n";
         }
         std::this_thread::sleep_for(std::chrono::seconds(1));
         break;
     }
-     std::cout << "\nDone sending " << i << " records " << " summimg " << bytes << " bytes\n";
+    std::cout << "\nDone sending " << i << " records " << " summimg " << bytes << " bytes\n";
 
     std::cout << " Done!\n";
     return 0;
 }
-#include <zlib.h>
-#define CHUNK 16384
 
-/* Compress from file source to file dest until EOF on source.
-   def() returns Z_OK on success, Z_MEM_ERROR if memory could not be
-   allocated for processing, Z_STREAM_ERROR if an invalid compression
-   level is supplied, Z_VERSION_ERROR if the version of zlib.h and the
-   version of the library linked do not match, or Z_ERRNO if there is
-   an error reading or writing the files. */
-int def(FILE *source, FILE *dest, int level)
+static const unsigned chunk_sz = 16384;
+int def(std::vector<unsigned char> &in, std::vector<unsigned char> &out, int level)
 {
-    int ret, flush;
+    int ret;
     unsigned have;
     z_stream strm;
-    unsigned char in[CHUNK];
-    unsigned char out[CHUNK];
+    unsigned char out_buff[chunk_sz];
 
     /* allocate deflate state */
     strm.zalloc = Z_NULL;
     strm.zfree = Z_NULL;
     strm.opaque = Z_NULL;
     ret = deflateInit(&strm, level);
+
     if (ret != Z_OK)
         return ret;
 
-    /* compress until end of file */
-    do {
-        strm.avail_in = fread(in, 1, CHUNK, source);
-        if (ferror(source)) {
-            (void)deflateEnd(&strm);
-            return Z_ERRNO;
-        }
-        flush = feof(source) ? Z_FINISH : Z_NO_FLUSH;
-        strm.next_in = in;
+    strm.avail_in = static_cast<unsigned>(in.size());
+    strm.next_in = in.data();
 
-        /* run deflate() on input until output buffer not full, finish
+    /* run deflate() on input until output buffer not full, finish
            compression if all of source has been read in */
-        do {
-            strm.avail_out = CHUNK;
-            strm.next_out = out;
-            ret = deflate(&strm, flush);    /* no bad return value */
-            assert(ret != Z_STREAM_ERROR);  /* state not clobbered */
-            have = CHUNK - strm.avail_out;
-            if (fwrite(out, 1, have, dest) != have || ferror(dest)) {
-                (void)deflateEnd(&strm);
-                return Z_ERRNO;
-            }
-        } while (strm.avail_out == 0);
-        assert(strm.avail_in == 0);     /* all input will be used */
-
-        /* done when last data in file processed */
-    } while (flush != Z_FINISH);
-    assert(ret == Z_STREAM_END);        /* stream will be complete */
+    do {
+        strm.avail_out = chunk_sz;
+        strm.next_out = out_buff;
+        ret = deflate(&strm, Z_NO_FLUSH); /* no bad return value */
+        assert(ret != Z_STREAM_ERROR);    /* state not clobbered */
+        have = chunk_sz - strm.avail_out;
+        out.insert(out.end(), out_buff, out_buff + strm.avail_out);
+    } while (strm.avail_out == 0);
+    assert(strm.avail_in == 0);     /* all input will be used */
 
     /* clean up and return */
-    (void)deflateEnd(&strm);
+    deflateEnd(&strm);
     return Z_OK;
 }
 
