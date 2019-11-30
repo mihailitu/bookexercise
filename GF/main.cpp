@@ -27,7 +27,7 @@ void zmqMessageHandler(COrsAppDataManager *, const std::string &, const GigaFlow
     }
 
     lastRecord = gfRecord->record_id();
-    // write_gf_record(std::cout, gfRecord);
+    write_gf_record(std::cout, gfRecord);
     write_gf_record(out, gfRecord);
 }
 
@@ -65,8 +65,8 @@ int main()
         return -1;
     }
 
-    // CGigaFlowClient gfclient("localhost"/*"192.168.1.191"*/, 5555, 1000000, nullptr, pfn);
-    CGigaFlowClient gfclient("office13.anuview.net", 5555, 1000000, nullptr, pfn);
+    CGigaFlowClient gfclient("localhost"/*"192.168.1.191"*/, 5555, 1000000, nullptr, pfn);
+    // CGigaFlowClient gfclient("office13.anuview.net", 5555, 1000000, nullptr, pfn);
     int rc = gfclient.StartListener();
     std::cout << "RC " << rc << std::endl;
 
@@ -146,4 +146,5 @@ void write_gf_record(std::ostream &out, const GigaFlow::Data::GFRecord * gfr)
     out << gfr->endTime(); out << ", ";
     out << gfr->srcas(); out << ", ";
     out << gfr->dstas(); out << '\n';
+    out.flush();
 }

@@ -28,8 +28,8 @@ private:
 	// ZMQ CURVE encryption keys
     std::string m_sPublicKey = "^d5+H{kG&}+Qm-m*I<Ss5iQ&wot:QQbr?+O]MESE";
     std::string m_sSecretKey = "{}Ff.6:>ItmqX/6gkCaL3hUjNQ@1zPoG]H:/^Xkl";
-    // std::string m_sServerPublicKey = "M[jOCOUmvzAqI@n@?7.TGRGegUpgbf=jK:#@TA3$";//localhost
-    std::string m_sServerPublicKey = "GfhLT3GkgOu3L4^{>ncPc$at2r:K)>{-TzWKwB7^"; // Kevin
+    std::string m_sServerPublicKey = "M[jOCOUmvzAqI@n@?7.TGRGegUpgbf=jK:#@TA3$";//localhost
+    // std::string m_sServerPublicKey = "GfhLT3GkgOu3L4^{>ncPc$at2r:K)>{-TzWKwB7^"; // Kevin
 
 	// GigaFlow client listener thread
 	std::thread m_gfListener;
