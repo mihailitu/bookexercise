@@ -16,6 +16,9 @@ class CGigaFlowClient {
 public:
 	using message_handler = std::function<void(COrsAppDataManager *orsDataManager, const std::string &gfName, const GigaFlow::Data::GFRecord *gfr)>;
 private:
+    // GigaFlow ID
+    std::string m_sServerID;
+
 	// GigaFlow's tcp://addr:PORT
 	std::string m_sGFAddress;
 	unsigned m_dGFPort;
@@ -53,6 +56,7 @@ private:
 public:
 	/**
 	 * @brief CGigaFlowClient constructor
+     * @param gfID  - Gigaflow server ID
 	 * @param gfAddress  - Gigaflow address string
 	 * @param gfPort     - GigaFlow's zmq server port
      * @param gfPublicKey - GigaFlow's public key, used by ZMQ Curve
@@ -60,7 +64,7 @@ public:
 	 * @param orsDataManager - COrsAppDataManager instance
 	 * @param messageHandler - data handler
 	**/
-    CGigaFlowClient(const std::string &gfAddress, unsigned gfPort, std::string gfPublicKey, int zmqQueueSz,
+    CGigaFlowClient(const std::string &gfID, const std::string &gfAddress, unsigned gfPort, const std::string &gfPublicKey, int zmqQueueSz,
 		COrsAppDataManager *orsDataManager, message_handler messageHandler);
 	virtual ~CGigaFlowClient();
 

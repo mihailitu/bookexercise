@@ -4,7 +4,8 @@
 #include <vector>
 #include <zmq.h>
 
-CGigaFlowClient::CGigaFlowClient(const std::string &gfAddress, unsigned gfPort, std::string gfPublicKey, int zmqQueueSz, COrsAppDataManager *orsDataManager, message_handler messageHandler) :
+CGigaFlowClient::CGigaFlowClient(const std::string &gfID, const std::string &gfAddress, unsigned gfPort, const std::string &gfPublicKey, int zmqQueueSz, COrsAppDataManager *orsDataManager, message_handler messageHandler) :
+    m_sServerID(gfID),
     m_sGFAddress(gfAddress),
     m_dGFPort(gfPort),
     m_sServerPublicKey(gfPublicKey),
@@ -207,7 +208,7 @@ void CGigaFlowClient::GFDataListener()
             const GigaFlow::Data::GFRecord * gfr = GigaFlow::Data::GetGFRecord(decompressed.data() + offset);
 
             if (m_pfnMessageHandler)
-                m_pfnMessageHandler(m_pOrsDataManager, m_sGFAddress, gfr);
+                m_pfnMessageHandler(m_pOrsDataManager, m_sServerID, gfr);
 
             offset += recLen;
 

@@ -40,11 +40,13 @@ void runGFClients()
 {
     std::string gfAddr = "localhost"/*"192.168.1.191"*/;
     std::string gfPublicKey = "M[jOCOUmvzAqI@n@?7.TGRGegUpgbf=jK:#@TA3$";
+    std::string gfID = "localhost";
 
 //    std::string gfAddr = "office13.anuview.net";
 //    std::string gfPublicKey = "-pp7*ct:04-wIeEk!h7(gF}POBmLvDNt9YO]P*qc";
+//    std::string gfID = "office13.anuview.net";
 
-    CGigaFlowClient gfclient(gfAddr, 5555, gfPublicKey, 1000000, nullptr, zmqMessageHandler);
+    CGigaFlowClient gfclient(gfID, gfAddr, 5555, gfPublicKey, 1000000, nullptr, zmqMessageHandler);
     int rc = gfclient.StartListener();
     std::cout << "RC " << rc << std::endl;
     // while() {
@@ -78,11 +80,13 @@ int main()
 
     std::string gfAddr = "localhost"/*"192.168.1.191"*/;
     std::string gfPublicKey = "M[jOCOUmvzAqI@n@?7.TGRGegUpgbf=jK:#@TA3$";
+    std::string gfID = "localhost";
 
 //    std::string gfAddr = "office13.anuview.net";
 //    std::string gfPublicKey = "-pp7*ct:04-wIeEk!h7(gF}POBmLvDNt9YO]P*qc";
+//    std::string gfID = "office13.anuview.net";
 
-    CGigaFlowClient gfclient(gfAddr, 5555, gfPublicKey, 1000000, nullptr, pfn);
+    CGigaFlowClient gfclient(gfID, gfAddr, 5555, gfPublicKey, 1000000, nullptr, pfn);
 
     int rc = gfclient.StartListener();
     std::cout << "RC " << rc << std::endl;
