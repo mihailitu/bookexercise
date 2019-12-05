@@ -92,21 +92,20 @@ void CGigaFlowClient::CloseConnection()
 }
 
 #include <zlib.h>
-bool decompress_memory(unsigned char *in_data, size_t in_data_size, std::vector<unsigned char> &out_data)
+bool decompress_data(unsigned char *in_data, size_t in_data_size,
+                       std::vector<unsigned char> &out_data,
+                       unsigned char *temp_buffer, size_t temp_buffer_len)
 {
     std::cout << "Decompress..." << in_data_size;
     std::cout.flush();
 
-    const size_t BUFSIZE = 1024 * 1024;
-    uint8_t temp_buffer[BUFSIZE];
-
     z_stream strm;
     strm.zalloc = nullptr;
     strm.zfree = nullptr;
-    strm.next_in = reinterpret_cast<unsigned char *>(in_data);
+    strm.next_in = static_cast<unsigned char *>(in_data);
     strm.avail_in = static_cast<unsigned int>(in_data_size);
-    strm.next_out = temp_buffer;
-    strm.avail_out = BUFSIZE;
+//    strm.next_out = temp_buffer;
+//    strm.avail_out = static_cast<unsigned int>(temp_buffer_len);
 
     int ret = inflateInit(&strm);
     if (ret != Z_OK)
@@ -114,7 +113,7 @@ bool decompress_memory(unsigned char *in_data, size_t in_data_size, std::vector<
 
     do {
         strm.next_out = static_cast<Bytef*>(temp_buffer);
-        strm.avail_out = BUFSIZE;
+        strm.avail_out = static_cast<unsigned int>(temp_buffer_len);
 
         ret = inflate(&strm, 0);
 
@@ -151,6 +150,10 @@ short readShortBigEndian(std::vector<unsigned char> &data, unsigned offset)
 void CGigaFlowClient::GFDataListener()
 {
     unsigned long records = 0;
+    const size_t temp_buffer_len = 300 * // average flow size
+                                   10000; // maximum expected records
+    // Create the temporary buffer used by decompress_data once and reuse it
+    unsigned char temp_buffer[temp_buffer_len];
 
     std::cout << "Start listening..." << '\n';
     m_bTerminate = false;
@@ -175,7 +178,7 @@ void CGigaFlowClient::GFDataListener()
         unsigned char * inData = static_cast<unsigned char *>(zmq_msg_data(&zmqMessage));
         size_t inDataSz = zmq_msg_size(&zmqMessage);
         std::vector<unsigned char> decompressed;
-        if (!decompress_memory(inData, inDataSz, decompressed)) {
+        if (!decompress_data(inData, inDataSz, decompressed, temp_buffer, temp_buffer_len)) {
             std::cout << "Dec failed" << std::endl;
             continue;
         }
