@@ -9,7 +9,7 @@ enum PROTO {
     ICMP = 1,
 };
 
-const unsigned N = 100;
+const unsigned N = 10000;
 
 struct GigaFlowRecord {
     int64_t record_id;
@@ -30,8 +30,8 @@ struct GigaFlowRecord {
     int32_t tos;
     std::string user;
     std::string domain;
-    std::vector<uint8_t> macsrc;
-    std::vector<uint8_t> macdst;
+    uint64_t macsrc;
+    uint64_t macdst;
     int32_t response1to2;
     int32_t responseCount1to2;
     int32_t flows1to2;
@@ -44,6 +44,9 @@ struct GigaFlowRecord {
     uint64_t startTime;
     uint64_t trueStartTime;
     uint64_t endTime;
+    int32_t srcas;
+    int32_t dstas;
+
 };
 
 static GigaFlowRecord data =
@@ -64,9 +67,9 @@ static GigaFlowRecord data =
  PROTO::TCP,                             // int32_t proto;
  14,                                     // int32_t tos;
  "",                                     // std::string user;
- "",                                    // std::string domain;
- {0x00, 0x0c, 0x29, 0x9f, 0xa2, 0x3b},   // std::vector<uint8_t> macsrc;
- {0x00, 0x00, 0x00, 0x00, 0x00, 0x00},   // std::vector<uint8_t> macdst;
+ "",                                     // std::string domain;
+ 1234,                                   // uint64_t macsrc;
+ 4321,                                   // uint64_t macdst;
  0,                                      // int32_t response1to2;
  0,                                      // int32_t responseCount1to2;
  14,                                     // int32_t flows1to2;
@@ -79,6 +82,8 @@ static GigaFlowRecord data =
  1569590160000,                          // uint64_t startTime;
  1569590216302,                          // uint64_t trueStartTime;
  1569590284910,                          // uint64_t endTime;
+ 123,                                    // int32_t srcas;
+ 321                                     // int32_t dstas;
 };
 
 #endif // GFRECORDSTRUCT_H

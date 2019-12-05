@@ -44,7 +44,9 @@ struct GFRecord FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_FWEXTCODE = 60,
     VT_STARTTIME = 62,
     VT_TRUESTARTTIME = 64,
-    VT_ENDTIME = 66
+    VT_ENDTIME = 66,
+    VT_SRCAS = 68,
+    VT_DSTAS = 70
   };
   int64_t record_id() const {
     return GetField<int64_t>(VT_RECORD_ID, 0);
@@ -100,11 +102,11 @@ struct GFRecord FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::String *domain() const {
     return GetPointer<const flatbuffers::String *>(VT_DOMAIN);
   }
-  const flatbuffers::Vector<uint8_t> *macsrc() const {
-    return GetPointer<const flatbuffers::Vector<uint8_t> *>(VT_MACSRC);
+  uint64_t macsrc() const {
+    return GetField<uint64_t>(VT_MACSRC, 0);
   }
-  const flatbuffers::Vector<uint8_t> *macdst() const {
-    return GetPointer<const flatbuffers::Vector<uint8_t> *>(VT_MACDST);
+  uint64_t macdst() const {
+    return GetField<uint64_t>(VT_MACDST, 0);
   }
   int32_t response1to2() const {
     return GetField<int32_t>(VT_RESPONSE1TO2, 0);
@@ -142,6 +144,12 @@ struct GFRecord FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   uint64_t endTime() const {
     return GetField<uint64_t>(VT_ENDTIME, 0);
   }
+  int32_t srcas() const {
+    return GetField<int32_t>(VT_SRCAS, 0);
+  }
+  int32_t dstas() const {
+    return GetField<int32_t>(VT_DSTAS, 0);
+  }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int64_t>(verifier, VT_RECORD_ID) &&
@@ -167,10 +175,8 @@ struct GFRecord FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            verifier.VerifyString(user()) &&
            VerifyOffset(verifier, VT_DOMAIN) &&
            verifier.VerifyString(domain()) &&
-           VerifyOffset(verifier, VT_MACSRC) &&
-           verifier.VerifyVector(macsrc()) &&
-           VerifyOffset(verifier, VT_MACDST) &&
-           verifier.VerifyVector(macdst()) &&
+           VerifyField<uint64_t>(verifier, VT_MACSRC) &&
+           VerifyField<uint64_t>(verifier, VT_MACDST) &&
            VerifyField<int32_t>(verifier, VT_RESPONSE1TO2) &&
            VerifyField<int32_t>(verifier, VT_RESPONSECOUNT1TO2) &&
            VerifyField<int32_t>(verifier, VT_FLOWS1TO2) &&
@@ -186,6 +192,8 @@ struct GFRecord FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            VerifyField<uint64_t>(verifier, VT_STARTTIME) &&
            VerifyField<uint64_t>(verifier, VT_TRUESTARTTIME) &&
            VerifyField<uint64_t>(verifier, VT_ENDTIME) &&
+           VerifyField<int32_t>(verifier, VT_SRCAS) &&
+           VerifyField<int32_t>(verifier, VT_DSTAS) &&
            verifier.EndTable();
   }
 };
@@ -247,11 +255,11 @@ struct GFRecordBuilder {
   void add_domain(flatbuffers::Offset<flatbuffers::String> domain) {
     fbb_.AddOffset(GFRecord::VT_DOMAIN, domain);
   }
-  void add_macsrc(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> macsrc) {
-    fbb_.AddOffset(GFRecord::VT_MACSRC, macsrc);
+  void add_macsrc(uint64_t macsrc) {
+    fbb_.AddElement<uint64_t>(GFRecord::VT_MACSRC, macsrc, 0);
   }
-  void add_macdst(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> macdst) {
-    fbb_.AddOffset(GFRecord::VT_MACDST, macdst);
+  void add_macdst(uint64_t macdst) {
+    fbb_.AddElement<uint64_t>(GFRecord::VT_MACDST, macdst, 0);
   }
   void add_response1to2(int32_t response1to2) {
     fbb_.AddElement<int32_t>(GFRecord::VT_RESPONSE1TO2, response1to2, 0);
@@ -289,6 +297,12 @@ struct GFRecordBuilder {
   void add_endTime(uint64_t endTime) {
     fbb_.AddElement<uint64_t>(GFRecord::VT_ENDTIME, endTime, 0);
   }
+  void add_srcas(int32_t srcas) {
+    fbb_.AddElement<int32_t>(GFRecord::VT_SRCAS, srcas, 0);
+  }
+  void add_dstas(int32_t dstas) {
+    fbb_.AddElement<int32_t>(GFRecord::VT_DSTAS, dstas, 0);
+  }
   explicit GFRecordBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -321,8 +335,8 @@ inline flatbuffers::Offset<GFRecord> CreateGFRecord(
     int32_t tos = 0,
     flatbuffers::Offset<flatbuffers::String> user = 0,
     flatbuffers::Offset<flatbuffers::String> domain = 0,
-    flatbuffers::Offset<flatbuffers::Vector<uint8_t>> macsrc = 0,
-    flatbuffers::Offset<flatbuffers::Vector<uint8_t>> macdst = 0,
+    uint64_t macsrc = 0,
+    uint64_t macdst = 0,
     int32_t response1to2 = 0,
     int32_t responseCount1to2 = 0,
     int32_t flows1to2 = 0,
@@ -334,11 +348,15 @@ inline flatbuffers::Offset<GFRecord> CreateGFRecord(
     flatbuffers::Offset<flatbuffers::String> fwextcode = 0,
     uint64_t startTime = 0,
     uint64_t trueStartTime = 0,
-    uint64_t endTime = 0) {
+    uint64_t endTime = 0,
+    int32_t srcas = 0,
+    int32_t dstas = 0) {
   GFRecordBuilder builder_(_fbb);
   builder_.add_endTime(endTime);
   builder_.add_trueStartTime(trueStartTime);
   builder_.add_startTime(startTime);
+  builder_.add_macdst(macdst);
+  builder_.add_macsrc(macsrc);
   builder_.add_duration2to1(duration2to1);
   builder_.add_bytes2to1(bytes2to1);
   builder_.add_packets2to1(packets2to1);
@@ -346,6 +364,8 @@ inline flatbuffers::Offset<GFRecord> CreateGFRecord(
   builder_.add_bytes1to2(bytes1to2);
   builder_.add_packets1to2(packets1to2);
   builder_.add_record_id(record_id);
+  builder_.add_dstas(dstas);
+  builder_.add_srcas(srcas);
   builder_.add_fwextcode(fwextcode);
   builder_.add_fwevent(fwevent);
   builder_.add_url(url);
@@ -355,8 +375,6 @@ inline flatbuffers::Offset<GFRecord> CreateGFRecord(
   builder_.add_flows1to2(flows1to2);
   builder_.add_responseCount1to2(responseCount1to2);
   builder_.add_response1to2(response1to2);
-  builder_.add_macdst(macdst);
-  builder_.add_macsrc(macsrc);
   builder_.add_domain(domain);
   builder_.add_user(user);
   builder_.add_tos(tos);
@@ -391,8 +409,8 @@ inline flatbuffers::Offset<GFRecord> CreateGFRecordDirect(
     int32_t tos = 0,
     const char *user = nullptr,
     const char *domain = nullptr,
-    const std::vector<uint8_t> *macsrc = nullptr,
-    const std::vector<uint8_t> *macdst = nullptr,
+    uint64_t macsrc = 0,
+    uint64_t macdst = 0,
     int32_t response1to2 = 0,
     int32_t responseCount1to2 = 0,
     int32_t flows1to2 = 0,
@@ -404,14 +422,14 @@ inline flatbuffers::Offset<GFRecord> CreateGFRecordDirect(
     const char *fwextcode = nullptr,
     uint64_t startTime = 0,
     uint64_t trueStartTime = 0,
-    uint64_t endTime = 0) {
+    uint64_t endTime = 0,
+    int32_t srcas = 0,
+    int32_t dstas = 0) {
   auto dev_ip__ = dev_ip ? _fbb.CreateVector<uint8_t>(*dev_ip) : 0;
   auto client_addr__ = client_addr ? _fbb.CreateVector<uint8_t>(*client_addr) : 0;
   auto server_addr__ = server_addr ? _fbb.CreateVector<uint8_t>(*server_addr) : 0;
   auto user__ = user ? _fbb.CreateString(user) : 0;
   auto domain__ = domain ? _fbb.CreateString(domain) : 0;
-  auto macsrc__ = macsrc ? _fbb.CreateVector<uint8_t>(*macsrc) : 0;
-  auto macdst__ = macdst ? _fbb.CreateVector<uint8_t>(*macdst) : 0;
   auto url__ = url ? _fbb.CreateString(url) : 0;
   auto fwevent__ = fwevent ? _fbb.CreateString(fwevent) : 0;
   auto fwextcode__ = fwextcode ? _fbb.CreateString(fwextcode) : 0;
@@ -435,8 +453,8 @@ inline flatbuffers::Offset<GFRecord> CreateGFRecordDirect(
       tos,
       user__,
       domain__,
-      macsrc__,
-      macdst__,
+      macsrc,
+      macdst,
       response1to2,
       responseCount1to2,
       flows1to2,
@@ -448,7 +466,9 @@ inline flatbuffers::Offset<GFRecord> CreateGFRecordDirect(
       fwextcode__,
       startTime,
       trueStartTime,
-      endTime);
+      endTime,
+      srcas,
+      dstas);
 }
 
 inline const GigaFlow::Data::GFRecord *GetGFRecord(const void *buf) {

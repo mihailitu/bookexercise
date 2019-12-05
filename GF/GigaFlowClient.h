@@ -11,6 +11,7 @@ class COrsAppDataManager {
 
 };
 
+
 class CGigaFlowClient {
 public:
 	using message_handler = std::function<void(COrsAppDataManager *orsDataManager, const std::string &gfName, const GigaFlow::Data::GFRecord *gfr)>;
@@ -26,10 +27,9 @@ private:
 	void *m_zmqSubSocket;
 
 	// ZMQ CURVE encryption keys
-    std::string m_sPublicKey = "^d5+H{kG&}+Qm-m*I<Ss5iQ&wot:QQbr?+O]MESE";
-    std::string m_sSecretKey = "{}Ff.6:>ItmqX/6gkCaL3hUjNQ@1zPoG]H:/^Xkl";
-    std::string m_sServerPublicKey = "M[jOCOUmvzAqI@n@?7.TGRGegUpgbf=jK:#@TA3$";//localhost
-    // std::string m_sServerPublicKey = "GfhLT3GkgOu3L4^{>ncPc$at2r:K)>{-TzWKwB7^"; // Kevin
+    std::string m_sPublicKey;
+    std::string m_sSecretKey;
+    std::string m_sServerPublicKey;
 
 	// GigaFlow client listener thread
 	std::thread m_gfListener;
@@ -55,11 +55,12 @@ public:
 	 * @brief CGigaFlowClient constructor
 	 * @param gfAddress  - Gigaflow address string
 	 * @param gfPort     - GigaFlow's zmq server port
+     * @param gfPublicKey - GigaFlow's public key, used by ZMQ Curve
 	 * @param zmqQueueSz - ZMQ client Queue size
 	 * @param orsDataManager - COrsAppDataManager instance
 	 * @param messageHandler - data handler
 	**/
-	CGigaFlowClient(const std::string &gfAddress, unsigned gfPort, int zmqQueueSz,
+    CGigaFlowClient(const std::string &gfAddress, unsigned gfPort, std::string gfPublicKey, int zmqQueueSz,
 		COrsAppDataManager *orsDataManager, message_handler messageHandler);
 	virtual ~CGigaFlowClient();
 
