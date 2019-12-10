@@ -202,7 +202,12 @@ uint32_t readIntBigEndian(std::vector<unsigned char> &data, unsigned offset)
 //}
 
 /*
- * ZMQ message format:
+ * ZMQ message format after decompression:
+ * 8 bytes - timestamp (uint64_t)
+ * 4 bytes - records number (uint32_t)
+ * for each record:
+ * 2 bytes - record length (uint16_t)
+ * len bytes - flatbuffer data
  */
 
 void CGigaFlowClient::GFDataListener()
