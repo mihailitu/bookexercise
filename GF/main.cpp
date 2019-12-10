@@ -91,7 +91,7 @@ int main()
     int rc = gfclient.StartListener();
     std::cout << "RC " << rc << std::endl;
 
-    std::this_thread::sleep_for(std::chrono::seconds(60));
+    std::this_thread::sleep_for(std::chrono::seconds(60 * 60));
 
     std::cout << "Ending..." << std::endl;
     gfclient.CloseConnection();

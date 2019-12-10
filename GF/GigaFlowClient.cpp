@@ -25,11 +25,9 @@ CGigaFlowClient::~CGigaFlowClient()
 int CGigaFlowClient::StartListener()
 {
     m_zmqContext = zmq_ctx_new();
-    m_zmqSubSocket = zmq_socket(m_zmqContext, ZMQ_SUB);
+    m_zmqSubSocket = zmq_socket(m_zmqContext, ZMQ_REQ);
 
-    int rc = zmq_setsockopt(m_zmqSubSocket, ZMQ_SUBSCRIBE, "", 0);
-    if (rc)
-        return -1;
+    int rc = 0;
 
     if (m_sPublicKey.length() > 0) {
         rc = zmq_setsockopt(m_zmqSubSocket, ZMQ_CURVE_PUBLICKEY, m_sPublicKey.c_str(), m_sPublicKey.length() + 1); // must include null byte
@@ -61,12 +59,12 @@ int CGigaFlowClient::StartListener()
     //        return -1;
     //    }
 
-    if (m_dZMQQueueSz > 0) {
-        rc = zmq_setsockopt(m_zmqSubSocket, ZMQ_RCVHWM, &m_dZMQQueueSz, sizeof(m_dZMQQueueSz));
-        if (rc) {
-            return -1;
-        }
-    }
+//    if (m_dZMQQueueSz > 0) {
+//        rc = zmq_setsockopt(m_zmqSubSocket, ZMQ_RCVHWM, &m_dZMQQueueSz, sizeof(m_dZMQQueueSz));
+//        if (rc) {
+//            return -1;
+//        }
+//    }
 
     rc = zmq_connect(m_zmqSubSocket, ("tcp://" + m_sGFAddress + ":" + std::to_string(m_dGFPort)).c_str());
     if (rc)
@@ -133,51 +131,124 @@ bool decompress_data(unsigned char *in_data, size_t in_data_size,
     return true;
 }
 
-short readShort(std::vector<unsigned char> &data, unsigned offset)
+#include <endian.h>
+uint16_t readShortBigEndian(std::vector<unsigned char> &data, unsigned offset)
 {
-    return *(reinterpret_cast<short *>(data.data() + offset));
+    uint16_t ret = *(reinterpret_cast<uint16_t*>(data.data() + offset));
+    ret = be16toh(ret);
+    return ret;
 }
 
-short readShortBigEndian(std::vector<unsigned char> &data, unsigned offset)
+uint64_t readULongLongBigEndian(std::vector<unsigned char> &data, unsigned offset)
 {
-    // return readShort(data, offset);
-    short j;
-    j = data[offset];
-    j <<= 8;
-    j |= data[offset+1];
-    return j;
+    uint64_t ret = *(reinterpret_cast<uint64_t *>(data.data() + offset));
+    ret = be64toh(ret);
+    return ret;
 }
+
+uint32_t readIntBigEndian(std::vector<unsigned char> &data, unsigned offset)
+{
+    uint32_t ret = *(reinterpret_cast<uint32_t *>(data.data() + offset));
+    ret = be32toh(ret);
+    return ret;
+}
+
+//unsigned short readShortBigEndian(std::vector<unsigned char> &data, unsigned offset)
+//{
+//    short j;
+//    j = data[offset];
+//    j <<= 8;
+//    j |= data[offset + 1];
+//    // std::bitset<8> x(data[offset]);
+//    // std::bitset<8> y(data[offset + 1]);
+//    // std::bitset<16> z(j);
+//    // std::cout << "readShort..." << x << '\n';
+//    // std::cout << "readShort..." << y << '\n';
+//    // std::cout << "offset:" << offset << '\n';
+//    // std::cout << "readShort..." << j << '\n';
+//    return j;
+//    // return *(reinterpret_cast<unsigned short *>(data.data() + offset));
+//}
+//unsigned int readIntBigEndian(std::vector<unsigned char> &array, unsigned offset)
+//{
+//    unsigned int value =
+//        static_cast<unsigned int>(array[offset]) << 24 |
+//        static_cast<unsigned int>(array[offset + 1]) << 16 |
+//        static_cast<unsigned int>(array[offset + 2]) << 8 |
+//        static_cast<unsigned int>(array[offset + 3]) ;
+
+//    // std::bitset<32> z(value);
+//    // std::cout << "readInt..." << value << '\n';
+//    // std::cout << "readInt..." << z << '\n';
+//    return value;
+//}
+
+//uint64_t readULongLongBigEndian(std::vector<unsigned char> &array, unsigned offset)
+//{
+//    uint64_t value =
+//        static_cast<uint64_t>(array[offset]) << 56 |
+//        static_cast<uint64_t>(array[offset + 1]) << 48 |
+//        static_cast<uint64_t>(array[offset + 2]) << 40 |
+//        static_cast<uint64_t>(array[offset + 3]) << 32 |
+//        static_cast<uint64_t>(array[offset + 4]) << 24 |
+//        static_cast<uint64_t>(array[offset + 5]) << 16 |
+//        static_cast<uint64_t>(array[offset + 6]) << 8 |
+//        static_cast<uint64_t>(array[offset + 7]);
+//    // std::bitset<64> z(value);
+//    // std::cout << "readLong..." << value << '\n';
+//    // std::cout << "readLong..." << z << '\n';
+//    return value;
+//    // return *(reinterpret_cast<unsigned short *>(data.data() + offset));
+//}
+
+/*
+ * ZMQ message format:
+ */
 
 void CGigaFlowClient::GFDataListener()
 {
-    unsigned long records = 0;
     const size_t temp_buffer_len = 300 * // average flow size
-                                   10000; // maximum expected records
+                                   100000; // maximum expected records
     // Create the temporary buffer used by decompress_data once and reuse it
     unsigned char temp_buffer[temp_buffer_len];
 
     std::cout << "Start listening..." << '\n';
     m_bTerminate = false;
-
-    zmq_msg_t zmqMessage;
+    uint64_t lastSeen = 0;
 
     while (!m_bTerminate) {
-        zmq_msg_init(&zmqMessage);
-        int rc = zmq_recvmsg(m_zmqSubSocket, &zmqMessage, 0);
+        //  {"type":"forensics",
+        //   "lastseen":0}
+        std::string jsonReq = R"({"type":"forensics","lastseen":)";
+        jsonReq += std::to_string(lastSeen);
+        jsonReq += "}";
+        std::cout << "Request: " << jsonReq << std::endl;
+
+        int rc = zmq_send(m_zmqSubSocket, jsonReq.c_str(), jsonReq.length(), 0);
+        if (rc < 0) {
+            std::cout << "send error" << '\n';
+            continue;
+        }
+        zmq_msg_t zmqReply;
+        zmq_msg_init(&zmqReply);
+        rc = zmq_recvmsg(m_zmqSubSocket, &zmqReply, 0);
         if (rc < 0) {
             std::cout << "recv error" << '\n';
             continue;
         }
 
-        std::cout << "received " << zmq_msg_size(&zmqMessage) << '\n';
+        std::cout << "received " << zmq_msg_size(&zmqReply) << '\n';
 
-        if (!m_pfnMessageHandler)
+        if (zmq_msg_size(&zmqReply) == 0) { // no new data available
+            std::cout << "No data available. Trying again later" << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(10)); // try again in 10 seconds
             continue;
+        }
 
         std::cout << "Decompress..." << std::endl;
 
-        unsigned char * inData = static_cast<unsigned char *>(zmq_msg_data(&zmqMessage));
-        size_t inDataSz = zmq_msg_size(&zmqMessage);
+        unsigned char * inData = static_cast<unsigned char *>(zmq_msg_data(&zmqReply));
+        size_t inDataSz = zmq_msg_size(&zmqReply);
         std::vector<unsigned char> decompressed;
         if (!decompress_data(inData, inDataSz, decompressed, temp_buffer, temp_buffer_len)) {
             std::cout << "Dec failed" << std::endl;
@@ -187,19 +258,27 @@ void CGigaFlowClient::GFDataListener()
         size_t buffLen = decompressed.size();
         std::cout << "Decompressed sz " << buffLen << std::endl;
 
+        if (buffLen < sizeof(lastSeen))
+            continue;
+
+        unsigned offset = 0;
+
+        lastSeen = readULongLongBigEndian(decompressed, offset);
+        offset += sizeof(lastSeen);
+
+        std::cout << "Timestamp: " << lastSeen << std::endl;
+
         if (buffLen < sizeof(short)) // make sure we have enough bytes
             continue;
 
-        short recNo = readShortBigEndian(decompressed, 0);
-        unsigned offset = sizeof(recNo); // normally, we will use sizeof(short). But the data comes from a Java program, so harcode it
+        uint32_t recNo = readIntBigEndian(decompressed, offset);
+        offset += sizeof(recNo);
         std::cout << "Rec no: " << recNo << std::endl;
-        // continue;
-        for(short i = 0; i < recNo; ++i) {
+        for(unsigned int i = 0; i < recNo; ++i) {
             if (offset + 2 > buffLen) // the buffer is malformed
                 break;
 
-            short recLen = readShortBigEndian(decompressed, offset);
-            std::cout << "Rec: " << i << " len: " <<  recLen << std::endl;
+            uint16_t recLen = readShortBigEndian(decompressed, offset);
             offset += sizeof(recLen);
 
             if (offset + recLen > buffLen) // the buffer is malformed
@@ -211,11 +290,6 @@ void CGigaFlowClient::GFDataListener()
                 m_pfnMessageHandler(m_pOrsDataManager, m_sServerID, gfr);
 
             offset += recLen;
-
-            if ((++records % 1000) == 0) {
-                std::cout << ".";
-                std::cout.flush();
-            }
         }
     }
 }
