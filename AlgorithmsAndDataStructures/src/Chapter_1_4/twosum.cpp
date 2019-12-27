@@ -3,7 +3,7 @@
 #include <unordered_map>
 
 // Given unsorted a, count all pairs that a[i]+a[j] = x
-int count_all_pairs(const std::vector<int> &a, int x)
+unsigned count_all_pairs(const std::vector<int> &a, int x)
 {
     std::unordered_map<int, int> hash;
     for(unsigned i = 0; i < a.size(); ++i)
@@ -14,6 +14,7 @@ int count_all_pairs(const std::vector<int> &a, int x)
         // if(hash.find(numberToFind))
 
     }
+    return 0;
 }
 
 TEST(Chapter_1_4, TwoSum)

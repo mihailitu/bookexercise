@@ -1,9 +1,9 @@
 #include "unionfind.h"
 #include "gtest.h"
 
-UnionFind::UnionFind(int N) : N(N), numberOfComponents(N-1)
+UnionFind::UnionFind(unsigned N) : N(N), numberOfComponents(N-1)
 {
-    for(int i = 0; i < N; ++i) // N array accesses
+    for(unsigned i = 0; i < N; ++i) // N array accesses
         id.push_back(i);
 }
 
@@ -19,14 +19,14 @@ void UnionFind::print() const
     std::cout << '\n';
 }
 
-UnionFindQuickUnionWeighted::UnionFindQuickUnionWeighted(int N) : UnionFind (N)
+UnionFindQuickUnionWeighted::UnionFindQuickUnionWeighted(unsigned N) : UnionFind (N)
 {
-    for(int i = 0; i < N; ++i) { // N array accesses
+    for(unsigned i = 0; i < N; ++i) { // N array accesses
         sz.push_back(1);
     }
 }
 
-int UnionFindQuickUnionWeighted::root(int i)
+unsigned UnionFindQuickUnionWeighted::root(unsigned i)
 {
     while(i != id[i]) {
         id[i] = id[id[i]]; // path compression
@@ -35,10 +35,10 @@ int UnionFindQuickUnionWeighted::root(int i)
     return i;
 }
 
-void UnionFindQuickUnionWeighted::connect(int p, int q)
+void UnionFindQuickUnionWeighted::connect(unsigned p, unsigned q)
 {
-    int i = root(p);
-    int j = root(q);
+    unsigned i = root(p);
+    unsigned j = root(q);
     if (i == j)
         return;
 
@@ -52,7 +52,7 @@ void UnionFindQuickUnionWeighted::connect(int p, int q)
     --numberOfComponents;
 }
 
-bool UnionFindQuickUnionWeighted::connected(int p, int q)
+bool UnionFindQuickUnionWeighted::connected(unsigned p, unsigned q)
 {
     return root(p) == root(q);
 }
@@ -67,14 +67,14 @@ void UnionFindQuickUnionWeighted::print() const
     std::cout << "\n\n";
 }
 
-UnionFindQuickFind::UnionFindQuickFind(int N) : UnionFind (N)
+UnionFindQuickFind::UnionFindQuickFind(unsigned N) : UnionFind (N)
 {
 }
 
-void UnionFindQuickFind::connect(int p, int q)
+void UnionFindQuickFind::connect(unsigned p, unsigned q)
 {
-    int pid = id[p];
-    int qid = id[q];
+    unsigned pid = id[p];
+    unsigned qid = id[q];
 
     if(pid == qid)
         return;
@@ -87,33 +87,33 @@ void UnionFindQuickFind::connect(int p, int q)
     --numberOfComponents;
 }
 
-bool UnionFindQuickFind::connected(int p, int q)
+bool UnionFindQuickFind::connected(unsigned p, unsigned q)
 {
     return (id[p] == id[q]);
 }
 
-UnionFindQuickUnion::UnionFindQuickUnion(int N) : UnionFind (N)
+UnionFindQuickUnion::UnionFindQuickUnion(unsigned N) : UnionFind (N)
 {
 }
 
-int UnionFindQuickUnion::root(int i)
+unsigned UnionFindQuickUnion::root(unsigned i)
 {
     while(i != id[i])
         i = id[i];
     return i;
 }
 
-void UnionFindQuickUnion::connect(int p, int q)
+void UnionFindQuickUnion::connect(unsigned p, unsigned q)
 {
-    int i = root(p);
-    int j = root(q);
+    unsigned i = root(p);
+    unsigned j = root(q);
     if (i == j)
         return;
     id[i] = j;
     --numberOfComponents;
 }
 
-bool UnionFindQuickUnion::connected(int p, int q)
+bool UnionFindQuickUnion::connected(unsigned p, unsigned q)
 {
     return root(p) == root(q);
 }
