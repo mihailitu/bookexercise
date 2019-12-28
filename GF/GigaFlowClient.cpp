@@ -93,7 +93,7 @@ void CGigaFlowClient::CloseConnection()
 #include <zlib.h>
 bool decompress_data(unsigned char *in_data, size_t in_data_size,
                        std::vector<unsigned char> &out_data,
-                       unsigned char *temp_buffer, size_t temp_buffer_len)
+                       unsigned char *temp_buffer, size_t temp_buffer_len, const std::atomic<bool> &terminate)
 {
     std::cout << "Decompress..." << in_data_size;
     std::cout.flush();
@@ -111,6 +111,10 @@ bool decompress_data(unsigned char *in_data, size_t in_data_size,
         return false;
 
     do {
+        if (terminate) {
+            ret = Z_STREAM_ERROR;
+            break;
+        }
         strm.next_out = static_cast<Bytef*>(temp_buffer);
         strm.avail_out = static_cast<unsigned int>(temp_buffer_len);
 
@@ -152,54 +156,6 @@ uint32_t readIntBigEndian(std::vector<unsigned char> &data, unsigned offset)
     ret = be32toh(ret);
     return ret;
 }
-
-//unsigned short readShortBigEndian(std::vector<unsigned char> &data, unsigned offset)
-//{
-//    short j;
-//    j = data[offset];
-//    j <<= 8;
-//    j |= data[offset + 1];
-//    // std::bitset<8> x(data[offset]);
-//    // std::bitset<8> y(data[offset + 1]);
-//    // std::bitset<16> z(j);
-//    // std::cout << "readShort..." << x << '\n';
-//    // std::cout << "readShort..." << y << '\n';
-//    // std::cout << "offset:" << offset << '\n';
-//    // std::cout << "readShort..." << j << '\n';
-//    return j;
-//    // return *(reinterpret_cast<unsigned short *>(data.data() + offset));
-//}
-//unsigned int readIntBigEndian(std::vector<unsigned char> &array, unsigned offset)
-//{
-//    unsigned int value =
-//        static_cast<unsigned int>(array[offset]) << 24 |
-//        static_cast<unsigned int>(array[offset + 1]) << 16 |
-//        static_cast<unsigned int>(array[offset + 2]) << 8 |
-//        static_cast<unsigned int>(array[offset + 3]) ;
-
-//    // std::bitset<32> z(value);
-//    // std::cout << "readInt..." << value << '\n';
-//    // std::cout << "readInt..." << z << '\n';
-//    return value;
-//}
-
-//uint64_t readULongLongBigEndian(std::vector<unsigned char> &array, unsigned offset)
-//{
-//    uint64_t value =
-//        static_cast<uint64_t>(array[offset]) << 56 |
-//        static_cast<uint64_t>(array[offset + 1]) << 48 |
-//        static_cast<uint64_t>(array[offset + 2]) << 40 |
-//        static_cast<uint64_t>(array[offset + 3]) << 32 |
-//        static_cast<uint64_t>(array[offset + 4]) << 24 |
-//        static_cast<uint64_t>(array[offset + 5]) << 16 |
-//        static_cast<uint64_t>(array[offset + 6]) << 8 |
-//        static_cast<uint64_t>(array[offset + 7]);
-//    // std::bitset<64> z(value);
-//    // std::cout << "readLong..." << value << '\n';
-//    // std::cout << "readLong..." << z << '\n';
-//    return value;
-//    // return *(reinterpret_cast<unsigned short *>(data.data() + offset));
-//}
 
 /*
  * ZMQ message format after decompression:
@@ -255,10 +211,13 @@ void CGigaFlowClient::GFDataListener()
         unsigned char * inData = static_cast<unsigned char *>(zmq_msg_data(&zmqReply));
         size_t inDataSz = zmq_msg_size(&zmqReply);
         std::vector<unsigned char> decompressed;
-        if (!decompress_data(inData, inDataSz, decompressed, temp_buffer, temp_buffer_len)) {
+        if (!decompress_data(inData, inDataSz, decompressed, temp_buffer, temp_buffer_len, m_bTerminate)) {
             std::cout << "Dec failed" << std::endl;
             continue;
         }
+
+        if (m_bTerminate)
+            return;
 
         size_t buffLen = decompressed.size();
         std::cout << "Decompressed sz " << buffLen << std::endl;
@@ -280,6 +239,9 @@ void CGigaFlowClient::GFDataListener()
         offset += sizeof(recNo);
         std::cout << "Rec no: " << recNo << std::endl;
         for(unsigned int i = 0; i < recNo; ++i) {
+            if (m_bTerminate)
+                break;
+
             if (offset + 2 > buffLen) // the buffer is malformed
                 break;
 

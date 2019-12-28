@@ -6,6 +6,7 @@
 #include <string>
 #include <thread>
 #include <functional>
+#include <atomic>
 
 class COrsAppDataManager {
 
@@ -42,7 +43,8 @@ private:
 	int m_dZMQQueueSz;
 
 	// maintains the thread running state
-	bool m_bTerminate;
+    std::atomic<bool> m_bTerminate;
+    // bool m_bTerminate;
 
 	// COrsAppDataManager instance
 	COrsAppDataManager *m_pOrsDataManager;
