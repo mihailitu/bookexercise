@@ -112,7 +112,7 @@ bool decompress_data(unsigned char *in_data, size_t in_data_size,
 
     do {
         if (terminate) {
-            ret = Z_STREAM_ERROR;
+            ret = Z_STREAM_END; // just exit
             break;
         }
         strm.next_out = static_cast<Bytef*>(temp_buffer);
