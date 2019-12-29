@@ -1,6 +1,7 @@
 #ifndef PERCOLATION_H
 #define PERCOLATION_H
 
+#include "unionfind.h"
 #include <vector>
 
 class Percolation
@@ -8,6 +9,10 @@ class Percolation
     unsigned long N;
     unsigned openSites;
     std::vector<std::vector<bool>> grid;
+
+    UnionFindQuickUnionWeighted uf;
+    unsigned ufIndex(unsigned row, unsigned col) const;
+    void connectUF(unsigned ufidx, unsigned row, unsigned col);
 public:
     // creates n-by-n grid, with all sites initially blocked
     Percolation(unsigned long _N);
@@ -27,7 +32,7 @@ public:
     // does the system percolate?
     bool percolates();
 
-    void print() const;
+    void print() const;    
 };
 
 #endif // PERCOLATION_H
