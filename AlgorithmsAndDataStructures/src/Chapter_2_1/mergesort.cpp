@@ -1,4 +1,5 @@
 #include <gtest.h>
+#include <random>
 
 template<typename T>
 void printv(const std::vector<T> &v)
@@ -11,12 +12,12 @@ void printv(const std::vector<T> &v)
 template<typename T>
 bool isSorted(const std::vector<T> &v, unsigned long lo, unsigned long hi)
 {
-    if (v.size() == 1)
+    if (v.size() <= 1)
         return true;
     if (lo >= hi)
         return true;
     for(unsigned long i = lo + 1; i <= hi; ++i)
-        if (v[i - 1] > v[i])
+        if (!(v[i - 1] <= v[i]))
             return false;
     return true;
 }
@@ -63,11 +64,13 @@ void sort(std::vector<T> &aux, std::vector<T> &data, unsigned long lo, unsigned 
 template<typename T>
 void mergesort(std::vector<T> &data)
 {
+    if (data.size() == 0)
+        return;
     std::vector<T> aux(data.size());
     sort(aux, data, 0, data.size() - 1);
 }
 
-TEST(Chapter_2_1, MergeSortInt1)
+TEST(Chapter_2_1, MergeSortInt)
 {
     std::vector<int> data = { 1, 3, 6, 4, 2, 4, 1, 4};
     printv(data);
@@ -79,7 +82,7 @@ TEST(Chapter_2_1, MergeSortInt1)
     printv(data);
 }
 
-TEST(Chapter_2_1, MergeSortChar1)
+TEST(Chapter_2_1, MergeSortChar)
 {
     std::string str = "MERGESORTEXAMPLE";
     std::vector<char> data (str.begin(), str.end());
@@ -90,4 +93,22 @@ TEST(Chapter_2_1, MergeSortChar1)
     EXPECT_TRUE(isSorted(data, 0, data.size() - 1));
 
     printv(data);
+}
+
+TEST(Chapter_2_1, MergeSortIntRandom)
+{
+    unsigned N = 1'000'000;
+    std::vector<int> data;
+    data.reserve(N);
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, N - 1);
+
+    for(unsigned i = 0; i < N; ++i)
+        data.push_back(dis(gen));
+
+    mergesort(data);
+
+    EXPECT_TRUE(isSorted(data, 0, data.size() - 1));
 }
