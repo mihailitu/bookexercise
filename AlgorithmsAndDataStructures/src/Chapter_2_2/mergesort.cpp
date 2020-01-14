@@ -83,7 +83,7 @@ void bottomupmergesort(std::vector<T> &data)
 }
 
 
-TEST(Chapter_2_1, MergeSortInt)
+TEST(Chapter_2_2, MergeSortInt)
 {
     std::vector<int> data = { 1, 3, 6, 4, 2, 4, 1, 4};
     printv(data);
@@ -95,7 +95,7 @@ TEST(Chapter_2_1, MergeSortInt)
     printv(data);
 }
 
-TEST(Chapter_2_1, MergeSortChar)
+TEST(Chapter_2_2, MergeSortChar)
 {
     std::string str = "MERGESORTEXAMPLE";
     std::vector<char> data (str.begin(), str.end());
@@ -108,7 +108,7 @@ TEST(Chapter_2_1, MergeSortChar)
     printv(data);
 }
 
-TEST(Chapter_2_1, MergeSortIntRandom1MElem)
+TEST(Chapter_2_2, MergeSortIntRandom1MElem)
 {
     unsigned N = 1'000'000;
     std::vector<int> data;
@@ -126,7 +126,7 @@ TEST(Chapter_2_1, MergeSortIntRandom1MElem)
     EXPECT_TRUE(isSorted(data, 0, data.size() - 1));
 }
 
-TEST(Chapter_2_1, MergeSortBottomUp1MElem)
+TEST(Chapter_2_2, MergeSortBottomUp1MElem)
 {
     unsigned N = 1'000'000;
     std::vector<int> data;
