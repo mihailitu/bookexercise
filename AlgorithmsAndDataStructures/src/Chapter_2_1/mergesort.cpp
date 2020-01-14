@@ -70,6 +70,19 @@ void mergesort(std::vector<T> &data)
     sort(aux, data, 0, data.size() - 1);
 }
 
+template<typename T>
+void bottomupmergesort(std::vector<T> &data)
+{
+    if (data.size() == 0)
+        return;
+    std::vector<T> aux(data.size());
+    unsigned long N = data.size();
+    for(unsigned long sz = 1; sz < N; sz = 2 * sz )
+        for(unsigned long lo = 0; lo < N - sz; lo += sz * 2)
+            merge(aux, data, lo, lo + sz - 1, std::min(lo + sz + sz - 1, N - 1));
+}
+
+
 TEST(Chapter_2_1, MergeSortInt)
 {
     std::vector<int> data = { 1, 3, 6, 4, 2, 4, 1, 4};
@@ -95,7 +108,7 @@ TEST(Chapter_2_1, MergeSortChar)
     printv(data);
 }
 
-TEST(Chapter_2_1, MergeSortIntRandom)
+TEST(Chapter_2_1, MergeSortIntRandom1MElem)
 {
     unsigned N = 1'000'000;
     std::vector<int> data;
@@ -109,6 +122,24 @@ TEST(Chapter_2_1, MergeSortIntRandom)
         data.push_back(dis(gen));
 
     mergesort(data);
+
+    EXPECT_TRUE(isSorted(data, 0, data.size() - 1));
+}
+
+TEST(Chapter_2_1, MergeSortBottomUp1MElem)
+{
+    unsigned N = 1'000'000;
+    std::vector<int> data;
+    data.reserve(N);
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, N - 1);
+
+    for(unsigned i = 0; i < N; ++i)
+        data.push_back(dis(gen));
+
+    bottomupmergesort(data);
 
     EXPECT_TRUE(isSorted(data, 0, data.size() - 1));
 }
