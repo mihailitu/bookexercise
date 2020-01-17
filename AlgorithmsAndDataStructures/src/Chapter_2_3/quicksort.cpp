@@ -4,17 +4,17 @@
 #include "util.h"
 
 template<typename T>
-int partition(std::vector<T> &data, int lo, int hi)
+unsigned long partition(std::vector<T> &data, unsigned long lo, unsigned long hi)
 {
-    int i = lo;
-    int j = hi + 1;
+    unsigned long i = lo;
+    unsigned long j = hi + 1;
 
     while (true) {
         while(data[++i] < data[lo]) // find item on the left to swap
             if (i == hi)
                 break;
 
-        while(data[lo] < data[--j]) // find item on the right side to swap
+        while(j > 0 && (data[lo] < data[--j])) // find item on the right side to swap
             if (j == lo)
                 break;
 
@@ -28,13 +28,14 @@ int partition(std::vector<T> &data, int lo, int hi)
 }
 
 template<typename T>
-void sort(std::vector<T> &data, int lo, int hi)
+void sort(std::vector<T> &data, unsigned long lo, unsigned long hi)
 {
     if (hi <= lo)
         return;
-    int j = partition(data, lo, hi);
+    unsigned long j = partition(data, lo, hi);
 
-    sort(data, lo, j - 1);
+    if (j > 0)
+        sort(data, lo, j - 1);
     sort(data, j + 1, hi);
 
 }
@@ -42,8 +43,8 @@ void sort(std::vector<T> &data, int lo, int hi)
 template<typename T>
 void quicksort(std::vector<T> &data)
 {
-    int lo = 0;
-    int hi = static_cast<int>(data.size()) - 1;
+    unsigned long lo = 0;
+    unsigned long hi = data.size() - 1;
     std::random_shuffle(data.begin(), data.end());
     sort(data, lo, hi);
 }
