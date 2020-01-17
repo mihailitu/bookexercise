@@ -21,7 +21,7 @@ void insertionSort(std::vector<T> &a)
 {
     auto N = a.size();
     for(decltype (N) i = 0; i < N; ++i) {
-        for(decltype (i) j = i; j > 0; --j)
+        for(auto j = i; j > 0; --j)
             if (a[j] < a[j-1])
                 std::swap(a[j], a[j-1]);
             else
@@ -34,13 +34,13 @@ void shellSort(std::vector<T> &a)
 {
     auto N = a.size();
 
-    decltype(N) h = N;
+    auto h = N;
     while (h < N/3)
         h = 3*h + 1;
 
     while(h >= 1) {
-        for(decltype (N) i = h; i < N; ++i) {
-            for(decltype (i) j = i; j >= h; j -= h)
+        for(auto i = h; i < N; ++i) {
+            for(auto j = i; j >= h; j -= h)
                 if (a[j] < a[j-h])
                     std::swap(a[j], a[j-h]);
         }
