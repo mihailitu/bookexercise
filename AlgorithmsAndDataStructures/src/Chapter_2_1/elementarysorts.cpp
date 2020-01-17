@@ -83,7 +83,7 @@ TEST(Chapter_2_1, ShellSort)
 
 TEST(Chapter_2_1, TimedElementarySorts)
 {
-    unsigned N = 100'000;
+    unsigned N = 1'000;
     std::vector<int> arr;
 
     std::random_device rd;
