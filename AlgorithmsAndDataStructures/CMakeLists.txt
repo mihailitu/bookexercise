@@ -16,6 +16,7 @@ aux_source_directory(src/Chapter_1_5 SRC_LIST)
 aux_source_directory(src/Chapter_2_1 SRC_LIST)
 aux_source_directory(src/Chapter_2_2 SRC_LIST)
 aux_source_directory(src/Chapter_2_3 SRC_LIST)
+aux_source_directory(src/Chapter_2_4 SRC_LIST)
 
 FILE(GLOB_RECURSE INC_ALL "src/Chapter_1_5/*.h")
 
