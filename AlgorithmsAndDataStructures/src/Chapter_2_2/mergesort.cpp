@@ -90,7 +90,7 @@ TEST(Chapter_2_2, MergeSortChar)
 
 TEST(Chapter_2_2, MergeSortIntRandom1MElem)
 {
-    unsigned N = 1'000'000;
+    unsigned N = 10'000'000;
     std::vector<int> data;
     data.reserve(N);
 
@@ -108,7 +108,7 @@ TEST(Chapter_2_2, MergeSortIntRandom1MElem)
 
 TEST(Chapter_2_2, MergeSortBottomUp1MElem)
 {
-    unsigned N = 1'000'000;
+    unsigned N = 10'000'000;
     std::vector<int> data;
     data.reserve(N);
 
