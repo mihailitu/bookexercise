@@ -22,7 +22,7 @@ bool isSorted(const std::vector<T> &v, unsigned long lo, unsigned long hi)
     if (lo >= hi)
         return true;
     for(unsigned long i = lo + 1; i <= hi; ++i)
-        if (!(v[i - 1] <= v[i]))
+        if ((v[i - 1] > v[i]))
             return false;
     return true;
 }
