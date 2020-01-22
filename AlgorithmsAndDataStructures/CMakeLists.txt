@@ -19,6 +19,8 @@ aux_source_directory(src/Chapter_2_3 SRC_LIST)
 aux_source_directory(src/Chapter_2_4 SRC_LIST)
 aux_source_directory(src/Chapter_3_1 SRC_LIST)
 aux_source_directory(src/Chapter_3_2 SRC_LIST)
+aux_source_directory(src/Chapter_3_3 SRC_LIST)
+aux_source_directory(src/Chapter_5_1 SRC_LIST)
 
 FILE(GLOB_RECURSE INC_ALL "src/Chapter_1_5/*.h")
 
@@ -27,6 +29,7 @@ add_executable(${PROJECT_NAME} main.cpp ${SRC_LIST} ${INC_ALL})
 target_link_libraries(${PROJECT_NAME} -lgtest -lpthread)
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PUBLIC src/Chapter_5_1)
 target_include_directories(${PROJECT_NAME} PUBLIC ../)
 target_include_directories(${PROJECT_NAME} PUBLIC ../gtest)
 target_include_directories(${PROJECT_NAME} PUBLIC ../gtest/internal)
