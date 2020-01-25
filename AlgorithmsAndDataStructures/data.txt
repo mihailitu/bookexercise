@@ -1,11 +1,2 @@
-https://algs4.cs.princeton.edu/15uf/tinyUF.txt
-https://algs4.cs.princeton.edu/15uf/mediumUF.txt
-https://algs4.cs.princeton.edu/15uf/largeUF.txt
-https://algs4.cs.princeton.edu/14analysis/1Kints.txt
-https://algs4.cs.princeton.edu/14analysis/2Kints.txt
-https://algs4.cs.princeton.edu/14analysis/4Kints.txt
-https://algs4.cs.princeton.edu/14analysis/8Kints.txt
-https://algs4.cs.princeton.edu/14analysis/16Kints.txt
-https://algs4.cs.princeton.edu/14analysis/32Kints.txt
-https://algs4.cs.princeton.edu/14analysis/1Mints.txt
-
+#!/bin/sh
+wget -P data/ -i data.txt
