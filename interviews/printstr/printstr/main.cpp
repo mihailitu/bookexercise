@@ -65,6 +65,8 @@ void printFits(const string &str, int w, int h)
 
 int main()
 {
+    printFits("    ", 20, 10);
+    printFits("     ", 20, 10);
     printFits("this is a string", 120, 20);
     printFits("this is a string", 20, 20);
     printFits("12345", 20, 20);
