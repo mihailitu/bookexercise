@@ -1,5 +1,5 @@
 CC := g++
-CO := -c -ggdb -std=c++17 -W -Wall -Wextra -pedantic -Wno-unknown-pragmas -fPIC -fno-strict-aliasing -Iinclude/
+CO := -c -ggdb -std=c++17 -W -Wall -Wextra -pedantic -Wno-unknown-pragmas -fPIC -fno-strict-aliasing -Iinclude/ -I../
 #release
 #CO := -c -std=c++17 -o3 -W -Wall -Wextra -pedantic -Wno-unknown-pragmas -fPIC -fno-strict-aliasing -Iinclude/
 
@@ -9,14 +9,14 @@ LO =
 SRCS := $(wildcard *.cpp src/*.cpp)
 OBJS := $(patsubst %.cpp, obj/%.o, $(SRCS))
 
-TARGET := prjtemplate
+TARGET := segwick
 
 first: all
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(LN) $(LO) -o $@ $^ #-lpthread  -lboost_system
+	$(LN) $(LO) -o $@ $^ -lgtest #-lpthread  -lboost_system
 
 obj/%.o: %.cpp
 	mkdir -p obj/src
