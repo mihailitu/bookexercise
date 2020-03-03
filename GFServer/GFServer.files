@@ -1,7 +1,0 @@
-gf.fbs
-gf_generated.h
-gfrecordstruct.h
-logger.h
-make_server.sh
-makefile
-server.cpp

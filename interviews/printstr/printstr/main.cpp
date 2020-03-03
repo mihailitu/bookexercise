@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <filesystem>
 
 using namespace std;
 
@@ -31,6 +32,7 @@ bool itFits(int w_width, int w_height, const std::string &str) {
 
     words.push_back(str.substr(start_pos));
 
+    std::cout << "(" << str.length() << ") ";
      for(auto w : words)
         std::cout << w << '.';
      std::cout << endl;
