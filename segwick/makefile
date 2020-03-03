@@ -7,7 +7,7 @@ LN := g++
 LO =
 
 SRCS := $(wildcard *.cpp src/*.cpp *.cc src/*.cc)
-OBJS := $(patsubst obj/%.o, $(SRCS))
+OBJS := $(patsubst %.cpp, obj/%.o, $(SRCS))
 
 TARGET := segwick
 
@@ -23,4 +23,4 @@ obj/%.o: %.cpp
 	$(CC) $(CO) -c -o $@ $<
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -rf obj/ $(TARGET)
