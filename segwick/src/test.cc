@@ -1,5 +1,5 @@
-#include <gtest.h>
+#include "gtest/gtest.h"
 
-TEST(Test, TTest)
+TEST(Test, Test1)
 {
 }
