@@ -6,22 +6,18 @@ CO := -c -ggdb -std=c++17 -W -Wall -Wextra -pedantic -Wno-unknown-pragmas -fPIC 
 LN := g++
 LO =
 
-SRCS := $(wildcard *.cpp src/*.cpp)
-OBJS := $(patsubst %.cpp, obj/%.o, $(SRCS))
+SRCS := $(wildcard *.cpp 01/*.cpp)
+OBJS := $(patsubst %.cpp, ../obj/e01/%.o, $(SRCS))
 
 TARGET := segwick
 
 first: all
 
 all: $(TARGET)
-	+$(MAKE) -C exercises
 
 $(TARGET): $(OBJS)
 	$(LN) $(LO) -o $@ $^ -lgtest -lpthread #-lboost_system
 
 obj/%.o: %.cpp
-	mkdir -p obj/src
+	mkdir -p ../obj/e01
 	$(CC) $(CO) -c -o $@ $<
-
-clean:
-	rm -rf obj/ $(TARGET)

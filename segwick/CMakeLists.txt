@@ -8,6 +8,8 @@ link_directories(${PROJECT_NAME} util/ ../ ../gtest/ ../gtest/internal ../gtest/
 
 aux_source_directory(src SRC_LIST)
 aux_source_directory(src/util SRC_LIST)
+aux_source_directory(tests/01 SRC_LIST)
+aux_source_directory(exercises/01 SRC_LIST)
 
 add_executable(${PROJECT_NAME} main.cpp ${SRC_LIST} ${INC_ALL})
 
