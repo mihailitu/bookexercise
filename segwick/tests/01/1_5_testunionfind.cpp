@@ -28,11 +28,11 @@ void readUFDataFile(const std::string &fName, int &N, std::vector<std::pair<int,
     }
 }
 
-TEST(Test_Chapter_01, UnionFind)
+TEST(Test_Chapter_01, QuickFind)
 {
     std::vector<std::pair<int, int>> connections;
     int N;
     readUFDataFile("", N, connections);
     log_debug("Creating UnionFind with %d elements and %d connections", N, connections.size());
-    UnionFind<int> f(N);
+    QuickFind<int> f(N);
 }

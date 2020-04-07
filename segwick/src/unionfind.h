@@ -4,9 +4,9 @@
 #include <vector>
 
 template<typename T>
-class UnionFind {
+class QuickFind {
 public:
-    UnionFind(unsigned _n) : N(_n) {}
+    QuickFind(unsigned _n) : N(_n) {}
 
     // connect p and q
     void connect(unsigned p, unsigned q) {
