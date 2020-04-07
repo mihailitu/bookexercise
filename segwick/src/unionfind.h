@@ -1,6 +1,8 @@
 #ifndef UNIONFIND_H
 #define UNIONFIND_H
 
+#include <vector>
+
 template<typename T>
 class UnionFind {
 public:
@@ -18,6 +20,7 @@ public:
     }
 private:
     unsigned N; // the capacity
+    std::vector<std::vector<T>> elements;
 };
 
 #endif // UNIONFIND_H
