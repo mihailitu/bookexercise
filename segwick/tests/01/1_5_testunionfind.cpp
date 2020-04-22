@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "logger.h"
+#include "data.h"
 
 #include "unionfind.h"
 
@@ -12,27 +13,11 @@
  * ....
  */
 
-void readUFDataFile(const std::string &fName, int &N, std::vector<std::pair<int, int>> &connections)
-{
-    std::ifstream testFile(fName);
-    if (!testFile.is_open()) {
-        FAIL() << fName << " not found";
-        return;
-    }
 
-    testFile >> N;
-    connections.reserve(N);
-    int p, q;
-    while (testFile >> p >> q) {
-        connections.push_back({p, q});
-    }
-}
-
-TEST(Test_Chapter_01, QuickFind)
+TEST(Test_Chapter_01, UnionFind)
 {
-    std::vector<std::pair<int, int>> connections;
-    int N;
-    readUFDataFile("", N, connections);
-    log_debug("Creating UnionFind with %d elements and %d connections", N, connections.size());
-    QuickFind<int> f(N);
+//    std::vector<std::pair<unsigned, unsigned>> connections;
+//    unsigned N;
+//    readUFDataFile("", N, connections);
+//    log_debug("Creating UnionFind with %d elements and %lu connections", N, connections.size());
 }
