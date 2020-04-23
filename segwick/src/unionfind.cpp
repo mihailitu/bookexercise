@@ -23,6 +23,7 @@ QuickUnion::QuickUnion(unsigned n) : UnionFind(n)
 
 void QuickUnion::connect(unsigned int p, unsigned int q)
 {
+    increaseTo(std::max(p, q));
     unsigned pRoot = findRoot(p);
     unsigned qRoot = findRoot(q);
     rootID[pRoot] = qRoot;

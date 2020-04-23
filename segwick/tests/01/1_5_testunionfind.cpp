@@ -4,20 +4,54 @@
 
 #include "unionfind.h"
 
-#include <fstream>
-
-/* data file format:
- * N - number of elements
- * p1 q1 - connection (p1, q1 < N)
- * p2 q2
- * ....
- */
-
-
-TEST(Test_Chapter_01, UnionFind)
+TEST(Test_Chapter_01, QuickUnion)
 {
-//    std::vector<std::pair<unsigned, unsigned>> connections;
-//    unsigned N;
-//    readUFDataFile("", N, connections);
-//    log_debug("Creating UnionFind with %d elements and %lu connections", N, connections.size());
+    std::vector<std::string> dataSets = {
+        "data/tinyUF.txt",
+        "data/mediumUF.txt",
+        "data/largeUF.txt"
+    };
+
+    for(const auto &dataFile : dataSets) {
+        log_info("Processing file %s", dataFile.c_str());
+
+        std::vector<std::pair<unsigned, unsigned>> connections;
+        unsigned N;
+        readUFDataFile(dataFile, N, connections);
+
+        log_debug("Creating UnionFind with %d elements and %lu connections", N, connections.size());
+        QuickUnion qf(static_cast<unsigned>(N));
+        for(unsigned i = 0; i < connections.size(); ++i)
+            qf.connect(connections[i].first, connections[i].second);
+
+        for(unsigned i = 0; i < connections.size(); ++i)
+            ASSERT_TRUE(qf.connected(connections[i].first, connections[i].second));
+    }
 }
+
+
+TEST(Test_Chapter_01, QuickFind)
+{
+    std::vector<std::string> dataSets = {
+        "data/tinyUF.txt",
+        "data/mediumUF.txt",
+        // "data/largeUF.txt"
+    };
+
+    for(const auto &dataFile : dataSets) {
+        log_info("Processing file %s", dataFile.c_str());
+
+        std::vector<std::pair<unsigned, unsigned>> connections;
+        unsigned N;
+        readUFDataFile(dataFile, N, connections);
+
+        log_debug("Creating UnionFind with %d elements and %lu connections", N, connections.size());
+        QuickFind qf(static_cast<unsigned>(N));
+        for(unsigned i = 0; i < connections.size(); ++i)
+            qf.connect(connections[i].first, connections[i].second);
+
+        for(unsigned i = 0; i < connections.size(); ++i)
+            ASSERT_TRUE(qf.connected(connections[i].first, connections[i].second));
+    }
+}
+
