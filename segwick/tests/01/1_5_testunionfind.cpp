@@ -9,7 +9,7 @@ TEST(Test_Chapter_01, QuickUnion)
     std::vector<std::string> dataSets = {
         "data/tinyUF.txt",
         "data/mediumUF.txt",
-        "data/largeUF.txt"
+        // "data/largeUF.txt"
     };
 
     for(const auto &dataFile : dataSets) {
