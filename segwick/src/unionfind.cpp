@@ -1,13 +1,53 @@
 #include "unionfind.h"
 
-QuickFind::QuickFind(unsigned _n) : N(_n) {
+UnionFind::UnionFind(unsigned _n) : N(_n)
+{
     rootID.resize(N);
     for(unsigned i = 0; i < N; ++i)
         rootID[i] = i; // each element is it's own root
 }
 
-// connect p and q
-void QuickFind::connect(unsigned p, unsigned q) {
+void UnionFind::increaseTo(unsigned val)
+{
+    if (val >= N) {
+        rootID.resize(val);
+        for(unsigned i = N; i < val; ++i)
+            rootID[i] = i;
+        N = val;
+    }
+}
+
+QuickUnion::QuickUnion(unsigned n) : UnionFind(n)
+{
+}
+
+void QuickUnion::connect(unsigned int p, unsigned int q)
+{
+    unsigned pRoot = findRoot(p);
+    unsigned qRoot = findRoot(q);
+    rootID[pRoot] = qRoot;
+}
+
+bool QuickUnion::connected(unsigned int p, unsigned int q)
+{
+    return findRoot(p) == findRoot(q);
+}
+
+unsigned QuickUnion::findRoot(unsigned p)
+{
+    while(p != rootID[p])
+        p = rootID[p];
+
+    return p;
+}
+
+QuickFind::QuickFind(unsigned n) : UnionFind(n)
+{
+}
+
+// connects p and q
+void QuickFind::connect(unsigned p, unsigned q)
+{
     // TODO: don't construct vector before hand, just insert up to p or q when connecting.
     increaseTo(std::max(p, q));
     unsigned pID = rootID[p];
@@ -19,20 +59,7 @@ void QuickFind::connect(unsigned p, unsigned q) {
 }
 
 // return true if p and q are connected, false otherwise
-bool QuickFind::connected(unsigned p, unsigned q) {
+bool QuickFind::connected(unsigned p, unsigned q)
+{
     return rootID[p] == rootID[q];
-}
-
-// return the number of elements
-unsigned QuickFind::capacity() const {
-    return N;
-}
-
-void QuickFind::increaseTo(unsigned val) {
-    if (val >= N) {
-        rootID.resize(val);
-        for(unsigned i = N; i < val; ++i)
-            rootID[i] = i;
-        N = val;
-    }
 }
