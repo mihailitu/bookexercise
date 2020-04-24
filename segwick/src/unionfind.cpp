@@ -9,7 +9,7 @@ UnionFind::UnionFind(unsigned _n) : N(_n)
 
 void UnionFind::increaseTo(unsigned val)
 {
-    if (val >= N) {
+    if (val > N) {
         rootID.resize(val);
         for(unsigned i = N; i < val; ++i)
             rootID[i] = i;
