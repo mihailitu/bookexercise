@@ -18,6 +18,7 @@ target_link_libraries(${PROJECT_NAME} -lgtest -lpthread)
 
 target_include_directories(${PROJECT_NAME} PUBLIC include/)
 target_include_directories(${PROJECT_NAME} PUBLIC src/)
+target_include_directories(${PROJECT_NAME} PUBLIC exercises/01)
 target_include_directories(${PROJECT_NAME} PUBLIC ../)
 target_include_directories(${PROJECT_NAME} PUBLIC ../gtest)
 target_include_directories(${PROJECT_NAME} PUBLIC ../gtest/internal)
