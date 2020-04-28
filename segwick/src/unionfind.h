@@ -21,6 +21,17 @@ protected:
     void increaseTo(unsigned val);
     unsigned N; // the capacity
     std::vector<unsigned> rootID;
+    std::vector<unsigned> sz;
+};
+
+class QuickUnionWeighted : public UnionFind
+{
+public:
+    QuickUnionWeighted(unsigned n);
+    void connect(unsigned p, unsigned q);
+    bool connected(unsigned p, unsigned q);
+private:
+    unsigned findRoot(unsigned p);
 };
 
 class QuickUnion : public UnionFind

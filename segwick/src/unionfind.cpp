@@ -3,18 +3,59 @@
 UnionFind::UnionFind(unsigned _n) : N(_n)
 {
     rootID.resize(N);
-    for(unsigned i = 0; i < N; ++i)
+    sz.resize(N);
+    for(unsigned i = 0; i < N; ++i) {
         rootID[i] = i; // each element is it's own root
+        sz[i] = 1;     // with tree size 1
+    }
 }
 
 void UnionFind::increaseTo(unsigned val)
 {
     if (val > N) {
         rootID.resize(val);
-        for(unsigned i = N; i < val; ++i)
+        sz.resize(val);
+        for(unsigned i = N; i < val; ++i) {
             rootID[i] = i;
+            sz[i] = 1;
+        }
         N = val;
     }
+}
+
+QuickUnionWeighted::QuickUnionWeighted(unsigned n) : UnionFind (n)
+{
+}
+
+void QuickUnionWeighted::connect(unsigned int p, unsigned int q)
+{
+    increaseTo(std::max(p, q));
+
+    unsigned pRoot = findRoot(p);
+    unsigned qRoot = findRoot(q);
+    if (pRoot == qRoot)
+        return;
+
+    if (sz[pRoot] < sz[qRoot]) {
+        rootID[pRoot] = qRoot;
+        sz[qRoot] += sz[pRoot];
+    } else {
+        rootID[qRoot] = pRoot;
+        sz[pRoot] += sz[qRoot];
+    }
+}
+
+bool QuickUnionWeighted::connected(unsigned int p, unsigned int q)
+{
+    return (findRoot(p) == findRoot(q));
+}
+
+unsigned QuickUnionWeighted::findRoot(unsigned p)
+{
+    while(p != rootID[p])
+        p = rootID[p];
+
+    return p;
 }
 
 QuickUnion::QuickUnion(unsigned n) : UnionFind(n)
