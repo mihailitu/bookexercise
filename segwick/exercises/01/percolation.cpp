@@ -1,6 +1,6 @@
 #include "percolation.h"
 
-Percolation::Percolation(unsigned n) : qfw(n + 1)
+Percolation::Percolation(unsigned n) : qfw(n * n + 2)
 {
 
 }
