@@ -54,6 +54,10 @@ public:
     /// does the system percolate?
     bool percolates();
 
+    unsigned size() const {
+        return N;
+    }
+
     /// print the system
     void print();
 

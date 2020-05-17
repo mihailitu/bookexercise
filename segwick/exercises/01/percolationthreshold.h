@@ -54,26 +54,35 @@
 
 class PercolationStats {
 public:
-    // perform independent trials on an n-by-n grid
+    /// perform independent trials on an n-by-n grid
     PercolationStats(int n, int trials);
 
-    // sample mean of percolation threshold
+    /// sample mean of percolation threshold
     double mean();
 
-    // sample standard deviation of percolation threshold
+    /// sample standard deviation of percolation threshold
     double stddev();
 
-    // low endpoint of 95% confidence interval
+    /// low endpoint of 95% confidence interval
     double confidenceLo();
 
-    // high endpoint of 95% confidence interval
+    /// high endpoint of 95% confidence interval
     double confidenceHi();
+private:
+    /// standard percolation size
+    unsigned systemSize;
+
+    /// the number of trials to be performed
+    unsigned trials;
+
+    double _mean;
+    double _stddev;
+    /// keeps the thresholds for each trial
+    std::vector<double> trialsThreshold;
+
+    /// run percolation trials
+    void runTrials();
 };
 
-class PercolationThreshold
-{
-public:
-    PercolationThreshold();
-};
 
 #endif // PERCOLATIONTHRESHOLD_H
