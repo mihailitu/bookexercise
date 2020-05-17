@@ -1,6 +1,8 @@
 #ifndef PERCOLATIONTHRESHOLD_H
 #define PERCOLATIONTHRESHOLD_H
 
+#include "percolation.h"
+
 /// Write a program to estimate the value of the percolation threshold via Monte Carlo simulation.
 /// The problem.
 /// In a famous scientific problem, researchers are interested in the following question:

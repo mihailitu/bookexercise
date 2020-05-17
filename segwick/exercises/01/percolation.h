@@ -23,7 +23,7 @@
 ///
 /// Eg.: 8x8 grid
 /// 1) percolates    1) does not percolates
-/// xx___xxx            xx__x_xx              x <- blocket site
+/// xx___xxx            xx__x_xx              x <- blocked site
 /// _xx_____            _____xxx              _ <- open site
 /// ___xx__x            __xx__xx
 /// xx__x___            xx_____x
@@ -36,26 +36,45 @@
 class Percolation
 {
 public:
-    // creates n-by-n grid, with all sites initially blocked
+    /// creates n-by-n grid, with all sites initially blocked
     Percolation(unsigned n);
 
-    // opens the site (row, col) if it is not open already
+    //// opens the site (row, col) if it is not open already
     void open(unsigned row, unsigned col);
 
-    // is the site (row, col) open?
+    /// is the site (row, col) open?
     bool isOpen(unsigned row, unsigned col);
 
-    // is the site (row, col) full?
+    /// is the site (row, col) full?
     bool isFull(unsigned row, unsigned col);
 
-    // returns the number of open sites
+    /// returns the number of open sites
     unsigned numberOfOpenSites();
 
-    // does the system percolate?
+    /// does the system percolate?
     bool percolates();
 
+    /// print the system
+    void print();
+
 private:
+    /// UnionFind structure
     QuickUnionWeighted qfw;
+
+    /// NxN dimension of the system
+    unsigned N;
+
+    /// open sites number
+    unsigned openSites;
+
+    /// open/closed sites
+    std::vector<std::vector<bool>> sites;
+
+    /// calculates the index in UnionFind array that correpsonds to [row, col] in the system
+    unsigned qfIndex(unsigned row, unsigned col);
+
+    /// verifies if indexes are valid
+    bool indexesAreValid(unsigned row, unsigned col);
 };
 
 #endif // PERCOLATION_H
