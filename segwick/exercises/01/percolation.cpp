@@ -40,11 +40,11 @@ void Percolation::open(unsigned row, unsigned col)
     // connect this site to its open neighbors
     if (row > 0 && sites[row - 1][col])
         qfw.connect(qfIndex(row, col), qfIndex(row - 1, col));
-    if (row < N && sites[row + 1][col])
+    if (row < N - 1 && sites[row + 1][col])
         qfw.connect(qfIndex(row, col), qfIndex(row + 1, col));
     if (col > 0 && sites[row][col - 1])
         qfw.connect(qfIndex(row, col), qfIndex(row, col - 1));
-    if (col < N && sites[row][col + 1])
+    if (col < N - 1 && sites[row][col + 1])
         qfw.connect(qfIndex(row, col), qfIndex(row, col + 1));
 }
 
@@ -96,7 +96,7 @@ void Percolation::print()
     for(unsigned i = 0; i < N; ++i) {
         std::cout << '|';
         for(unsigned j = 0; j < N; ++j)
-            std::cout << (isOpen(i, j) ? ' ' : 'x');
+            std::cout << (sites[i][j] ? ' ' : 'x');
         std::cout << "|\n";
     }
 
