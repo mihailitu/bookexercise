@@ -4,8 +4,9 @@
 Percolation::Percolation(unsigned n) :
     qfw(n * n + 2), // UnionFind will store n*n values, plus fake top node and fake bottom node
     N(n), // sites will be from 1 to N
-    virtualTop(N),
-    virtualBottom(N+1)
+    virtualTop(N * N),
+    virtualBottom(N * N+1),
+    openSites(0)
 {
     sites.resize(N);
     for(unsigned i = 0; i < N; ++i) {
@@ -37,14 +38,14 @@ void Percolation::open(unsigned row, unsigned col)
     ++openSites;
 
     // connect this site to its open neighbors
-    if (indexesAreValid(row - 1, col) && isOpen(row - 1, col))
-        qfw.connect(row - 1, col);
-    if (indexesAreValid(row + 1, col) && isOpen(row + 1, col))
-        qfw.connect(row + 1, col);
-    if (indexesAreValid(row, col - 1) && isOpen(row, col - 1))
-        qfw.connect(row, col - 1);
-    if (indexesAreValid(row, col + 1) && isOpen(row, col + 1))
-        qfw.connect(row, col + 1);
+    if (row > 0 && isOpen(row - 1, col))
+        qfw.connect(qfIndex(row, col), qfIndex(row - 1, col));
+    if (row < N && isOpen(row + 1, col))
+        qfw.connect(qfIndex(row, col), qfIndex(row + 1, col));
+    if (col > 0 && isOpen(row, col - 1))
+        qfw.connect(qfIndex(row, col), qfIndex(row, col - 1));
+    if (col < N && isOpen(row, col + 1))
+        qfw.connect(qfIndex(row, col), qfIndex(row, col + 1));
 }
 
 // is the site (row, col) open?
