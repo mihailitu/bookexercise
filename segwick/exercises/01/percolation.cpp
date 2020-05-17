@@ -38,13 +38,13 @@ void Percolation::open(unsigned row, unsigned col)
     ++openSites;
 
     // connect this site to its open neighbors
-    if (row > 0 && isOpen(row - 1, col))
+    if (row > 0 && sites[row - 1][col])
         qfw.connect(qfIndex(row, col), qfIndex(row - 1, col));
-    if (row < N && isOpen(row + 1, col))
+    if (row < N && sites[row + 1][col])
         qfw.connect(qfIndex(row, col), qfIndex(row + 1, col));
-    if (col > 0 && isOpen(row, col - 1))
+    if (col > 0 && sites[row][col - 1])
         qfw.connect(qfIndex(row, col), qfIndex(row, col - 1));
-    if (col < N && isOpen(row, col + 1))
+    if (col < N && sites[row][col + 1])
         qfw.connect(qfIndex(row, col), qfIndex(row, col + 1));
 }
 
@@ -65,9 +65,7 @@ bool Percolation::isFull(unsigned row, unsigned col)
     if (!indexesAreValid(row, col))
         return false;
 
-    --row; --col;
-
-    return isOpen(row, col) && qfw.connected(0, qfIndex(row, col));
+    return isOpen(row, col) && qfw.connected(0, qfIndex(row - 1, col - 1));
 }
 
 // returns the number of open sites
