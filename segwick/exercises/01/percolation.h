@@ -64,6 +64,10 @@ private:
     /// NxN dimension of the system
     unsigned N;
 
+    /// UnionFind structure virtual's top and bottom
+    unsigned virtualTop;
+    unsigned virtualBottom;
+
     /// open sites number
     unsigned openSites;
 

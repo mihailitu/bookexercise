@@ -3,17 +3,19 @@
 
 Percolation::Percolation(unsigned n) :
     qfw(n * n + 2), // UnionFind will store n*n values, plus fake top node and fake bottom node
-    N(n) // sites will be from 1 to N
+    N(n), // sites will be from 1 to N
+    virtualTop(N),
+    virtualBottom(N+1)
 {
-    sites.resize(N + 1);
-    for(unsigned i = 1; i <= N; ++i) {
-        sites[i].resize(N + 1);
-        sites[i].assign(N + 1, false);
+    sites.resize(N);
+    for(unsigned i = 0; i < N; ++i) {
+        sites[i].resize(N);
+        sites[i].assign(N, false);
     }
 
-    for(unsigned i = 1; i <= N; ++i) {
-        qfw.connect(i, 0); // connect top row to virtual top
-        qfw.connect(qfIndex(N, i), N * N + 1); // connect bottom row to virtual bottom
+    for(unsigned i = 0; i < N; ++i) {
+        qfw.connect(i, virtualTop); // connect top row to virtual top
+        qfw.connect(qfIndex(N - 1, i), virtualBottom); // connect bottom row to virtual bottom
     }
 }
 
@@ -28,6 +30,8 @@ void Percolation::open(unsigned row, unsigned col)
 {
     if (!indexesAreValid(row, col) || isOpen(row, col))
         return;
+
+    --row; --col;
 
     sites[row][col] = true;
     ++openSites;
@@ -49,6 +53,8 @@ bool Percolation::isOpen(unsigned row, unsigned col)
     if (!indexesAreValid(row, col))
         return false;
 
+    --row; --col;
+
     return sites[row][col];
 }
 
@@ -57,6 +63,8 @@ bool Percolation::isFull(unsigned row, unsigned col)
 {
     if (!indexesAreValid(row, col))
         return false;
+
+    --row; --col;
 
     return isOpen(row, col) && qfw.connected(0, qfIndex(row, col));
 }
@@ -71,31 +79,30 @@ unsigned Percolation::numberOfOpenSites()
 bool Percolation::percolates()
 {
     // when virtual top is connected to virtual bottom, the system percolates
-    return qfw.connected(0, N*N + 1);
+    return qfw.connected(virtualBottom, virtualTop);
 }
 
 unsigned Percolation::qfIndex(unsigned row, unsigned col)
 {
-    return col + N * (row - 1);
+    return col + N * row;
 }
 
 void Percolation::print()
 {
     std::cout << '|';
-    for(unsigned i = 1; i <= N; ++i)
+    for(unsigned i = 0; i < N; ++i)
         std::cout << '-';
     std::cout << "|\n";
 
-    for(unsigned i = 1; i <= N; ++i) {
+    for(unsigned i = 0; i < N; ++i) {
         std::cout << '|';
-        for(unsigned j = 1; j <= N; ++j)
+        for(unsigned j = 0; j < N; ++j)
             std::cout << (isOpen(i, j) ? ' ' : 'x');
         std::cout << "|\n";
     }
 
     std::cout << '|';
-    for(unsigned i = 1; i <= N; ++i)
+    for(unsigned i = 0; i < N; ++i)
         std::cout << '-';
     std::cout << "|\n";
-
 }
