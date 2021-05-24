@@ -1,5 +1,4 @@
 #include "gtest/gtest.h"
-
 #include <forward_list>
 /**
  * @brief TEST MergeSortedLinkedList
@@ -8,72 +7,132 @@
  */
 
 template <typename T>
-void MergeSortedLinkedLists()
+std::forward_list<T> MergeSortedLinkedListsSTD(std::forward_list<T> &l1, std::forward_list<T> &l2)
 {
     std::forward_list<T> ll;
+    auto begin = ll.before_begin();
+    auto current = begin;
+    auto l1begin = l1.begin();
+    auto l2begin = l2.begin();
+    while( (l1begin != l1.end()) && (l2begin != l2.end())) {
+        if (*l1begin < *l2begin) {
+            current = ll.emplace_after(current, l1.front());
+            l1.pop_front();
+            l1begin = l1.begin();
+        } else {
+            current = ll.insert_after(current, l2.front());
+            l2.pop_front();
+            l2begin = l2.begin();
+        }
+    }
 
+    if (!l1.empty()) {
+        ll.merge(l1);
+    } else if(!l2.empty()) {
+        ll.merge(l2);
+    }
+
+    return ll;
+}
+
+TEST(HRank, MergeSortedLinkedListSTD)
+{
+    std::forward_list<int> l1 = {4, 6, 8, 12};
+    std::forward_list<int> l2 = {1, 3, 7, 9, 11, 12, 17};
+
+    std::cout << "Sorted list STD:\n";
+    auto ll = MergeSortedLinkedListsSTD<int>(l1, l2);
+    for(const auto &it : ll) {
+        std::cout << it << ' ';
+    }
+}
+
+template<typename T>
+struct Node {
+    T data;
+    Node *next = nullptr;
+};
+
+template<typename T>
+class List
+{
+
+private:
+    Node<T> *head = nullptr;
+    Node<T> *current = nullptr;
+public:
+    void insert(T val) {
+        if(isEmpty()) {
+            head = new Node<T>;
+            head->data = val;
+            current = head;
+            return;
+        }
+        Node<T> *tmp = new Node<T>;
+        tmp->data = val;
+        current->next = tmp;
+        current = tmp;
+    }
+    bool isEmpty() const {
+        return head == nullptr;
+    }
+
+    Node<T>* begin() const {
+        return head;
+    }
+
+    ~List() {
+        while(head != nullptr) {
+            Node<T> *tmp = head->next;
+            delete head;
+            head = tmp;
+        }
+    }
+};
+
+template <typename T>
+List<T> MergeSortedLinkedLists(const List<T> &l1, const List<T> &l2) {
+    List<T> ll;
+    Node<T> *l1h = l1.begin();
+    Node<T> *l2h = l2.begin();
+    while((l1h != nullptr) && (l2h != nullptr)) {
+        if (l1h->data < l2h->data) {
+            ll.insert(l1h->data);
+            l1h = l1h->next;
+        } else {
+            ll.insert(l2h->data);
+            l2h = l2h->next;
+        }
+    }
+    Node<T> *remaining = (l1h != nullptr) ? l1h : l2h;
+
+    while (remaining != nullptr) {
+        ll.insert(remaining->data);
+        remaining = remaining->next;
+    }
+    return ll;
 }
 
 TEST(HRank, MergeSortedLinkedList)
 {
 
+    std::vector<int> l1v = {4, 6, 8, 12};
+    std::vector<int> l2v = {1, 3, 7, 9, 11, 12, 17};
+
+    List<int> l1;
+    List<int> l2;
+    for(const auto &it : l1v) {
+        l1.insert(it);
+    }
+    for(const auto &it : l2v) {
+        l2.insert(it);
+    }
+
+    std::cout << "Sorted list no STD:\n";
+    auto ll = MergeSortedLinkedLists<int>(l1, l2);
+    Node<int> *merged = ll.begin();
+    while(merged != nullptr) {
+        std::cout << merged->data << ' ';
+        merged = merged->next;
+    }
 }
-
-
-enum GanularilyType {
-    OneMin = 1,
-    TenMin = 10,
-    OneHour = 60,
-    SixHours = 360,
-    OneDay = 1440
-};
-
-struct AggregateFileInfo {
-    std::string fileSuffix;
-    std::string parentSuffix;
-    GanularilyType granularity;
-    TrendFileTypeEnum fileType; // used to open the stream
-    std::vector<std::pair<StreamTypeEnum, std::vector<StreamTypeEnum>>> streamDependency;
-};
-
-AggregateFileInfo rawFile = { "", "", OneMin, TrendFileType_Regular,{} };
-
-AggregateFileInfo _pas = {
-    "_pas",
-    "",
-    OneMin,
-    TrendFileType_Aggregate,
-    { { STREAM_APA_TREND_EX,            { STREAM_APA_SERVER_TREND_EX, STREAM_APA_SUMMARY_TREND_EX } },
-      { STREAM_ATA_DETAILS_TREND_EX,    { STREAM_ATA_DETAILS_SERVER_TREND_EX, STREAM_ATA_DETAILS_SUMMARY_TREND_EX } },
-      { STREAM_ATA_FIX_TREND_EX,        { STREAM_ATA_FIX_TREND_EX, STREAM_ATA_FIX_SUMMARY_TREND_EX } },
-      { STREAM_ATA_SQL_TREND_EX,        { STREAM_ATA_SQL_SERVER_TREND_EX, STREAM_ATA_SQL_SUMMARY_TREND_EX } },
-    }
-};
-
-AggregateFileInfo _10m = {
-    "_10m",
-    "",
-    TenMin,
-    TrendFileType_Aggregate,
-    { { STREAM_APA_TREND_EX,{ STREAM_APA_SERVER_TREND_EX, STREAM_APA_SUMMARY_TREND_EX } },
-      { STREAM_ATA_DETAILS_TREND_EX,{ STREAM_ATA_DETAILS_SERVER_TREND_EX, STREAM_ATA_DETAILS_SUMMARY_TREND_EX } },
-      { STREAM_ATA_FIX_TREND_EX,{ STREAM_ATA_FIX_TREND_EX, STREAM_ATA_FIX_SUMMARY_TREND_EX } },
-      { STREAM_ATA_SQL_TREND_EX,{ STREAM_ATA_SQL_SERVER_TREND_EX, STREAM_ATA_SQL_SUMMARY_TREND_EX } },
-    }
-};
-
-std::vector<StreamTypeEnum> rawFileStreams = {
-    STREAM_APA_TREND_EX,
-    STREAM_ATA_DETAILS_TREND_EX,
-    STREAM_ATA_FIX_TREND_EX,
-    STREAM_ATA_SQL_TREND_EX,
-    STREAM_ATA_URL_TREND_EX,
-    STREAM_NETWORK_TOTALS_TREND_EX,
-    STREAM_PAIR_EX
-};
-
-std::vector<AggregateFileInfo> rollupsInfo = {
-    { _pas },
-    { _10m },
-};
-
