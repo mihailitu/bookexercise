@@ -136,3 +136,8 @@ TEST(HRank, MergeSortedLinkedList)
         merged = merged->next;
     }
 }
+
+TEST(HRank, MergeSortedLinkedListsNoCopy)
+{
+    FAIL() << "TODO: Implement with moving elements";
+}
